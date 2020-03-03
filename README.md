@@ -6,11 +6,11 @@
 LightSearch Android
 ===================
 
-LightSearch Android - Мобильное клиентское приложение на операционной системе Android
+LightSearch Android - Мобильное клиентское приложение на операционной системе Android.
 
 Принцип работы
 --------------
-Архитектура приложения построена на Android Fragment'ах и одном управляющем Activity. Для взаимодействия с LightSearch Server используется библиотека Retrofit2
+Архитектура приложения построена на Android Fragment'ах и одном управляющем Activity. Для взаимодействия с LightSearch Server используется библиотека Retrofit2.
 
 Список основных Fragment'ов:
 1) Авторизация
