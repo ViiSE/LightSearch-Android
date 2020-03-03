@@ -33,6 +33,11 @@ LightSearch Android - Мобильное клиентское приложени
 3) Отвязка товара
 4) Открытие, закрытие, отмена мягкого чека
 
+Ссылки
+------
+История проекта LightSearch доступна в [документах](https://github.com/ViiSE/LightSearch/tree/master/Documents/Project%20history)
+и в [заметках разработки](https://github.com/ViiSE/LightSearch/blob/master/Dev%20notes).
+
 Используемые библиотеки и технологии
 ------------------------------------
 - [spots-dialog](https://github.com/d-max/spots-dialog)
