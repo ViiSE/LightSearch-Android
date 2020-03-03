@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutBind"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textViewSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/search_label"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/editTextSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/edittextshape"
+            android:ems="10"
+            android:imeOptions="flagNoExtractUi"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonBarcode"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/buttonshape"
+            android:shadowColor="@color/buttonShadowColor"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="1"
+            android:text="@string/buttonBarcode_label"
+            android:textColor="@color/buttonTextColor" />
+
+        <Space
+            android:id="@+id/spaceSearch1"
+            android:layout_width="match_parent"
+            android:layout_height="35dp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupSearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RadioButton
+                android:id="@+id/radioButtonSklad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="@string/skladRB"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/radioButtonTK"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/TKRB"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/radioButtonAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/AllRB"
+                android:textSize="20sp" />
+        </RadioGroup>
+
+        <Space
+            android:id="@+id/spaceSearch2"
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:id="@+id/textViewSklad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sklad_label"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/spinnerSklad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:id="@+id/spaceSearch3"
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <TextView
+            android:id="@+id/textViewTK"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/TK_label"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/spinnerTK"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:id="@+id/spaceSearch4"
+            android:layout_width="match_parent"
+            android:layout_height="48dp" />
+
+        <Button
+            android:id="@+id/buttonSearch"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/buttonshape"
+            android:shadowColor="@color/buttonShadowColor"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="1"
+            android:text="@string/buttonSearch_label"
+            android:textColor="@color/buttonTextColor" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

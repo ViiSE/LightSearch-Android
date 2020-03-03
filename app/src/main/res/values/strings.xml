@@ -1,0 +1,133 @@
+<resources>
+    <string name="app_name">LightSearch</string>
+
+    <!-- TextView -->
+    <string name="username_label">Имя пользователя:</string>
+    <string name="password_label">Пароль:</string>
+    <string name="search_label">Поиск:</string>
+    <string name="host_label">Хост сервера:</string>
+    <string name="port_label">Порт сервера:</string>
+    <string name="openSC_label">Мягкий чек не открыт.</string>
+    <string name="userIdent_label">Идентификатор пользователя:</string>
+    <string name="softCheckTotalCost_label">Итого:</string>
+    <string name="cartTotalCost_label">Итого:</string>
+    <string name="cartTotalAmount_label">Товаров:</string>
+    <string name="cartDeliveryType_label">Cпособ доставки:</string>
+    <string name="current_amount_cart_unit">ед.</string>
+    <string name="current_price_unit">руб.</string>
+    <string name="default_ip">127.0.0.1</string>
+    <string name="default_port">50000</string>
+    <string name="bind_barcode">Привязка товара №</string>
+    <!-- ======== -->
+
+    <!-- CheckBox -->
+    <string name="checkBox_settings">Расширенные настройки</string>
+    <!-- ======== -->
+
+    <!-- RadioButton -->
+    <string name="skladRB">Склады</string>
+    <string name="TKRB">ТК</string>
+    <string name="AllRB">Все</string>
+    <!-- ============ -->
+
+    <!-- Button -->
+    <string name="buttonSearch_label">Поиск</string>
+    <string name="buttonBarcode_label">Сканировать штрих-код</string>
+    <string name="buttonConnect_label">Подключиться</string>
+    <string name="buttonChPass_label">Изменить пароль администратора</string>
+    <string name="buttonOpenSC_label">Открыть мягкий чек</string>
+    <string name="buttonCart_label">В корзину</string>
+    <string name="buttonCloseSC_label">Закрыть мягкий чек</string>
+    <string name="button_update">Обновить</string>
+    <string name="button_update_later">Позже</string>
+    <string name="button_bind_check">Проверить</string>
+    <string name="button_bind">Привязать</string>
+    <!-- ====== -->
+
+    <!-- Spinner -->
+    <string name="sklad_label">Выберите склад:</string>
+    <string name="TK_label">Выберите ТК:</string>
+    <!-- ======= -->
+
+    <!-- Dialog Window -->
+    <string name="dialog_error">Ошибка</string>
+    <string name="dialog_fail">Провал</string>
+    <string name="dialog_success">Успех</string>
+    <string name="dialog_pass_error">Введен неверный пароль!</string>
+    <string name="dialog_OK">OK</string>
+    <string name="dialog_cancel">Отмена</string>
+    <string name="input_password">Введите пароль:</string>
+    <string name="create_password_admin">Создать пароль администратора</string>
+    <string name="change_password_admin">Изменить пароль администратора</string>
+    <string name="password_changed">Пароль изменен!</string>
+    <string name="dialog_exit">Выход</string>
+    <string name="dialog_exit_to_auth">Вы уверены, что хотите выйти в меню авторизации?</string>
+    <string name="dialog_cancel_soft_check">Вы уверены, что хотите отменить текущий мягкий чек?</string>
+    <string name="dialog_cancel_binding">Вы уверены, что хотите отменить привязку по текущему товару?</string>
+    <string name="dialog_exit_to_cart">Вы уверены, что хотите выйти из корзины? Это отменит текущий мягкий чек.</string>
+    <string name="dialog_message">Сообщение</string>
+    <string name="dialog_no_result">Запрос не дал результата</string>
+    <string name="dialog_bind_check_no_result_title">Товар не найден!</string>
+    <string name="dialog_bind_check_no_result">Данный товар не привязан ни к одному из существующих товаров. Переход в режим привязки.</string>
+    <string name="dialog_bind_check_one_result_title">Товар привязан!</string>
+    <string name="dialog_bind_cancel">Привязка отменена.</string>
+    <string name="permission_request">Запрос на права</string>
+    <string name="permission_request_IMEI">Нужны права на отправку IMEI</string>
+    <string name="unconfirmed_record">Количество некоторых товаров, указанных в мягком чеке, больше, чем свободное количество данных товаров на складах. Данные товары выделены красным.</string>
+    <string name="spots_dialog_query_exec">Выполнение</string>
+    <string name="spots_dialog_connect">Подключение</string>
+    <string name="spots_dialog_auth">Авторизация</string>
+    <string name="dialog_res_bind">Привязать данный товар?</string>
+    <string name="dialog_res_unbind">Отвязать данный товар?</string>
+    <string name="dialog_res_prod_id">ИД</string>
+    <string name="dialog_res_prod_name">Наименование</string>
+    <string name="dialog_res_prod_price">Цена</string>
+    <string name="dialog_res_prod_amount">Кол-во</string>
+    <string name="dialog_res_prod_max_amount">Общее кол-во</string>
+    <string name="dialog_res_prod_old_max_amount">Общее кол-во ДО</string>
+    <string name="dialog_res_prod_new_max_amount">Общее кол-во ПОСЛЕ</string>
+    <string name="dialog_res_prod_subdivisions">Подразделения</string>
+    <string name="dialog_update_title">Доступно обновление!</string>
+    <!-- ============= -->
+
+    <!-- Toast -->
+    <string name="toast_empty_cart">Корзина пуста!</string>
+    <string name="toast_delivery_not_chosen">Выберите способ доставки!</string>
+    <string name="toast_barcode_not_enough_symbols">"Введите не менее пяти символов!"</string>
+    <string name="toast_empty_soft_check">"Мягкий чек пуст!"</string>
+    <string name="toast_not_enough_auth_data">Заполните все поля, необходимые для регистрации!</string>
+    <!-- ===== -->
+
+    <!-- Snackbar -->
+    <string name="snackbar_prod_deleted">&#160;&#160;Товар удален.</string>
+    <string name="snackbar_prod_added">&#160;&#160;Товар добавлен.</string>
+    <string name="snackbar_bind_check_ok">&#160;&#160;Товар найден!</string>
+    <string name="snackbar_unbind_check_ok">&#160;&#160;Товар отвязан!</string>
+    <string name="snackbar_cancel">Отмена&#160;&#160;&#160;</string>
+    <!-- ======== -->
+
+    <!-- TableResult -->
+    <string name="subdivColLabel">Подразделение</string>
+    <string name="idColLabel">ИД</string>
+    <string name="nameColLabel">Наим-ие</string>
+    <string name="priceColLabel">Цена</string>
+    <string name="amountColLabel">Кол-во</string>
+
+    <!-- Fragment Tag -->
+    <string name="fragment_authorization">Авторизация</string>
+    <string name="fragment_search">Поиск</string>
+    <string name="fragment_soft_check">Мягкий чек</string>
+    <string name="fragment_container">LightSearch</string>
+    <string name="fragment_result_search">Результат</string>
+    <string name="fragment_result_bind">Результат</string>
+    <string name="fragment_result_unbind">Результат</string>
+    <string name="fragment_cart">Корзина</string>
+    <string name="fragment_binding">Привязка</string>
+    <string name="fragment_unbinding">Отвязка</string>
+    <!-- ============ -->
+
+    <!-- App Updater -->
+    <string name="update_url">http://192.168.3.215:50001/update/info/update.json</string>
+    <!-- =========== -->
+
+</resources>
