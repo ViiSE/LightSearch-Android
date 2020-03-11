@@ -62,7 +62,7 @@ public class BindResultUIProcessor implements Function<CommandResult, Void> {
                 if(activity.getBindingContainerFragment() == null)
                     activity.doBindingContainerFragmentTransactionFromResultBind();
 
-                activity.getBindingContainerFragment().switchToCheckBind();
+                activity.getContainerFragment().switchToCheckBind();
 
                 activity.callDialogSuccess(bindCmdRes.message());
             }

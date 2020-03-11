@@ -31,7 +31,7 @@ public interface FragmentTransactionManager {
     void doContainerFragmentTransactionFromCart();
 
     void doResultBindFragmentTransaction(String title, BindCommandResult bindCmdRes);
-    void doBindingContainerFragmentTransaction(String[] skladArray, String[] TKArray);
+    void doBindingContainerFragmentTransaction();
     void doBindingContainerFragmentTransactionFromResultBind();
     void doResultUnbindFragmentTransaction(String title, UnbindCommandResult unbindCmdRes);
 }

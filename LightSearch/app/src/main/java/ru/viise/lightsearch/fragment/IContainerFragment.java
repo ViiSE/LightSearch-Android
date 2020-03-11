@@ -26,4 +26,8 @@ public interface IContainerFragment extends Findable {
     void switchToSoftCheckFragment();
     void switchToOpenSoftCheckFragment();
     void addSoftCheckRecord(SoftCheckRecord record);
+    void setUnbindingBarcode(String barcode, boolean isRun);
+    void setBindingBarcode(String barcode, boolean isRun);
+    void switchToBind();
+    void switchToCheckBind();
 }

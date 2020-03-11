@@ -122,8 +122,9 @@
     <string name="fragment_result_bind">Результат</string>
     <string name="fragment_result_unbind">Результат</string>
     <string name="fragment_cart">Корзина</string>
-    <string name="fragment_binding">Привязка</string>
-    <string name="fragment_unbinding">Отвязка</string>
+    <string name="fragment_binding">Привязка товара</string>
+    <string name="fragment_binding_unbinding">Операции</string>
+    <string name="fragment_unbinding">Отвязка товара</string>
     <!-- ============ -->
 
     <!-- App Updater -->

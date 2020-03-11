@@ -59,6 +59,8 @@ import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
 import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.find.ImplFinder;
 import ru.viise.lightsearch.find.ImplFinderFragmentFromActivityDefaultImpl;
+import ru.viise.lightsearch.find.ImplFinderFragmentFromFragmentDefaultImpl;
+import ru.viise.lightsearch.fragment.ContainerFragment;
 import ru.viise.lightsearch.fragment.IBindingContainerFragment;
 import ru.viise.lightsearch.fragment.IContainerFragment;
 import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManager;
@@ -118,16 +120,10 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
                     containerFragment.setCardCode(scanContent);
                 else if(scanType == ScanType.SEARCH_SOFT_CHECK)
                     containerFragment.setSoftCheckBarcode(scanContent);
-
-            IBindingContainerFragment bindingContainerFragment = getBindingContainerFragment();
-            if(bindingContainerFragment != null)
-                if(scanType == ScanType.SEARCH)
-                    bindingContainerFragment.setSearchBarcode(scanContent);
                 else if (scanType == ScanType.SEARCH_BIND)
-                    bindingContainerFragment.setBindingBarcode(scanContent, true);
+                    containerFragment.setBindingBarcode(scanContent, true);
                 else if(scanType == ScanType.UNBIND)
-                    bindingContainerFragment.setUnbindingBarcode(scanContent, true);
-
+                    containerFragment.setUnbindingBarcode(scanContent, true);
         }
     }
 
@@ -164,13 +160,6 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         FragmentTransactionManager fragmentTransactionManager =
                 FragmentTransactionManagerInit.fragmentTransactionManager(this);
         fragmentTransactionManager.doContainerFragmentTransaction(skladArr, TKArr);
-    }
-
-    // TODO: 29.01.20 REMOVE THIS LATER
-    public void doBindingContainerFragmentTransaction(String[] skladArr, String[] TKArr) {
-        FragmentTransactionManager fragmentTransactionManager =
-                FragmentTransactionManagerInit.fragmentTransactionManager(this);
-        fragmentTransactionManager.doBindingContainerFragmentTransaction(skladArr, TKArr);
     }
 
     // TODO: 29.01.20 REMOVE THIS LATER
@@ -240,7 +229,7 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         NoResultAlertDialogCreator noResADCr =
                 NoResultAlertDialogCreatorInit.bindCheckNoResultAlertDialogCreator(this, message);
         noResADCr.create().show();
-        getBindingContainerFragment().switchToBind();
+        getContainerFragment().switchToBind();
     }
 
     public void callSearchDialogOneResult(SearchRecord searchRecord) {
@@ -285,9 +274,15 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
     }
 
     public IBindingContainerFragment getBindingContainerFragment() {
-        ImplFinder<IBindingContainerFragment> finder = new ImplFinderFragmentFromActivityDefaultImpl<>(this);
-        try { return finder.findImpl(IBindingContainerFragment.class); }
-        catch(FindableException ignore) { return null; }
+        try {
+            ImplFinder<ContainerFragment> cfFinder = new ImplFinderFragmentFromActivityDefaultImpl<>(this);
+            ContainerFragment cf = cfFinder.findImpl(ContainerFragment.class);
+
+            ImplFinder<IBindingContainerFragment> bcfFinder = new ImplFinderFragmentFromFragmentDefaultImpl<>(cf);
+            return bcfFinder.findImpl(IBindingContainerFragment.class);
+        } catch (FindableException ignore) {
+            return null;
+        }
     }
 
     @Override

@@ -29,31 +29,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ru.viise.lightsearch.R;
-import ru.viise.lightsearch.activity.OnBackPressedListener;
-import ru.viise.lightsearch.activity.OnBackPressedListenerType;
 import ru.viise.lightsearch.data.BindRecord;
 import ru.viise.lightsearch.data.UnbindRecord;
-import ru.viise.lightsearch.dialog.alert.CancelBindingAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.CancelBindingAlertDialogCreatorInit;
-import ru.viise.lightsearch.dialog.alert.ExitToAuthorizationAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.ExitToAuthorizationAlertDialogCreatorInit;
 import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.find.ImplFinder;
 import ru.viise.lightsearch.find.ImplFinderFragmentFromFragmentDefaultImpl;
 
 
-public class BindingContainerFragment extends Fragment implements IBindingContainerFragment, OnBackPressedListener {
+public class BindingContainerFragment extends Fragment implements IBindingContainerFragment {
 
     private static final String TAG = "ContainerFragment";
     private int selected = 0; // 0 - CheckBindingMode, 1 - BindingMode, 2 - BindingDone
-
-    private FragmentPageAdapter fragmentPageAdapter;
-
-
-    private String[] skladArray;
-    private String[] TKArray;
-
-    private OnBackPressedListenerType onBackPressedListenerType;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,18 +49,13 @@ public class BindingContainerFragment extends Fragment implements IBindingContai
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_container, container, false);
-        ViewPager viewPager = view.findViewById(R.id.ViewPagerCon);
+        View view = inflater.inflate(R.layout.fragment_binding_container, container, false);
+        ViewPager viewPager = view.findViewById(R.id.ViewPagerBindCon);
 
         setupViewPager(viewPager);
 
-        TabLayout tabLayout = view.findViewById(R.id.TabLayoutCon);
+        TabLayout tabLayout = view.findViewById(R.id.TabLayoutBindCon);
         tabLayout.setupWithViewPager(viewPager);
-
-        if(selected == 0)
-            onBackPressedListenerType = OnBackPressedListenerType.CONTAINER_FRAGMENT;
-        else if(selected == 1)
-            onBackPressedListenerType = OnBackPressedListenerType.BINDING_FRAGMENT;
 
         return view;
     }
@@ -90,18 +71,13 @@ public class BindingContainerFragment extends Fragment implements IBindingContai
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        fragmentPageAdapter = new FragmentPageAdapter(getChildFragmentManager());
-        SearchFragment searchFragment = new SearchFragment();
+        FragmentPageAdapter fragmentPageAdapter = new FragmentPageAdapter(getChildFragmentManager());
         BindingFragment bindingFragment = new BindingFragment();
         UnbindingFragment unbindingFragment = new UnbindingFragment();
-        fragmentPageAdapter.addFragment(searchFragment, getString(R.string.fragment_search));
         fragmentPageAdapter.addFragment(bindingFragment, getString(R.string.fragment_binding));
         fragmentPageAdapter.addFragment(unbindingFragment, getString(R.string.fragment_unbinding));
 
-        searchFragment.init(skladArray, TKArray);
-
         viewPager.setAdapter(fragmentPageAdapter);
-        onBackPressedListenerType = OnBackPressedListenerType.CONTAINER_FRAGMENT;
     }
 
     @Override
@@ -159,7 +135,6 @@ public class BindingContainerFragment extends Fragment implements IBindingContai
         if(bindingFragment != null) {
             if(bindingFragment.isVisible()) {
                 bindingFragment.switchToBind();
-                onBackPressedListenerType = OnBackPressedListenerType.BINDING_FRAGMENT;
                 selected = 1;
             }
         }
@@ -170,7 +145,6 @@ public class BindingContainerFragment extends Fragment implements IBindingContai
         IBindingFragment bindingFragment = getIBindingFragment();
         if(bindingFragment != null) {
             bindingFragment.switchToCheckBind();
-            onBackPressedListenerType = OnBackPressedListenerType.CONTAINER_FRAGMENT;
             selected = 0;
         }
     }
@@ -188,24 +162,6 @@ public class BindingContainerFragment extends Fragment implements IBindingContai
         IUnbindingFragment unbindingFragment = getIUnbindingFragment();
         if(unbindingFragment != null) {
             unbindingFragment.showResult(record);
-        }
-    }
-
-    public void setupSearchFragment(String[] skladArray, String[] TKArray) {
-        this.skladArray = skladArray;
-        this.TKArray = TKArray;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (onBackPressedListenerType == OnBackPressedListenerType.CONTAINER_FRAGMENT) {
-            ExitToAuthorizationAlertDialogCreator exitTAADCr =
-                    ExitToAuthorizationAlertDialogCreatorInit.exitToAuthorizationAlertDialogCreator(this.getActivity());
-            exitTAADCr.create().show();
-        } else if(onBackPressedListenerType == OnBackPressedListenerType.BINDING_FRAGMENT) {
-            CancelBindingAlertDialogCreator cancelBADCr =
-                    CancelBindingAlertDialogCreatorInit.cancelBindingAlertDialogCreator(this);
-            cancelBADCr.create().show();
         }
     }
 }

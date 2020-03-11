@@ -21,6 +21,7 @@ import android.support.v7.app.AlertDialog;
 
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.fragment.IBindingContainerFragment;
+import ru.viise.lightsearch.fragment.IContainerFragment;
 
 public class CancelBindingAlertDialogCreatorDefaultImpl implements CancelBindingAlertDialogCreator {
 
@@ -49,7 +50,7 @@ public class CancelBindingAlertDialogCreatorDefaultImpl implements CancelBinding
                 .create();
 
         dialogOKCancelContainer.buttonOK().setOnClickListener(viewOKCancel -> {
-            ((IBindingContainerFragment) fragment).switchToCheckBind();
+            ((IContainerFragment) fragment).switchToCheckBind();
             dialog.dismiss();
             successAD.show();
         });

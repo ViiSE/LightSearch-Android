@@ -112,9 +112,8 @@ public class FragmentTransactionManagerDefaultImpl implements FragmentTransactio
     }
 
     @Override
-    public void doBindingContainerFragmentTransaction(String[] skladArray, String[] TKArray) {
+    public void doBindingContainerFragmentTransaction() {
         BindingContainerFragment bindingContainerFragment = new BindingContainerFragment();
-        bindingContainerFragment.setupSearchFragment(skladArray, TKArray);
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
         transaction.replace(R.id.FrameLayoutManager, bindingContainerFragment, activity.getString(R.string.fragment_container));
