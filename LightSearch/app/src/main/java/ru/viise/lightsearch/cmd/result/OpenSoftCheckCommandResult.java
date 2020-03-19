@@ -16,4 +16,6 @@
 
 package ru.viise.lightsearch.cmd.result;
 
-public interface OpenSoftCheckCommandResult extends CommandResult { }
+public interface OpenSoftCheckCommandResult extends CommandResult {
+    boolean isCancel();
+}

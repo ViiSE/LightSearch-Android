@@ -56,7 +56,13 @@ public class UnbindProcess implements Process<UnbindPojo> {
                 return errorResult(ePojo.getMessage());
             }
         } catch (IOException ex) {
-            return errorResult(ex.getMessage());
+            String message = ex.getMessage();
+            if(ex.getMessage().equals("timeout"))
+                message = "Не удалось установить связь с сервером.";
+            else if(ex.getMessage().equals(""))
+                message = "Неизвестная ошибка. Попробуйте выполнить запрос позже.";
+
+            return errorResult(message);
         }
 
     }

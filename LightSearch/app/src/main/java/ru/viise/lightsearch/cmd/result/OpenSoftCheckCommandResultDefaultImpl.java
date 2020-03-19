@@ -22,12 +22,18 @@ public class OpenSoftCheckCommandResultDefaultImpl implements OpenSoftCheckComma
 
     private final boolean isDone;
     private final String message;
+    private final boolean isCancel;
     private final ReconnectDTO reconnectDTO;
 
-    public OpenSoftCheckCommandResultDefaultImpl(boolean isDone, String message, ReconnectDTO reconnectDTO) {
+    public OpenSoftCheckCommandResultDefaultImpl(
+            boolean isDone,
+            String message,
+            ReconnectDTO reconnectDTO,
+            boolean isCancel) {
         this.isDone = isDone;
         this.message = message;
         this.reconnectDTO = reconnectDTO;
+        this.isCancel = isCancel;
     }
 
     @Override
@@ -48,5 +54,10 @@ public class OpenSoftCheckCommandResultDefaultImpl implements OpenSoftCheckComma
     @Override
     public String message() {
         return message;
+    }
+
+    @Override
+    public boolean isCancel() {
+        return isCancel;
     }
 }

@@ -154,6 +154,7 @@ public class SoftCheckContainerFragment extends Fragment implements ISoftCheckCo
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.addToBackStack(null);
         transaction.commit();
+        this.getActivity().setTitle(R.string.fragment_cart);
         selected = 2;
         onBackPressedListenerType = OnBackPressedListenerType.CART_FRAGMENT;
     }

@@ -59,8 +59,14 @@ public class BindProcess implements Process<BindPojo> {
                         bp.getFactoryBarcode());
             }
         } catch (IOException ex) {
+            String message = ex.getMessage();
+            if(ex.getMessage().equals("timeout"))
+                message = "Не удалось установить связь с сервером.";
+            else if(ex.getMessage().equals(""))
+                message = "Неизвестная ошибка. Попробуйте выполнить запрос позже.";
+
             return errorResult(
-                    ex.getMessage(),
+                    message,
                     bp.getSelected(),
                     bp.getFactoryBarcode());
         }

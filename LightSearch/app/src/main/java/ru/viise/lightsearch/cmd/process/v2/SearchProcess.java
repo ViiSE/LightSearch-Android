@@ -61,8 +61,14 @@ public class SearchProcess implements Process<SearchPojo> {
                         sp.getType());
             }
         } catch (IOException ex) {
+            String message = ex.getMessage();
+            if(ex.getMessage().equals("timeout"))
+                message = "Не удалось установить связь с сервером.";
+            else if(ex.getMessage().equals(""))
+                message = "Неизвестная ошибка. Попробуйте выполнить запрос позже.";
+
             return errorResult(
-                    ex.getMessage(),
+                    message,
                     sp.getSubdivision(),
                     sp.getType());
         }
