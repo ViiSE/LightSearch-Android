@@ -35,7 +35,6 @@
             <EditText
                 android:id="@+id/editTextSearchSC"
                 android:layout_width="0dp"
-                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"

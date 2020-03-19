@@ -23,6 +23,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -47,7 +48,6 @@ import ru.viise.lightsearch.cmd.result.UnbindCommandResult;
 import ru.viise.lightsearch.data.BindRecord;
 import ru.viise.lightsearch.data.ScanType;
 import ru.viise.lightsearch.data.SearchRecord;
-import ru.viise.lightsearch.data.SoftCheckRecord;
 import ru.viise.lightsearch.data.UnbindRecord;
 import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreator;
 import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreatorActivityImpl;
@@ -97,6 +97,10 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
             IMEI = tm.getDeviceId();
         else
             reqPhonePermission();
+
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        }, 1);
 
         ResultCommandUICreator resCmdUiCr = ResultCommandUICreatorInit.resultCommandUICreator(this);
         commandHolderUI = resCmdUiCr.createResultCommandHolderUI();
@@ -149,18 +153,6 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
                 else if(scanType == ScanType.SEARCH_SOFT_CHECK)
                     softCheckContainerFragment.setSoftCheckBarcode(scanContent);
             }
-
-//            IOpenSoftCheckFragment openSoftCheckFragment = getOpenSoftCheckFragment();
-//            if(openSoftCheckFragment != null) {
-//                if(scanType == ScanType.OPEN_SOFT_CHECK)
-//                    openSoftCheckFragment.setCardCode(scanContent);
-//            }
-
-//            ISoftCheckFragment softCheckFragment = getSoftCheckFragment();
-//            if(softCheckFragment != null) {
-//                if(scanType == ScanType.SEARCH_SOFT_CHECK)
-//                    softCheckFragment.setSoftCheckBarcode(scanContent);
-//            }
         }
     }
 
@@ -213,27 +205,10 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         fragmentTransactionManager.doBindingContainerFragmentTransactionFromResultBind();
     }
 
-    public void doContainerFragmentTransactionFromCart() {
-        FragmentTransactionManager fragmentTransactionManager =
-                FragmentTransactionManagerInit.fragmentTransactionManager(this);
-        fragmentTransactionManager.doContainerFragmentTransactionFromCart();
-    }
-
-    public void doOpenSoftCheckFragmentTransaction() {
-        FragmentTransactionManager fragmentTransactionManager =
-                FragmentTransactionManagerInit.fragmentTransactionManager(this);
-        fragmentTransactionManager.doOpenSoftCheckFragmentTransaction();
-    }
-
     public void doResultSearchFragmentTransaction(String title, List<SearchRecord> searchRecords) {
         FragmentTransactionManager fragmentTransactionManager =
                 FragmentTransactionManagerInit.fragmentTransactionManager(this);
         fragmentTransactionManager.doResultSearchFragmentTransaction(title, searchRecords);
-    }
-
-    public void showSearchSoftCheckResult(List<SoftCheckRecord> softCheckRecords) {
-        ISoftCheckContainerFragment softCheckContainerFragment = getSoftCheckContainerFragment();
-        softCheckContainerFragment.showResultSearchSoftCheckFragment(softCheckRecords);
     }
 
     public void doSoftCheckContainerFragmentTransaction() {
@@ -271,16 +246,6 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         FragmentTransactionManager fragmentTransactionManager =
                 FragmentTransactionManagerInit.fragmentTransactionManager(this);
         fragmentTransactionManager.doResultUnbindFragmentTransaction(title, unbindCmdRes);
-    }
-
-    public void doCartFragmentTransaction(List<SoftCheckRecord> cartRecords) {
-        ISoftCheckFragment softCheckFragment = getSoftCheckFragment();
-        softCheckFragment.switchToCart(cartRecords);
-//        ISoftCheckContainerFragment softCheckContainerFragment = getSoftCheckContainerFragment();
-//        softCheckContainerFragment.switchToOpenSoftCheckFragment();
-//        FragmentTransactionManager fragmentTransactionManager =
-//                FragmentTransactionManagerInit.fragmentTransactionManager(this);
-//        fragmentTransactionManager.doCartFragmentTransaction(cartRecords);
     }
 
     public void callDialogError(String errorMessage) {

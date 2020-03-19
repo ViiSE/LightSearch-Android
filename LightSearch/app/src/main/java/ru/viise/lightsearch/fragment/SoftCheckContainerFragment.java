@@ -21,17 +21,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,19 +37,14 @@ import ru.viise.lightsearch.activity.KeyboardHideToolDefaultImpl;
 import ru.viise.lightsearch.activity.ManagerActivityHandler;
 import ru.viise.lightsearch.activity.OnBackPressedListener;
 import ru.viise.lightsearch.activity.OnBackPressedListenerType;
-import ru.viise.lightsearch.data.CartRecord;
 import ru.viise.lightsearch.data.SoftCheckRecord;
 import ru.viise.lightsearch.dialog.alert.AlertDialogUtil;
 import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreator;
 import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreatorInit;
-import ru.viise.lightsearch.dialog.alert.DialogOKContainer;
-import ru.viise.lightsearch.dialog.alert.DialogOKContainerCreatorInit;
-import ru.viise.lightsearch.dialog.alert.DialogOKContainerInit;
 import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
 import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.find.ImplFinder;
 import ru.viise.lightsearch.find.ImplFinderFragmentFromActivityDefaultImpl;
-import ru.viise.lightsearch.find.ImplFinderFragmentFromFragmentDefaultImpl;
 import ru.viise.lightsearch.fragment.adapter.ResultSearchSoftCheckArrayAdapter;
 
 public class SoftCheckContainerFragment extends Fragment implements ISoftCheckContainerFragment, OnBackPressedListener {
@@ -124,35 +114,6 @@ public class SoftCheckContainerFragment extends Fragment implements ISoftCheckCo
         outState.putParcelableArrayList(SOFT_CHECK_RECORDS, new ArrayList<>(softCheckRecords));
         super.onSaveInstanceState(outState);
     }
-
-//    @Override
-//    public void switchToSoftCheckFragment() {
-//        SoftCheckFragment scFragment = new SoftCheckFragment();
-//        scFragment.init(softCheckRecords);
-//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//        transaction.setCustomAnimations(R.anim.enter_from_down, R.anim.exit_to_up, R.anim.enter_from_up, R.anim.exit_to_down);
-//        transaction.replace(R.id.fragment_sc_container, scFragment);
-//        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//        transaction.addToBackStack(null);
-//        transaction.commit();
-//        selected = 1;
-//        onBackPressedListenerType = OnBackPressedListenerType.SOFT_CHECK_FRAGMENT;
-//    }
-//
-//    @Override
-//    public void switchToOpenSoftCheckFragment() {
-//        if (selected != 0) {
-//            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//            transaction.setCustomAnimations(R.anim.enter_from_up, R.anim.exit_to_down, R.anim.enter_from_down, R.anim.exit_to_up);
-//            transaction.replace(R.id.fragment_sc_container, new OpenSoftCheckFragment());
-//            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//            transaction.addToBackStack(null);
-//            transaction.commit();
-//            softCheckRecords.clear();
-//            selected = 0;
-//            onBackPressedListenerType = OnBackPressedListenerType.OPEN_SOFT_CHECK;
-//        }
-//    }
 
     @Override
     public void switchToSoftCheckFragment() {
@@ -230,22 +191,6 @@ public class SoftCheckContainerFragment extends Fragment implements ISoftCheckCo
         }
     }
 
-//    @Override
-//    public void showResultSearchSoftCheckFragment(List<SoftCheckRecord> records) {
-//        ResultSearchSoftCheckFragment resultFragment = new ResultSearchSoftCheckFragment();
-//        resultFragment.init(records);
-//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//        transaction.setCustomAnimations(R.anim.enter_from_down, R.anim.exit_to_up, R.anim.enter_from_up, R.anim.exit_to_down);
-//        transaction.replace(R.id.fragment_sc_container, resultFragment);
-//        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//        transaction.addToBackStack(null);
-//        transaction.commit();
-//        StackFragmentTitle.push(getString(R.string.fragment_soft_check));
-//        this.getActivity().setTitle(R.string.fragment_result_soft_check);
-//        KeyboardHideTool khTool = new KeyboardHideToolDefaultImpl(this.getActivity());
-//        khTool.hideKeyboard();
-//    }
-
     @Override
     public void addSoftCheckRecord(SoftCheckRecord record) {
         this.getActivity().setTitle(R.string.fragment_soft_check);
@@ -266,10 +211,6 @@ public class SoftCheckContainerFragment extends Fragment implements ISoftCheckCo
     public void showResultSearchSoftCheckFragment(List<SoftCheckRecord> records) {
         KeyboardHideTool khTool = new KeyboardHideToolDefaultImpl(this.getActivity());
         khTool.hideKeyboard();
-//        ResultSearchDialogFragment dialogFragment = new ResultSearchDialogFragment();
-//        dialogFragment.init(records);
-//        dialogFragment.show(getFragmentManager(), ResultSearchDialogFragment.TAG);
-//        this.getActivity().setTitle(R.string.fragment_result_soft_check);
 
         View dialogView = this.getActivity().getLayoutInflater().inflate(R.layout.dialog_soft_check_result_search, null);
         ImageButton buttonCancel = dialogView.findViewById(R.id.imageButtonCancel);
@@ -287,15 +228,6 @@ public class SoftCheckContainerFragment extends Fragment implements ISoftCheckCo
         buttonCancel.setOnClickListener(view -> dialogResult.dismiss());
         AlertDialogUtil.setTransparentBackground(dialogResult);
         dialogResult.show();
-//        ResultSearchSoftCheckFragment resultFragment = new ResultSearchSoftCheckFragment();
-//        resultFragment.init(records);
-//
-//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//        transaction.setCustomAnimations(R.anim.enter_from_down, R.anim.exit_to_up, R.anim.enter_from_up, R.anim.exit_to_down);
-//        transaction.replace(R.id.fragment_open_sc, resultFragment);
-//        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//        transaction.addToBackStack(ResultSearchSoftCheckFragment.TAG);
-//        transaction.commit();
     }
 
     @Override

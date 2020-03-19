@@ -38,7 +38,6 @@ public class ConfirmSoftCheckProductsResultUIProcessor implements Function<Comma
             ISoftCheckContainerFragment softCheckContainerFragment = activity.getSoftCheckContainerFragment();
             if (softCheckContainerFragment != null)
                 softCheckContainerFragment.switchToCartFragment(conSCProdRes.cartRecords());
-//            activity.doCartFragmentTransaction(conSCProdRes.cartRecords());
         } else if(conSCProdRes.isReconnect()) {
             // FIXME: 22.02.20 DO IT LATER
 //            SharedPreferences sPref = activity.getSharedPreferences("pref", Context.MODE_PRIVATE);

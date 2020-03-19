@@ -52,8 +52,26 @@ public class UpdateAlertDialogCreatorDefaultImpl implements UpdateAlertDialogCre
         AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setView(dialogOKCancelContainer.dialogOKCancelView()).create();
 
-        dialogOKCancelContainer.buttonOK().setOnClickListener(viewOK ->
-                UtilsLibrary.goToUpdate(activity.getApplicationContext(), apk));
+        dialogOKCancelContainer.buttonOK().setOnClickListener(viewOK -> {
+            UtilsLibrary.goToUpdate(activity.getApplicationContext(), apk);
+            dialog.dismiss();
+
+            DialogOKContainer dialogOKContainer =
+                    DialogOKContainerCreatorInit.dialogOKContainerCreator(activity)
+                            .create();
+
+            dialogOKContainer.textViewTitle().setText(R.string.dialog_update_downloading_title);
+            dialogOKContainer.textViewResult().setText(R.string.dialog_update_downloading_description);
+
+            dialogOKContainer.buttonOK().setText(R.string.dialog_OK);
+
+            AlertDialog dialogDownloading = new AlertDialog.Builder(activity)
+                    .setView(dialogOKContainer.dialogOKView()).create();
+
+            dialogOKContainer.buttonOK().setOnClickListener(view -> dialogDownloading.dismiss());
+            AlertDialogUtil.setTransparentBackground(dialogDownloading);
+            dialogDownloading.show();
+        });
 
         dialogOKCancelContainer.buttonCancel().setOnClickListener(viewCancel -> dialog.dismiss());
         AlertDialogUtil.setTransparentBackground(dialog);

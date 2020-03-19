@@ -199,7 +199,7 @@ public class CartFragment extends Fragment implements ICartFragment {
     }
 
     private void fillSpinnerDeliveryType() {
-        String[] data = new String[4];
+        String[] data = new String[2];
         data[0] = NO;
 //        data[1] = DOSTAVKA_SO_SKLADOV;
 //        data[2] = SAMOVYVOZ_SO_SKLADOV;
@@ -338,12 +338,4 @@ public class CartFragment extends Fragment implements ICartFragment {
         adapter.notifyDataSetChanged();
         tryToCloseSoftCheck();
     }
-
-//    @Override
-//    public void onBackPressed() {
-//        CancelSoftCheckFromCartAlertDialogCreator cancelSCFCADCr =
-//                CancelSoftCheckFromCartAlertDialogCreatorInit.cancelSoftCheckFromCartAlertDialogCreator(
-//                        this, managerActivityHandler, queryDialog);
-//        cancelSCFCADCr.create().show();
-//    }
 }

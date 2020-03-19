@@ -67,8 +67,6 @@ public class AppUpdater implements IAppUpdater {
                             UpdateAlertDialogCreatorInit.alertDialogUpdateCreator(activity, update)
                             .create();
 
-
-
                     alertDialog.setCanceledOnTouchOutside(false);
                     alertDialog.show();
 

@@ -38,9 +38,6 @@ public class SearchResultUIProcessor implements Function<CommandResult, Void> {
         SearchCommandResult searchCmdRes = (SearchCommandResult) commandResult;
         if(searchCmdRes.isDone()) {
             if (searchCmdRes.records().size() != 0) {
-//                SearchResultTitleCreator searchResTitleCr =
-//                        SearchResultTitleCreatorInit.searchResultTitleCreator(searchCmdRes.subdivision(),
-//                                searchCmdRes.records().get(0).barcode());
                 String title = activity.getString(R.string.search_result) + " " + searchCmdRes.subdivision();
                 if (searchCmdRes.records().size() == 1)
                     activity.callSearchDialogOneResult(searchCmdRes.records().get(0));

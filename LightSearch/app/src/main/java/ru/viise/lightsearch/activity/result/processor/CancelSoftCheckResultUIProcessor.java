@@ -23,7 +23,6 @@ import ru.viise.lightsearch.activity.ManagerActivity;
 import ru.viise.lightsearch.cmd.result.CancelSoftCheckCommandResult;
 import ru.viise.lightsearch.cmd.result.CommandResult;
 import ru.viise.lightsearch.fragment.ISoftCheckContainerFragment;
-import ru.viise.lightsearch.fragment.SoftCheckContainerFragment;
 
 public class CancelSoftCheckResultUIProcessor implements Function<CommandResult, Void> {
 
@@ -38,12 +37,7 @@ public class CancelSoftCheckResultUIProcessor implements Function<CommandResult,
         CancelSoftCheckCommandResult cancelSCCmdRes = (CancelSoftCheckCommandResult)commandResult;
         if(cancelSCCmdRes.isDone()) {
             activity.setTitle(activity.getString(R.string.fragment_container));
-//            activity.getSupportFragmentManager().popBackStack(OpenSoftCheckFragment.TAG, 0);
-//            if(cancelSCCmdRes.isCart())
-//                activity.getSupportFragmentManager().popBackStack();
-
             activity.callDialogSuccess(cancelSCCmdRes.message());
-//            activity.getSupportFragmentManager().popBackStack(SoftCheckContainerFragment.TAG, 0);
             ISoftCheckContainerFragment containerFragment = activity.getSoftCheckContainerFragment();
             if(containerFragment != null)
                 containerFragment.switchToOpenSoftCheckFragment();

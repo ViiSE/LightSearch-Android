@@ -16,17 +16,21 @@
 
 package ru.viise.lightsearch.util.appupdater;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.text.TextUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.util.appupdater.objects.Update;
 import ru.viise.lightsearch.util.appupdater.objects.Version;
 
@@ -99,8 +103,16 @@ public class UtilsLibrary {
     }
 
     public static void goToUpdate(Context context, URL url) {
-        Intent intent = intentToUpdate(url);
-        context.startActivity(intent);
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url.toString()));
+        request.setDescription(context.getString(R.string.download_description));
+        request.setTitle(context.getString(R.string.download_title));
+        request.allowScanningByMediaScanner();
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "app-release.apk");
+        DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        manager.enqueue(request);
+//        Intent intent = intentToUpdate(url);
+//        context.startActivity(intent);
     }
 
     static Boolean isNetworkAvailable(Context context) {

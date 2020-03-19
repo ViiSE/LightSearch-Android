@@ -103,6 +103,8 @@
     <string name="dialog_res_prod_new_max_amount">Общее кол-во ПОСЛЕ</string>
     <string name="dialog_res_prod_subdivisions">Подразделения</string>
     <string name="dialog_update_title">Доступно обновление!</string>
+    <string name="dialog_update_downloading_description">Обновление загружается. Статус загрузки и файл обновления доступны в шторке уведомлений.</string>
+    <string name="dialog_update_downloading_title">Обновление загружается!</string>
     <!-- ============= -->
 
     <!-- Toast -->
@@ -155,6 +157,8 @@
 
     <!-- App Updater -->
     <string name="update_url">http://192.168.3.215:50001/update/info/update.json</string>
+    <string name="download_title">LightSearch</string>
+    <string name="download_description">Загрузка обновления…</string>
     <!-- =========== -->
 
     <!-- Content Description -->

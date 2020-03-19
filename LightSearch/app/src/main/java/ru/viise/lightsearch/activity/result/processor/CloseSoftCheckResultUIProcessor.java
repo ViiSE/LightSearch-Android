@@ -16,8 +16,6 @@
 
 package ru.viise.lightsearch.activity.result.processor;
 
-import android.support.v4.app.FragmentManager;
-
 import java.util.function.Function;
 
 import ru.viise.lightsearch.R;
@@ -25,7 +23,6 @@ import ru.viise.lightsearch.activity.ManagerActivity;
 import ru.viise.lightsearch.cmd.result.CloseSoftCheckCommandResult;
 import ru.viise.lightsearch.cmd.result.CommandResult;
 import ru.viise.lightsearch.fragment.ISoftCheckContainerFragment;
-import ru.viise.lightsearch.fragment.OpenSoftCheckFragment;
 
 public class CloseSoftCheckResultUIProcessor implements Function<CommandResult, Void> {
 
@@ -40,12 +37,10 @@ public class CloseSoftCheckResultUIProcessor implements Function<CommandResult, 
         CloseSoftCheckCommandResult closeSCCmdRes = (CloseSoftCheckCommandResult)commandResult;
         if(closeSCCmdRes.isDone()) {
             activity.callDialogSuccess(closeSCCmdRes.message());
-//            activity.doContainerFragmentTransactionFromCart();
             activity.setTitle(activity.getString(R.string.fragment_container));
             ISoftCheckContainerFragment containerFragment = activity.getSoftCheckContainerFragment();
             if(containerFragment != null)
                 containerFragment.switchToOpenSoftCheckFragment();
-//            activity.getSupportFragmentManager().popBackStack(OpenSoftCheckFragment.TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         } else if(closeSCCmdRes.isReconnect()) {
             // FIXME: 22.02.20 DO IT LATER
 //            SharedPreferences sPref = activity.getSharedPreferences("pref", Context.MODE_PRIVATE);
