@@ -48,11 +48,14 @@ public class OpenSoftCheckProcess implements Process<OpenSoftCheckPojo> {
                     .execute();
             if(response.isSuccessful()) {
                 OpenSoftCheckResultPojo oscr = response.body();
-                return new CommandResultOpenSoftCheckCreatorV2Impl(oscr).create();
+                return new CommandResultOpenSoftCheckCreatorV2Impl(oscr, false).create();
             } else {
                 String json = response.errorBody().string();
                 ErrorPojo ePojo = new Gson().fromJson(json, ErrorPojo.class);
-                return errorResult(ePojo.getMessage());
+                if(ePojo.getMessage().contains("уже открыт"))
+                    return errorResult(ePojo.getMessage(),true);
+                else
+                    return errorResult(ePojo.getMessage(),false);
             }
         } catch (IOException ex) {
             String message = ex.getMessage();
@@ -61,15 +64,14 @@ public class OpenSoftCheckProcess implements Process<OpenSoftCheckPojo> {
             else if(ex.getMessage().equals(""))
                 message = "Неизвестная ошибка. Попробуйте выполнить запрос позже.";
 
-            return errorResult(message);
+            return errorResult(message, false);
         }
-
     }
 
-    private CommandResult errorResult(String message) {
+    private CommandResult errorResult(String message, boolean isCancel) {
         OpenSoftCheckResultPojo oscr = new OpenSoftCheckResultPojo();
         oscr.setIsDone(false);
         oscr.setMessage(message);
-        return new CommandResultOpenSoftCheckCreatorV2Impl(oscr).create();
+        return new CommandResultOpenSoftCheckCreatorV2Impl(oscr, isCancel).create();
     }
 }

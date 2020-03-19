@@ -21,7 +21,7 @@ import ru.viise.lightsearch.data.ReconnectDTO;
 public class OpenSoftCheckCommandResultInit {
 
     public static OpenSoftCheckCommandResult openSoftCheckCommandResult(
-            boolean isDone, String message, ReconnectDTO reconnectDTO) {
-        return new OpenSoftCheckCommandResultDefaultImpl(isDone, message, reconnectDTO);
+            boolean isDone, String message, ReconnectDTO reconnectDTO, boolean isCancel) {
+        return new OpenSoftCheckCommandResultDefaultImpl(isDone, message, reconnectDTO, isCancel);
     }
 }

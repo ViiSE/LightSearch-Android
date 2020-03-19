@@ -24,9 +24,11 @@ import ru.viise.lightsearch.data.pojo.OpenSoftCheckResultPojo;
 public class CommandResultOpenSoftCheckCreatorV2Impl implements CommandResultCreator {
 
     private final OpenSoftCheckResultPojo pojo;
+    private final boolean isCancel;
 
-    public CommandResultOpenSoftCheckCreatorV2Impl(OpenSoftCheckResultPojo pojo) {
+    public CommandResultOpenSoftCheckCreatorV2Impl(OpenSoftCheckResultPojo pojo, boolean isCancel) {
         this.pojo = pojo;
+        this.isCancel = isCancel;
     }
 
     @Override
@@ -34,6 +36,7 @@ public class CommandResultOpenSoftCheckCreatorV2Impl implements CommandResultCre
         return OpenSoftCheckCommandResultInit.openSoftCheckCommandResult(
                 pojo.getIsDone(),
                 pojo.getMessage(),
-                null);
+                null,
+                isCancel);
     }
 }

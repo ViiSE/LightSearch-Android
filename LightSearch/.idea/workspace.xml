@@ -15,21 +15,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d971fcd-3628-4833-9afe-96f8e9859b51" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/activity/result/processor/OpenSoftCheckResultUIProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/activity/result/processor/OpenSoftCheckResultUIProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/AuthorizationProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/AuthorizationProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/BindCheckProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/BindCheckProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/BindProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/BindProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/CancelSoftCheckProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/CancelSoftCheckProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/CloseSoftCheckProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/CloseSoftCheckProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/ConfirmSoftCheckProductsCommandProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/ConfirmSoftCheckProductsCommandProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/release/output.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/release/output.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/OpenSoftCheckProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/OpenSoftCheckProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/SearchProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/SearchProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/UnbindCheckProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/UnbindCheckProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/UnbindProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/v2/UnbindProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/result/OpenSoftCheckCommandResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/result/OpenSoftCheckCommandResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/result/OpenSoftCheckCommandResultDefaultImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/result/OpenSoftCheckCommandResultDefaultImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/SoftCheckContainerFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/SoftCheckContainerFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/result/OpenSoftCheckCommandResultInit.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/result/OpenSoftCheckCommandResultInit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/result/creator/v2/CommandResultOpenSoftCheckCreatorV2Impl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/result/creator/v2/CommandResultOpenSoftCheckCreatorV2Impl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -37,7 +30,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="5LX9K18811910889" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_3a_API_27" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
