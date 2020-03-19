@@ -18,7 +18,6 @@ package ru.viise.lightsearch.cmd.result;
 
 import java.util.List;
 
-import ru.viise.lightsearch.data.BindRecord;
 import ru.viise.lightsearch.data.ReconnectDTO;
 import ru.viise.lightsearch.data.UnbindRecord;
 

@@ -21,23 +21,18 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.Space;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -65,7 +60,7 @@ import ru.viise.lightsearch.pref.PreferencesManagerInit;
 import ru.viise.lightsearch.pref.PreferencesManagerType;
 
 
-public class SearchFragment extends Fragment implements View.OnClickListener, ISearchFragment {
+public class SearchFragment extends Fragment implements ISearchFragment {
 
     private final String ALL_UI = SearchFragmentContentEnum.ALL_UI.stringValue();
 
@@ -88,8 +83,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, IS
     private ManagerActivityHandler managerActivityHandler;
     private ManagerActivityUI managerActivityUI;
 
-    private Animation animAlpha;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,31 +99,40 @@ public class SearchFragment extends Fragment implements View.OnClickListener, IS
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        animAlpha = AnimationUtils.loadAnimation(this.getActivity(), R.anim.alpha);
-
         skladSpinner = view.findViewById(R.id.spinnerSklad);
         TKSpinner = view.findViewById(R.id.spinnerTK);
         searchEditText = view.findViewById(R.id.editTextSearch);
-        Button searchButton = view.findViewById(R.id.buttonSearch);
-        Button barcodeButton = view.findViewById(R.id.buttonBarcode);
+        FloatingActionButton barcodeButton = view.findViewById(R.id.floatingActionButtonBarcode);
         skladRadioButton = view.findViewById(R.id.radioButtonSklad);
         TKRadioButton = view.findViewById(R.id.radioButtonTK);
         AllRadioButton = view.findViewById(R.id.radioButtonAll);
 
-        Space space1 = view.findViewById(R.id.spaceSearch1);
-        Space space4 = view.findViewById(R.id.spaceSearch4);
-        Display display = Objects.requireNonNull(this.getActivity()).getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int height = size.y;
+        searchEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String barcode = searchEditText.getText().toString();
 
-        if(height == 854) {
-            space1.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0));
-            space4.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0));
-        }
+                if(barcode.length() < 2) {
+                    Toast t = Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(),
+                            "Введите не менее двух символов!", Toast.LENGTH_LONG);
+                    t.show();
+                } else {
+                    KeyboardHideToolInit.keyboardHideTool(getActivity()).hideKeyboard();
+                    run(barcode);
+                }
+                searchEditText.clearFocus();
+                v.requestFocus();
+                return true;
+            }
+            return false;
+        });
 
-        searchButton.setOnClickListener(this);
-        barcodeButton.setOnClickListener(this);
+        barcodeButton.setOnClickListener(view1 -> {
+            KeyboardHideToolInit.keyboardHideTool(this.getActivity()).hideKeyboard();
+            searchEditText.clearFocus();
+            view1.requestFocus();
+            managerActivityUI.setScanType(ScanType.SEARCH);
+            ScannerInit.scanner(this.getActivity()).scan();
+        });
 
         switch(selected) {
             case 0:
@@ -195,58 +197,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, IS
         this.TKArray = TKArray;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()) {
-            case R.id.buttonSearch:
-                v.startAnimation(animAlpha);
-                String barcode = searchEditText.getText().toString();
-
-                if(barcode.length() < 2) {
-                    Toast t = Toast.makeText(Objects.requireNonNull(this.getActivity()).getApplicationContext(),
-                            "Введите не менее двух символов!", Toast.LENGTH_LONG);
-                    t.show();
-                } else {
-                    KeyboardHideToolInit.keyboardHideTool(this.getActivity()).hideKeyboard();
-
-                    SharedPreferences sPref = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
-                    PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
-
-                    Command<SearchPojo> command = new SearchCommandWithBarcode(
-                            new SearchCommandWithSklad(
-                                    new SearchCommandWithTK(
-                                            new SearchCommandWithSubdivision(
-                                                    new SearchCommandWithToken(
-                                                            new SearchCommandSimple(),
-                                                    prefManager.load(PreferencesManagerType.TOKEN_MANAGER)
-                                                    ), getSubdivision().uiValue()
-                                            ), getSelectedTK()
-                                    ), getSelectedSklad()
-                            ), barcode);
-
-                    NetworkAsyncTask<SearchPojo> networkAsyncTask = new NetworkAsyncTask<>(
-                            managerActivityHandler,
-                            queryDialog);
-
-                    networkAsyncTask.execute(command);
-                }
-                searchEditText.clearFocus();
-                v.requestFocus();
-                break;
-            case R.id.buttonBarcode:
-                KeyboardHideToolInit.keyboardHideTool(this.getActivity()).hideKeyboard();
-
-                searchEditText.clearFocus();
-                v.requestFocus();
-
-                v.startAnimation(animAlpha);
-                managerActivityUI.setScanType(ScanType.SEARCH);
-                ScannerInit.scanner(this.getActivity()).scan();
-                break;
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -291,7 +241,32 @@ public class SearchFragment extends Fragment implements View.OnClickListener, IS
     }
 
     @Override
-    public void setSearchBarcode(String barcode) {
+    public void setSearchBarcode(String barcode, boolean isRun) {
         searchEditText.setText(barcode);
+        if(isRun)
+            run(barcode);
+    }
+
+    private void run(String barcode) {
+        SharedPreferences sPref = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+        PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
+
+        Command<SearchPojo> command = new SearchCommandWithBarcode(
+                new SearchCommandWithSklad(
+                        new SearchCommandWithTK(
+                                new SearchCommandWithSubdivision(
+                                        new SearchCommandWithToken(
+                                                new SearchCommandSimple(),
+                                                prefManager.load(PreferencesManagerType.TOKEN_MANAGER)
+                                        ), getSubdivision().uiValue()
+                                ), getSelectedTK()
+                        ), getSelectedSklad()
+                ), barcode);
+
+        NetworkAsyncTask<SearchPojo> networkAsyncTask = new NetworkAsyncTask<>(
+                managerActivityHandler,
+                queryDialog);
+
+        networkAsyncTask.execute(command);
     }
 }

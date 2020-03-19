@@ -36,6 +36,6 @@ public class ExampleUITest {
 
     @Test
     public void test() {
-        onView(ViewMatchers.withId(R.id.FrameLayoutManager)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(R.id.activity_manager)).check(matches(isDisplayed()));
     }
 }

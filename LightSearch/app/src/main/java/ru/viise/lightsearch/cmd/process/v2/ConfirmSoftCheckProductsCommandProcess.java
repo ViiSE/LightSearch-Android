@@ -62,21 +62,27 @@ public class ConfirmSoftCheckProductsCommandProcess implements Process<ConfirmSo
                 ErrorPojo ePojo = new Gson().fromJson(json, ErrorPojo.class);
                 return errorResult(
                         ePojo.getMessage(),
-                        cscpp.getSoftCheckRecords());
+                        cscpp.getSoftCheckRecords(),
+                        cscpp.getType());
             }
         } catch (IOException ex) {
             return errorResult(
                     ex.getMessage(),
-                    cscpp.getSoftCheckRecords());
+                    cscpp.getSoftCheckRecords(),
+                    cscpp.getType());
         }
 
     }
 
-    private CommandResult errorResult(String message, List<SoftCheckRecord> records) {
+    private CommandResult errorResult(String message, List<SoftCheckRecord> records, int type) {
         ConfirmSoftCheckProductsResultPojo cscprp = new ConfirmSoftCheckProductsResultPojo();
         cscprp.setIsDone(false);
         cscprp.setMessage(message);
         cscprp.setSoftCheckRecords(records);
-        return new CommandResultConfirmCartProductsCreatorV2Impl(cscprp).create();
+        if(type == 1) {
+            return new CommandResultConfirmCartProductsCreatorV2Impl(cscprp).create();
+        } else {
+            return new CommandResultConfirmSoftCheckProductsCreatorV2Impl(cscprp).create();
+        }
     }
 }

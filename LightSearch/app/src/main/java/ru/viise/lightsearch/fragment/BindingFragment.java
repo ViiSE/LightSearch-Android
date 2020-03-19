@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -36,8 +37,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,10 +85,6 @@ public class BindingFragment extends Fragment implements IBindingFragment {
     private ManagerActivityHandler managerActivityHandler;
     private ManagerActivityUI managerActivityUI;
 
-    private Animation animAlpha;
-
-    private ImageButton bindButton;
-
     private LinearLayout linearLayoutBindFactoryBarcode;
 
     @Override
@@ -106,23 +103,16 @@ public class BindingFragment extends Fragment implements IBindingFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_binding, container, false);
 
-        animAlpha = AnimationUtils.loadAnimation(this.getActivity(), R.anim.alpha);
-
         bindingOKCardView = view.findViewById(R.id.cardViewBindingContainerOK);
         searchEditText = view.findViewById(R.id.editTextSearchBinding);
         textViewFactoryBarcode = view.findViewById(R.id.textViewBindBarcode);
-        bindButton = view.findViewById(R.id.buttonBind);
         linearLayoutBindFactoryBarcode = view.findViewById(R.id.linearLayoutBindFactoryBarcode);
-        ImageButton barcodeButton = view.findViewById(R.id.buttonBarcodeBinding);
+        FloatingActionButton barcodeButton = view.findViewById(R.id.floatingActionButtonBindingBarcode);
 
         if(selected == 0) {
-            bindButton.setImageResource(R.drawable.ic_magnifier_search);
-
             linearLayoutBindFactoryBarcode.setVisibility(View.GONE);
             searchEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
         } else if(selected == 1) {
-            bindButton.setImageResource(R.drawable.ic_binding);
-
             linearLayoutBindFactoryBarcode.setVisibility(View.VISIBLE);
             textViewFactoryBarcode.setText(factoryBarcode);
             searchEditText.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -133,29 +123,32 @@ public class BindingFragment extends Fragment implements IBindingFragment {
         queryDialog = SpotsDialogCreatorInit.spotsDialogCreator(this.getActivity(), R.string.spots_dialog_query_exec)
                 .create();
 
-        bindButton.setOnClickListener(view1 -> {
-            view1.startAnimation(animAlpha);
-            String input = searchEditText.getText().toString();
-
-            if(input.length() < 2) {
-                Toast t = Toast.makeText(Objects.requireNonNull(this.getActivity()).getApplicationContext(),
-                        "Введите не менее двух символов!", Toast.LENGTH_LONG);
-                t.show();
-            } else {
-                run();
-            }
-            view1.requestFocus();
-        });
-
         barcodeButton.setOnClickListener(view2 -> {
             KeyboardHideToolInit.keyboardHideTool(this.getActivity()).hideKeyboard();
 
             searchEditText.clearFocus();
             view2.requestFocus();
 
-            view2.startAnimation(animAlpha);
             managerActivityUI.setScanType(ScanType.SEARCH_BIND);
             ScannerInit.scanner(this.getActivity()).scan();
+        });
+
+        searchEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String input = searchEditText.getText().toString();
+
+                if(input.length() < 2) {
+                    Toast t = Toast.makeText(Objects.requireNonNull(this.getActivity()).getApplicationContext(),
+                            "Введите не менее двух символов!", Toast.LENGTH_LONG);
+                    t.show();
+                } else {
+                    run();
+                }
+                v.requestFocus();
+
+                return true;
+            }
+            return false;
         });
 
         searchMode = 1;
@@ -323,7 +316,6 @@ public class BindingFragment extends Fragment implements IBindingFragment {
         }
 
         selected = 1;
-        bindButton.setImageResource(R.drawable.ic_binding);
         Animation in = AnimationUtils.loadAnimation(this.getActivity(), android.R.anim.fade_in);
         linearLayoutBindFactoryBarcode.startAnimation(in);
 
@@ -370,7 +362,6 @@ public class BindingFragment extends Fragment implements IBindingFragment {
         // ==================== ANIMATION  END ==================== //
 
         selected = 0;
-        bindButton.setImageResource(R.drawable.ic_magnifier_search);
 
         Animation out = AnimationUtils.loadAnimation(this.getActivity(), android.R.anim.fade_out);
         linearLayoutBindFactoryBarcode.startAnimation(out);
@@ -385,14 +376,27 @@ public class BindingFragment extends Fragment implements IBindingFragment {
     @Override
     public void showResult(BindRecord record) {
         if(bindingOKCardView.getVisibility() == View.GONE) {
-            TextView barcodeTV = bindingOKCardView.findViewById(R.id.textViewCardIDBindingContainerOK);
-            TextView nameTV = bindingOKCardView.findViewById(R.id.textViewCardNameBindingContainerOK);
-            barcodeTV.setText(record.barcode());
-            nameTV.setText(record.name());
+            Animation in = AnimationUtils.loadAnimation(this.getActivity(), android.R.anim.slide_out_right);
+            in.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    TextView barcodeTV = bindingOKCardView.findViewById(R.id.textViewCardIDBindingContainerOK);
+                    TextView nameTV = bindingOKCardView.findViewById(R.id.textViewCardNameBindingContainerOK);
+                    barcodeTV.setText(record.barcode());
+                    nameTV.setText(record.name());
+                }
 
-            Animation in = AnimationUtils.loadAnimation(this.getActivity(), android.R.anim.slide_in_left);
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    bindingOKCardView.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
             bindingOKCardView.startAnimation(in);
-            bindingOKCardView.setVisibility(View.VISIBLE);
             showSnackbar();
         } else {
             Animation in = AnimationUtils.loadAnimation(this.getActivity(), android.R.anim.slide_in_left);

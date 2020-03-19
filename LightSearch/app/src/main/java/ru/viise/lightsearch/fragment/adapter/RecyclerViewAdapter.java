@@ -104,35 +104,41 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 int caretPos = 0;
 
                 @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    caretPos = etCardCurrentAmount.getSelectionStart();
-                }
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
                 @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    delAction = charSequence.length() < prevString.length();
-                }
+                public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
                 @Override
                 public void afterTextChanged(Editable editable) {
+                    int pos = getAdapterPosition();
                     if (!ignore) {
-                        ProductAmountFormat prAmountFormat = ProductAmountFormatInit.productAmountFormat();
-                        float curAmount = prAmountFormat.format(etCardCurrentAmount.getText().toString());
-
-                        int pos = getAdapterPosition();
-                        data.get(pos).setProductsCount(curAmount);
-
-                        ignore = true;
-
-                        twCardTotalCost.setText(data.get(pos).totalCostWithUnit());
-                        if(!delAction) {
-                            prevString = editable.toString().toLowerCase();
+                        String etCurAmountStr = etCardCurrentAmount.getText().toString();
+                        if(etCurAmountStr.equals("") ||
+                            etCurAmountStr.equals(".") ||
+                                etCurAmountStr.equals("-")) {
                             etCardCurrentAmount.removeTextChangedListener(this);
-                            etCardCurrentAmount.setText(String.valueOf(data.get(pos).currentAmount()));
+                            etCardCurrentAmount.setText("0.25");
+                            etCurAmountStr = "0.25";
                             etCardCurrentAmount.addTextChangedListener(this);
-                            try { etCardCurrentAmount.setSelection(caretPos + 1); }
-                            catch(IndexOutOfBoundsException ignore) {}
-                        } else {
+                        }
+
+                        ProductAmountFormat prAmountFormat = ProductAmountFormatInit.productAmountFormat();
+                        float curAmount = prAmountFormat.format(etCurAmountStr);
+                        data.get(pos).setProductsCount(curAmount);
+                        ignore = true;
+                        twCardTotalCost.setText(data.get(pos).totalCostWithUnit());
+
+                        if(Float.compare(curAmount, data.get(pos).maxAmount()) > 0) {
+                            etCardCurrentAmount.removeTextChangedListener(this);
+                            etCardCurrentAmount.setText(String.valueOf(data.get(pos).maxAmount()));
+                            etCardCurrentAmount.addTextChangedListener(this);
+                        }
+
+                        if(!etCardCurrentAmount.getText().toString().matches("^\\d+(?:\\.\\d{0,2})?$")) {
+                            etCardCurrentAmount.setText(String.valueOf(data.get(pos).currentAmount()));
+                        }
+                     } else {
                             if(etCardCurrentAmount.getText().toString().isEmpty()) {
                                 etCardCurrentAmount.removeTextChangedListener(this);
                                 etCardCurrentAmount.setText(String.valueOf(data.get(pos).currentAmount()));
@@ -145,8 +151,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         getTotalCost();
                         ignore = false;
                     }
-                }
-            });
+                });
         }
     }
 

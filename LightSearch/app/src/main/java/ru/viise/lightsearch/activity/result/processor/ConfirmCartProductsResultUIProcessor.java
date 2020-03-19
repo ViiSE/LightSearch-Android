@@ -25,6 +25,7 @@ import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.find.ImplFinder;
 import ru.viise.lightsearch.find.ImplFinderFragmentFromActivityDefaultImpl;
 import ru.viise.lightsearch.fragment.ICartFragment;
+import ru.viise.lightsearch.fragment.ISoftCheckContainerFragment;
 
 public class ConfirmCartProductsResultUIProcessor implements Function<CommandResult, Void> {
 
@@ -38,11 +39,14 @@ public class ConfirmCartProductsResultUIProcessor implements Function<CommandRes
     public Void apply(CommandResult commandResult) {
         ConfirmCartProductsResult conCProdRes = (ConfirmCartProductsResult) commandResult;
         if(conCProdRes.isDone()) {
-            ImplFinder<ICartFragment> finder = new ImplFinderFragmentFromActivityDefaultImpl<>(activity);
-            try {
-                ICartFragment cartFragment = finder.findImpl(ICartFragment.class);
-                cartFragment.refreshCartRecords(conCProdRes.cartRecords());
-            } catch(FindableException ignore) {}
+            ISoftCheckContainerFragment softCheckContainerFragment = activity.getSoftCheckContainerFragment();
+            if (softCheckContainerFragment != null)
+                softCheckContainerFragment.refreshCartRecords(conCProdRes.cartRecords());
+//            ImplFinder<ICartFragment> finder = new ImplFinderFragmentFromActivityDefaultImpl<>(activity);
+//            try {
+//                ICartFragment cartFragment = finder.findImpl(ICartFragment.class);
+//                cartFragment.refreshCartRecords(conCProdRes.cartRecords());
+//            } catch(FindableException ignore) {}
         } else if(conCProdRes.isReconnect()) {
             // FIXME: 22.02.20 DO IT LATER
 //            SharedPreferences sPref = activity.getSharedPreferences("pref", Context.MODE_PRIVATE);

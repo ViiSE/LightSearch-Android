@@ -19,6 +19,8 @@ package ru.viise.lightsearch.data.pojo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import ru.viise.lightsearch.data.v2.SearchCommandType;
+
 public class SearchPojo implements SendForm {
 
     @SerializedName("barcode")
@@ -33,6 +35,7 @@ public class SearchPojo implements SendForm {
 
     private String token;
     private String subdivision;
+    private SearchCommandType type = SearchCommandType.SEARCH;
 
     public void setBarcode(String barcode) {
         this.barcode = barcode;
@@ -72,5 +75,13 @@ public class SearchPojo implements SendForm {
 
     public void setSubdivision(String subdivision) {
         this.subdivision = subdivision;
+    }
+
+    public void setType(SearchCommandType type) {
+        this.type = type;
+    }
+
+    public SearchCommandType getType() {
+        return type;
     }
 }

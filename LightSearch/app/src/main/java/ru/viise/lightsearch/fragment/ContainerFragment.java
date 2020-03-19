@@ -22,7 +22,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -33,7 +33,6 @@ import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.activity.ManagerActivityHandler;
 import ru.viise.lightsearch.activity.OnBackPressedListener;
 import ru.viise.lightsearch.activity.OnBackPressedListenerType;
-import ru.viise.lightsearch.data.SoftCheckRecord;
 import ru.viise.lightsearch.dialog.alert.CancelBindingAlertDialogCreator;
 import ru.viise.lightsearch.dialog.alert.CancelBindingAlertDialogCreatorInit;
 import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreator;
@@ -44,11 +43,12 @@ import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
 import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.find.ImplFinder;
 import ru.viise.lightsearch.find.ImplFinderFragmentFromFragmentDefaultImpl;
+import ru.viise.lightsearch.fragment.pager.DepthPageTransformer;
 
 
 public class ContainerFragment extends Fragment implements OnBackPressedListener, IContainerFragment {
 
-    private static final String TAG = "ContainerFragment";
+    public static final String TAG = "containerFragment";
 
     private String[] skladArray;
     private String[] TKArray;
@@ -72,13 +72,26 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_container, container, false);
-        ViewPager viewPager = view.findViewById(R.id.ViewPagerCon);
-
+        View view = inflater.inflate(R.layout.fragment_container_bottom_nav, container, false);
+        ViewPager viewPager = view.findViewById(R.id.ViewPagerBtmNavBar);
         setupViewPager(viewPager);
 
-        TabLayout tabLayout = view.findViewById(R.id.TabLayoutCon);
-        tabLayout.setupWithViewPager(viewPager);
+        BottomNavigationView btmNavView = view.findViewById(R.id.btmNavViewCon);
+
+        btmNavView.setOnNavigationItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId()) {
+                case R.id.action_search:
+                    viewPager.setCurrentItem(0, true);
+                    break;
+                case R.id.action_tasks:
+                    viewPager.setCurrentItem(1, true);
+                    break;
+                case R.id.action_more:
+                    viewPager.setCurrentItem(2, true);
+                    break;
+            }
+            return true;
+        });
 
         queryDialog = SpotsDialogCreatorInit.spotsDialogCreator(this.getActivity(), R.string.spots_dialog_query_exec)
                 .create();
@@ -108,15 +121,19 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
     private void setupViewPager(ViewPager viewPager) {
         FragmentPageAdapter fragmentPageAdapter = new FragmentPageAdapter(getChildFragmentManager());
         SearchFragment searchFragment = new SearchFragment();
-        BindingContainerFragment bindingContainerFragment = new BindingContainerFragment();
-        SoftCheckContainerFragment rootFragment = new SoftCheckContainerFragment();
+
+        TasksFragment tasksFragment = new TasksFragment();
+        MoreFragment moreFragment = new MoreFragment();
+
         fragmentPageAdapter.addFragment(searchFragment, getString(R.string.fragment_search));
-        fragmentPageAdapter.addFragment(rootFragment, getString(R.string.fragment_soft_check));
-        fragmentPageAdapter.addFragment(bindingContainerFragment, getString(R.string.fragment_binding_unbinding));
+        fragmentPageAdapter.addFragment(tasksFragment, getString(R.string.fragment_tasks));
+        fragmentPageAdapter.addFragment(moreFragment, getString(R.string.fragment_more));
 
         searchFragment.init(skladArray, TKArray);
 
+        viewPager.setPageTransformer(true, new DepthPageTransformer());
         viewPager.setAdapter(fragmentPageAdapter);
+
         onBackPressedListenerType = OnBackPressedListenerType.CONTAINER_FRAGMENT;
     }
 
@@ -139,24 +156,15 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
                     ExitToAuthorizationAlertDialogCreatorInit.exitToAuthorizationAlertDialogCreator(
                             this.getActivity());
             exitTAADCr.create().show();
-        } else if(onBackPressedListenerType == OnBackPressedListenerType.SOFT_CHECK_FRAGMENT) {
-            CancelSoftCheckAlertDialogCreator cancelSCADCr =
-                    CancelSoftCheckAlertDialogCreatorInit.cancelSoftCheckAlertDialogCreator(
-                            this, managerActivityHandler, queryDialog);
-            cancelSCADCr.create().show();
-        } else if(onBackPressedListenerType == OnBackPressedListenerType.BINDING_FRAGMENT) {
-            CancelBindingAlertDialogCreator cancelBADCr =
-                    CancelBindingAlertDialogCreatorInit.cancelBindingAlertDialogCreator(this);
-            cancelBADCr.create().show();
         }
     }
 
     @Override
-    public void setSearchBarcode(String barcode) {
+    public void setSearchBarcode(String barcode, boolean isRun) {
         try {
             ImplFinder<ISearchFragment> finder = new ImplFinderFragmentFromFragmentDefaultImpl<>(this);
             ISearchFragment searchFragment = finder.findImpl(ISearchFragment.class);
-            searchFragment.setSearchBarcode(barcode);
+            searchFragment.setSearchBarcode(barcode, isRun);
         }
         catch(FindableException ignore) {}
     }
@@ -168,80 +176,6 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
             IOpenSoftCheckFragment openSoftCheckFragment = finder.findImpl(IOpenSoftCheckFragment.class);
             openSoftCheckFragment.setCardCode(cardCode);
         } catch(FindableException ignore) {}
-    }
-
-    @Override
-    public void setSoftCheckBarcode(String barcode) {
-        ISoftCheckFragment softCheckFragment = getSoftCheckFragment();
-        if(softCheckFragment != null)
-            softCheckFragment.setSoftCheckBarcode(barcode);
-    }
-
-    @Override
-    public void switchToSoftCheckFragment() {
-        ISoftCheckContainerFragment softCheckContainerFragment = getSoftCheckContainerFragment();
-        if(softCheckContainerFragment != null) {
-            softCheckContainerFragment.switchToSoftCheckFragment();
-            onBackPressedListenerType = OnBackPressedListenerType.SOFT_CHECK_FRAGMENT;
-            selected = 1;
-        }
-    }
-
-    @Override
-    public void switchToOpenSoftCheckFragment() {
-        ISoftCheckContainerFragment softCheckContainerFragment = getSoftCheckContainerFragment();
-        if(softCheckContainerFragment != null) {
-            softCheckContainerFragment.switchToOpenSoftCheckFragment();
-            onBackPressedListenerType = OnBackPressedListenerType.CONTAINER_FRAGMENT;
-            selected = 0;
-        }
-    }
-
-    @Override
-    public void addSoftCheckRecord(SoftCheckRecord record) {
-        ISoftCheckFragment softCheckFragment = getSoftCheckFragment();
-        if(softCheckFragment != null)
-            softCheckFragment.addSoftCheckRecord(record);
-    }
-
-    @Override
-    public void setUnbindingBarcode(String barcode, boolean isRun) {
-        IBindingContainerFragment bindingContainerFragment = getBindingContainerFragment();
-        if(bindingContainerFragment != null)
-            bindingContainerFragment.setUnbindingBarcode(barcode, isRun);
-    }
-
-    @Override
-    public void setBindingBarcode(String barcode, boolean isRun) {
-        IBindingContainerFragment bindingContainerFragment = getBindingContainerFragment();
-        if(bindingContainerFragment != null)
-            bindingContainerFragment.setBindingBarcode(barcode, isRun);
-    }
-
-    @Override
-    public void switchToBind() {
-        IBindingContainerFragment bindingContainerFragment = getBindingContainerFragment();
-        if(bindingContainerFragment != null) {
-            bindingContainerFragment.switchToBind();
-            onBackPressedListenerType = OnBackPressedListenerType.BINDING_FRAGMENT;
-            selected = 2;
-        }
-    }
-
-    @Override
-    public void switchToCheckBind() {
-        IBindingContainerFragment bindingContainerFragment = getBindingContainerFragment();
-        if(bindingContainerFragment != null) {
-            bindingContainerFragment.switchToCheckBind();
-            onBackPressedListenerType = OnBackPressedListenerType.CONTAINER_FRAGMENT;
-            selected = 0;
-        }
-    }
-
-    private IBindingContainerFragment getBindingContainerFragment() {
-        ImplFinder<IBindingContainerFragment> finder = new ImplFinderFragmentFromFragmentDefaultImpl<>(this);
-        try { return finder.findImpl(IBindingContainerFragment.class); }
-        catch(FindableException ignore) { return null; }
     }
 
     public void setupSearchFragment(String[] skladArray, String[] TKArray) {

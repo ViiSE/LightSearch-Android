@@ -35,7 +35,7 @@ import ru.viise.lightsearch.pref.PreferencesManager;
 import ru.viise.lightsearch.pref.PreferencesManagerInit;
 import ru.viise.lightsearch.pref.PreferencesManagerType;
 
-public class CancelSoftCheckAlertDialogCreatorDefaultImpl implements CancelSoftCheckAlertDialogCreator {
+public class CancelSoftCheckAlertDialogCreatorFragmentImpl implements CancelSoftCheckAlertDialogCreator {
 
     private final String PREF = "pref";
 
@@ -43,8 +43,8 @@ public class CancelSoftCheckAlertDialogCreatorDefaultImpl implements CancelSoftC
     private final ManagerActivityHandler managerActivityHandler;
     private final android.app.AlertDialog queryDialog;
 
-    public CancelSoftCheckAlertDialogCreatorDefaultImpl(Fragment fragment, ManagerActivityHandler managerActivityHandler,
-                android.app.AlertDialog queryDialog) {
+    public CancelSoftCheckAlertDialogCreatorFragmentImpl(Fragment fragment, ManagerActivityHandler managerActivityHandler,
+                                                         android.app.AlertDialog queryDialog) {
         this.fragment = fragment;
         this.managerActivityHandler = managerActivityHandler;
         this.queryDialog = queryDialog;

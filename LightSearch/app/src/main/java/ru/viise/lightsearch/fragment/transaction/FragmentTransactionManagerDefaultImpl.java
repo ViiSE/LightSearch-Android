@@ -30,6 +30,7 @@ import ru.viise.lightsearch.fragment.AuthorizationFragment;
 import ru.viise.lightsearch.fragment.BindingContainerFragment;
 import ru.viise.lightsearch.fragment.CartFragment;
 import ru.viise.lightsearch.fragment.ContainerFragment;
+import ru.viise.lightsearch.fragment.OpenSoftCheckFragment;
 import ru.viise.lightsearch.fragment.ResultBindFragment;
 import ru.viise.lightsearch.fragment.ResultSearchFragment;
 import ru.viise.lightsearch.fragment.ResultUnbindFragment;
@@ -47,7 +48,8 @@ public class FragmentTransactionManagerDefaultImpl implements FragmentTransactio
     public void doAuthorizationFragmentTransaction() {
         AuthorizationFragment authorizationFragment = new AuthorizationFragment();
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.FrameLayoutManager, authorizationFragment, activity.getString(R.string.fragment_authorization));
+        transaction.replace(R.id.activity_manager, authorizationFragment);
+        transaction.addToBackStack(AuthorizationFragment.TAG);
         transaction.commit();
         activity.setTitle(activity.getString(R.string.fragment_authorization));
     }
@@ -58,8 +60,8 @@ public class FragmentTransactionManagerDefaultImpl implements FragmentTransactio
         containerFragment.setupSearchFragment(skladArray, TKArray);
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-        transaction.replace(R.id.FrameLayoutManager, containerFragment, activity.getString(R.string.fragment_container));
-        transaction.addToBackStack(activity.getString(R.string.fragment_container));
+        transaction.replace(R.id.activity_manager, containerFragment, ContainerFragment.TAG);
+        transaction.addToBackStack(ContainerFragment.TAG);
         transaction.commit();
         activity.setTitle(activity.getString(R.string.fragment_container));
         StackFragmentTitle.push(activity.getString(R.string.fragment_authorization));
@@ -71,7 +73,7 @@ public class FragmentTransactionManagerDefaultImpl implements FragmentTransactio
         resultSearchFragment.init(searchRecords);
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_down, R.anim.exit_to_up, R.anim.enter_from_up, R.anim.exit_to_down);
-        transaction.replace(R.id.FrameLayoutManager, resultSearchFragment, activity.getString(R.string.fragment_result_search));
+        transaction.replace(R.id.activity_manager, resultSearchFragment, activity.getString(R.string.fragment_result_search));
         transaction.addToBackStack(activity.getString(R.string.fragment_result_search));
         transaction.commit();
         activity.setTitle(title);
@@ -84,7 +86,7 @@ public class FragmentTransactionManagerDefaultImpl implements FragmentTransactio
         cartFragment.init(cartRecords);
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-        transaction.replace(R.id.FrameLayoutManager, cartFragment, activity.getString(R.string.fragment_cart));
+        transaction.replace(R.id.activity_manager, cartFragment, activity.getString(R.string.fragment_cart));
         transaction.addToBackStack(activity.getString(R.string.fragment_cart));
         transaction.commit();
         activity.setTitle(activity.getString(R.string.fragment_cart));
@@ -99,12 +101,23 @@ public class FragmentTransactionManagerDefaultImpl implements FragmentTransactio
     }
 
     @Override
+    public void doOpenSoftCheckFragmentTransaction() {
+        OpenSoftCheckFragment scfr = new OpenSoftCheckFragment();
+        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter_from_down, R.anim.exit_to_up, R.anim.enter_from_up, R.anim.exit_to_down);
+        transaction.replace(R.id.activity_manager, scfr);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        activity.setTitle(activity.getString(R.string.fragment_soft_check));
+        transaction.commit();
+    }
+
+    @Override
     public void doResultBindFragmentTransaction(String title, BindCommandResult bindCmdRes) {
         ResultBindFragment resultBindFragment = new ResultBindFragment();
         resultBindFragment.init(bindCmdRes.records(), bindCmdRes.factoryBarcode(), bindCmdRes.selected());
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_down, R.anim.exit_to_up, R.anim.enter_from_up, R.anim.exit_to_down);
-        transaction.replace(R.id.FrameLayoutManager, resultBindFragment, activity.getString(R.string.fragment_result_bind));
+        transaction.replace(R.id.activity_manager, resultBindFragment, activity.getString(R.string.fragment_result_bind));
         transaction.addToBackStack(activity.getString(R.string.fragment_result_bind));
         transaction.commit();
         activity.setTitle(title);
@@ -116,7 +129,7 @@ public class FragmentTransactionManagerDefaultImpl implements FragmentTransactio
         BindingContainerFragment bindingContainerFragment = new BindingContainerFragment();
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-        transaction.replace(R.id.FrameLayoutManager, bindingContainerFragment, activity.getString(R.string.fragment_container));
+        transaction.replace(R.id.activity_manager, bindingContainerFragment);
         transaction.addToBackStack(activity.getString(R.string.fragment_container));
         transaction.commit();
         activity.setTitle(activity.getString(R.string.fragment_container));
@@ -136,7 +149,7 @@ public class FragmentTransactionManagerDefaultImpl implements FragmentTransactio
         resultUnbindFragment.init(unbindCmdRes.records(), unbindCmdRes.factoryBarcode());
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_down, R.anim.exit_to_up, R.anim.enter_from_up, R.anim.exit_to_down);
-        transaction.replace(R.id.FrameLayoutManager, resultUnbindFragment, activity.getString(R.string.fragment_result_unbind));
+        transaction.replace(R.id.activity_manager, resultUnbindFragment);
         transaction.addToBackStack(activity.getString(R.string.fragment_result_unbind));
         transaction.commit();
         activity.setTitle(title);

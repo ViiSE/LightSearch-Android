@@ -82,7 +82,7 @@ import static android.view.View.OnClickListener;
 
 public class AuthorizationFragment extends Fragment implements OnClickListener {
 
-    private static final String TAG = "AuthorizationFragment";
+    public static final String TAG = "AuthorizationFragment";
     private final String PREF       = "pref";
 
     private EditText editTextUsername;

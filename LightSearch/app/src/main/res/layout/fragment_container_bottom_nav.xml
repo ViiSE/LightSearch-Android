@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:activity="ru.viise.lightsearch.fragment.ContainerFragment"
+    android:orientation="vertical"
+    android:id="@+id/fragment_container_btm_nav">
+
+    <ru.viise.lightsearch.fragment.pager.SwipeableViewPager
+        android:id="@+id/ViewPagerBtmNavBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:isSwipe="false">
+    </ru.viise.lightsearch.fragment.pager.SwipeableViewPager>
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/btmNavViewCon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/navBarColor"
+        app:menu="@menu/bottom_nav_menu_main"
+        app:itemIconTint="@drawable/btm_nav_bar_select"
+        app:itemTextColor="@drawable/btm_nav_bar_select"/>
+</RelativeLayout>

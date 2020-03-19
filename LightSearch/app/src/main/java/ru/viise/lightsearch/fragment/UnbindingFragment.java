@@ -24,16 +24,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.Objects;
@@ -73,8 +72,6 @@ public class UnbindingFragment extends Fragment implements IUnbindingFragment {
     private ManagerActivityHandler managerActivityHandler;
     private ManagerActivityUI managerActivityUI;
 
-    private Animation animAlpha;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,27 +87,28 @@ public class UnbindingFragment extends Fragment implements IUnbindingFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_unbinding, container, false);
 
-        animAlpha = AnimationUtils.loadAnimation(this.getActivity(), R.anim.alpha);
-
         searchEditText = view.findViewById(R.id.editTextSearchUnbinding);
-        ImageButton unbindButton = view.findViewById(R.id.buttonUnbind);
-        ImageButton barcodeButton = view.findViewById(R.id.buttonBarcodeUnbinding);
+        FloatingActionButton barcodeButton = view.findViewById(R.id.floatingActionButtonUnbindingBarcode);
 
         queryDialog = SpotsDialogCreatorInit.spotsDialogCreator(this.getActivity(), R.string.spots_dialog_query_exec)
                 .create();
 
-        unbindButton.setOnClickListener(view1 -> {
-            view1.startAnimation(animAlpha);
-            String input = searchEditText.getText().toString();
+        searchEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String input = searchEditText.getText().toString();
 
-            if(input.length() < 2) {
-                Toast t = Toast.makeText(Objects.requireNonNull(this.getActivity()).getApplicationContext(),
-                        "Введите не менее двух символов!", Toast.LENGTH_LONG);
-                t.show();
-            } else {
-                run();
+                if(input.length() < 2) {
+                    Toast t = Toast.makeText(Objects.requireNonNull(this.getActivity()).getApplicationContext(),
+                            "Введите не менее двух символов!", Toast.LENGTH_LONG);
+                    t.show();
+                } else {
+                    run();
+                }
+                v.requestFocus();
+
+                return true;
             }
-            view1.requestFocus();
+            return false;
         });
 
         barcodeButton.setOnClickListener(view2 -> {
@@ -119,7 +117,6 @@ public class UnbindingFragment extends Fragment implements IUnbindingFragment {
             searchEditText.clearFocus();
             view2.requestFocus();
 
-            view2.startAnimation(animAlpha);
             managerActivityUI.setScanType(ScanType.UNBIND);
             ScannerInit.scanner(this.getActivity()).scan();
         });

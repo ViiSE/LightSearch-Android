@@ -99,6 +99,17 @@ public class SoftCheckRecordDefaultImpl implements SoftCheckRecord {
     }
 
     @Override
+    public float refreshMaxAmount() {
+        float tempMaxAmount = 0;
+        for(Subdivision subdivision : subdivisions.collection())
+            tempMaxAmount += subdivision.productAmount();
+
+        maxAmount = tempMaxAmount;
+
+        return maxAmount;
+    }
+
+    @Override
     public void setMaxAmount(float maxAmount) {
         this.maxAmount = maxAmount;
     }

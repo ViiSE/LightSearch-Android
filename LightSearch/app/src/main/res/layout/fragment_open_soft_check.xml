@@ -1,45 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:id="@+id/fragment_open_sc">
 
-    <LinearLayout
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_soft_check_ts"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/editTextOpenSC"/>
+
+    <EditText
+        android:id="@+id/editTextOpenSC"
+        android:layout_centerInParent="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:id="@+id/fragmentOpenSC"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/edittextshape"
+        android:ems="10"
+        android:imeOptions="actionSearch"
+        android:hint="@string/openSCHintScanner"
+        android:inputType="number"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/textViewSCNotOpen"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="160dp"
-            android:text="@string/openSC_label"
-            android:textSize="25sp" />
+    <TextView
+        android:id="@+id/textViewSCOr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/or_label"
+        android:textColor="@color/hintColor"
+        android:layout_below="@id/editTextOpenSC"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:padding="10dp" />
 
-        <Space
-            android:id="@+id/spaceOpenSC"
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
-
-        <Button
-            android:id="@+id/buttonOpenSoftCheck"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginStart="103dp"
-            android:background="@drawable/button_round"
-            android:shadowColor="@color/buttonShadowColor"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="20"
-            android:text="@string/buttonOpenSC_label"
-            android:textColor="@color/buttonTextColor" />
-
-    </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+    <Button
+        android:id="@+id/buttonOpenSoftCheck"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewSCOr"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="@color/buttonShadowColor"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="2"
+        android:textSize="15sp"
+        android:text="@string/buttonOpenSC_label"
+        android:textColor="@color/buttonTextColor" />
+</RelativeLayout>

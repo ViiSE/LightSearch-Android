@@ -18,7 +18,6 @@ package ru.viise.lightsearch.cmd.result;
 
 import java.util.List;
 
-import ru.viise.lightsearch.data.BindRecord;
 import ru.viise.lightsearch.data.UnbindRecord;
 
 public interface UnbindCommandResult extends CommandResult {

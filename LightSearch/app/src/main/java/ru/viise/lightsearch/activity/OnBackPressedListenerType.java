@@ -19,6 +19,8 @@ package ru.viise.lightsearch.activity;
 public enum OnBackPressedListenerType {
     CONTAINER_FRAGMENT,
     SOFT_CHECK_FRAGMENT,
+    OPEN_SOFT_CHECK,
     BINDING_FRAGMENT,
-    BINDING_CHECK_FRAGMENT
+    BINDING_CHECK_FRAGMENT,
+    CART_FRAGMENT
 }

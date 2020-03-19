@@ -21,6 +21,7 @@ import java.util.function.Function;
 import ru.viise.lightsearch.activity.ManagerActivity;
 import ru.viise.lightsearch.cmd.result.CommandResult;
 import ru.viise.lightsearch.cmd.result.ConfirmSoftCheckProductsResult;
+import ru.viise.lightsearch.fragment.ISoftCheckContainerFragment;
 
 public class ConfirmSoftCheckProductsResultUIProcessor implements Function<CommandResult, Void> {
 
@@ -33,9 +34,12 @@ public class ConfirmSoftCheckProductsResultUIProcessor implements Function<Comma
     @Override
     public Void apply(CommandResult commandResult) {
         ConfirmSoftCheckProductsResult conSCProdRes = (ConfirmSoftCheckProductsResult) commandResult;
-        if(conSCProdRes.isDone())
-            activity.doCartFragmentTransaction(conSCProdRes.cartRecords());
-        else if(conSCProdRes.isReconnect()) {
+        if(conSCProdRes.isDone()) {
+            ISoftCheckContainerFragment softCheckContainerFragment = activity.getSoftCheckContainerFragment();
+            if (softCheckContainerFragment != null)
+                softCheckContainerFragment.switchToCartFragment(conSCProdRes.cartRecords());
+//            activity.doCartFragmentTransaction(conSCProdRes.cartRecords());
+        } else if(conSCProdRes.isReconnect()) {
             // FIXME: 22.02.20 DO IT LATER
 //            SharedPreferences sPref = activity.getSharedPreferences("pref", Context.MODE_PRIVATE);
 //            PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);

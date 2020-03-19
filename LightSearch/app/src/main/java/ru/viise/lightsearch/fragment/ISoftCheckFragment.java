@@ -16,10 +16,13 @@
 
 package ru.viise.lightsearch.fragment;
 
+import java.util.List;
+
 import ru.viise.lightsearch.data.SoftCheckRecord;
 import ru.viise.lightsearch.find.Findable;
 
 public interface ISoftCheckFragment extends Findable {
     void setSoftCheckBarcode(String barcode);
     void addSoftCheckRecord(SoftCheckRecord record);
+    void switchToCart(List<SoftCheckRecord> cartRecords);
 }

@@ -24,7 +24,7 @@ public class CancelSoftCheckAlertDialogCreatorInit {
 
     public static CancelSoftCheckAlertDialogCreator cancelSoftCheckAlertDialogCreator(Fragment fragment,
                     ManagerActivityHandler managerActivityHandler, android.app.AlertDialog queryDialog) {
-        return new CancelSoftCheckAlertDialogCreatorDefaultImpl(fragment, managerActivityHandler,
+        return new CancelSoftCheckAlertDialogCreatorFragmentImpl(fragment, managerActivityHandler,
                 queryDialog);
     }
 }

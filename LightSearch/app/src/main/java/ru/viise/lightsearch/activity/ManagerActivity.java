@@ -19,9 +19,11 @@ package ru.viise.lightsearch.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
@@ -47,6 +49,8 @@ import ru.viise.lightsearch.data.ScanType;
 import ru.viise.lightsearch.data.SearchRecord;
 import ru.viise.lightsearch.data.SoftCheckRecord;
 import ru.viise.lightsearch.data.UnbindRecord;
+import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreator;
+import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreatorActivityImpl;
 import ru.viise.lightsearch.dialog.alert.ErrorAlertDialogCreator;
 import ru.viise.lightsearch.dialog.alert.ErrorAlertDialogCreatorInit;
 import ru.viise.lightsearch.dialog.alert.NoResultAlertDialogCreator;
@@ -59,12 +63,18 @@ import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
 import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.find.ImplFinder;
 import ru.viise.lightsearch.find.ImplFinderFragmentFromActivityDefaultImpl;
-import ru.viise.lightsearch.find.ImplFinderFragmentFromFragmentDefaultImpl;
-import ru.viise.lightsearch.fragment.ContainerFragment;
+import ru.viise.lightsearch.fragment.BindingContainerFragment;
 import ru.viise.lightsearch.fragment.IBindingContainerFragment;
 import ru.viise.lightsearch.fragment.IContainerFragment;
+import ru.viise.lightsearch.fragment.IOpenSoftCheckFragment;
+import ru.viise.lightsearch.fragment.ISoftCheckContainerFragment;
+import ru.viise.lightsearch.fragment.ISoftCheckFragment;
+import ru.viise.lightsearch.fragment.SoftCheckContainerFragment;
 import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManager;
 import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManagerInit;
+import ru.viise.lightsearch.pref.PreferencesManager;
+import ru.viise.lightsearch.pref.PreferencesManagerInit;
+import ru.viise.lightsearch.pref.PreferencesManagerType;
 import ru.viise.lightsearch.request.PhonePermission;
 import ru.viise.lightsearch.request.PhonePermissionInit;
 import ru.viise.lightsearch.util.UpdateChecker;
@@ -91,7 +101,15 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         ResultCommandUICreator resCmdUiCr = ResultCommandUICreatorInit.resultCommandUICreator(this);
         commandHolderUI = resCmdUiCr.createResultCommandHolderUI();
 
-        doAuthorizationFragmentTransaction();
+//        SharedPreferences sPref = this.getSharedPreferences("pref", Context.MODE_PRIVATE);
+//        PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
+//        JWTClient jwtClient = new JWTClientWithPrefManager(prefManager);
+//        try {
+//            jwtClient.check();
+//
+//        } catch (JWTException ex) {
+            doAuthorizationFragmentTransaction();
+//        }
 
         UpdateChecker updateChecker = UpdateCheckerInit.updateChecker(ManagerActivity.this);
         updateChecker.checkUpdate();
@@ -115,15 +133,34 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
 
             if (containerFragment != null)
                 if(scanType == ScanType.SEARCH)
-                    containerFragment.setSearchBarcode(scanContent);
-                else if(scanType == ScanType.OPEN_SOFT_CHECK)
-                    containerFragment.setCardCode(scanContent);
-                else if(scanType == ScanType.SEARCH_SOFT_CHECK)
-                    containerFragment.setSoftCheckBarcode(scanContent);
-                else if (scanType == ScanType.SEARCH_BIND)
-                    containerFragment.setBindingBarcode(scanContent, true);
+                    containerFragment.setSearchBarcode(scanContent, true);
+
+            IBindingContainerFragment bindingContainerFragment = getBindingContainerFragment();
+            if(bindingContainerFragment != null)
+                if (scanType == ScanType.SEARCH_BIND)
+                    bindingContainerFragment.setBindingBarcode(scanContent, true);
                 else if(scanType == ScanType.UNBIND)
-                    containerFragment.setUnbindingBarcode(scanContent, true);
+                    bindingContainerFragment.setUnbindingBarcode(scanContent, true);
+
+            ISoftCheckContainerFragment softCheckContainerFragment = getSoftCheckContainerFragment();
+            if(softCheckContainerFragment != null) {
+                if(scanType == ScanType.OPEN_SOFT_CHECK)
+                    softCheckContainerFragment.setCardCode(scanContent);
+                else if(scanType == ScanType.SEARCH_SOFT_CHECK)
+                    softCheckContainerFragment.setSoftCheckBarcode(scanContent);
+            }
+
+//            IOpenSoftCheckFragment openSoftCheckFragment = getOpenSoftCheckFragment();
+//            if(openSoftCheckFragment != null) {
+//                if(scanType == ScanType.OPEN_SOFT_CHECK)
+//                    openSoftCheckFragment.setCardCode(scanContent);
+//            }
+
+//            ISoftCheckFragment softCheckFragment = getSoftCheckFragment();
+//            if(softCheckFragment != null) {
+//                if(scanType == ScanType.SEARCH_SOFT_CHECK)
+//                    softCheckFragment.setSoftCheckBarcode(scanContent);
+//            }
         }
     }
 
@@ -157,6 +194,13 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
     }
 
     public void doContainerFragmentTransaction(String[] skladArr, String[] TKArr) {
+        SharedPreferences sPref = this.getSharedPreferences("pref", Context.MODE_PRIVATE);
+        PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
+        if(prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER).equals("0")) {
+            prefManager.save(
+                    PreferencesManagerType.USER_IDENT_MANAGER,
+                    prefManager.load(PreferencesManagerType.USERNAME_MANAGER));
+        }
         FragmentTransactionManager fragmentTransactionManager =
                 FragmentTransactionManagerInit.fragmentTransactionManager(this);
         fragmentTransactionManager.doContainerFragmentTransaction(skladArr, TKArr);
@@ -175,10 +219,44 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         fragmentTransactionManager.doContainerFragmentTransactionFromCart();
     }
 
+    public void doOpenSoftCheckFragmentTransaction() {
+        FragmentTransactionManager fragmentTransactionManager =
+                FragmentTransactionManagerInit.fragmentTransactionManager(this);
+        fragmentTransactionManager.doOpenSoftCheckFragmentTransaction();
+    }
+
     public void doResultSearchFragmentTransaction(String title, List<SearchRecord> searchRecords) {
         FragmentTransactionManager fragmentTransactionManager =
                 FragmentTransactionManagerInit.fragmentTransactionManager(this);
         fragmentTransactionManager.doResultSearchFragmentTransaction(title, searchRecords);
+    }
+
+    public void showSearchSoftCheckResult(List<SoftCheckRecord> softCheckRecords) {
+        ISoftCheckContainerFragment softCheckContainerFragment = getSoftCheckContainerFragment();
+        softCheckContainerFragment.showResultSearchSoftCheckFragment(softCheckRecords);
+    }
+
+    public void doSoftCheckContainerFragmentTransaction() {
+        SoftCheckContainerFragment scfr = new SoftCheckContainerFragment();
+        scfr.switchToOpenSoftCheckFragment();
+        FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter_from_down, R.anim.exit_to_up, R.anim.enter_from_up, R.anim.exit_to_down);
+        transaction.replace(R.id.activity_manager, scfr, SoftCheckContainerFragment.TAG);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.addToBackStack(SoftCheckContainerFragment.TAG);
+        this.setTitle(this.getString(R.string.fragment_soft_check));
+        transaction.commit();
+    }
+
+    public void doBindingContainerFragmentTransaction() {
+        BindingContainerFragment bcf = new BindingContainerFragment();
+        FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter_from_down, R.anim.exit_to_up, R.anim.enter_from_up, R.anim.exit_to_down);
+        transaction.replace(R.id.activity_manager, bcf, this.getString(R.string.fragment_binding));
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.addToBackStack(this.getString(R.string.fragment_binding_container));
+        this.setTitle(this.getString(R.string.fragment_binding_container));
+        transaction.commit();
     }
 
     // TODO: 30.01.20 REMOVE THIS LATER
@@ -196,17 +274,32 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
     }
 
     public void doCartFragmentTransaction(List<SoftCheckRecord> cartRecords) {
-        IContainerFragment containerFragment = getContainerFragment();
-        containerFragment.switchToOpenSoftCheckFragment();
-        FragmentTransactionManager fragmentTransactionManager =
-                FragmentTransactionManagerInit.fragmentTransactionManager(this);
-        fragmentTransactionManager.doCartFragmentTransaction(cartRecords);
+        ISoftCheckFragment softCheckFragment = getSoftCheckFragment();
+        softCheckFragment.switchToCart(cartRecords);
+//        ISoftCheckContainerFragment softCheckContainerFragment = getSoftCheckContainerFragment();
+//        softCheckContainerFragment.switchToOpenSoftCheckFragment();
+//        FragmentTransactionManager fragmentTransactionManager =
+//                FragmentTransactionManagerInit.fragmentTransactionManager(this);
+//        fragmentTransactionManager.doCartFragmentTransaction(cartRecords);
     }
 
     public void callDialogError(String errorMessage) {
         ErrorAlertDialogCreator errADCr =
                 ErrorAlertDialogCreatorInit.errorAlertDialogCreator(this, errorMessage);
         errADCr.create().show();
+    }
+
+    public void callDialogCancelSoftCheck(String errorMessage) {
+        CancelSoftCheckAlertDialogCreator cscADCr =
+                new CancelSoftCheckAlertDialogCreatorActivityImpl(
+                        this,
+                        SpotsDialogCreatorInit
+                                .spotsDialogCreator(
+                                        this,
+                                        R.string.spots_dialog_query_exec)
+                                .create(),
+                        errorMessage);
+        cscADCr.create().show();
     }
 
     public void callDialogSuccess(String message) {
@@ -229,7 +322,7 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         NoResultAlertDialogCreator noResADCr =
                 NoResultAlertDialogCreatorInit.bindCheckNoResultAlertDialogCreator(this, message);
         noResADCr.create().show();
-        getContainerFragment().switchToBind();
+        getBindingContainerFragment().switchToBind();
     }
 
     public void callSearchDialogOneResult(SearchRecord searchRecord) {
@@ -273,12 +366,27 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         catch(FindableException ignore) { return null; }
     }
 
+    public ISoftCheckContainerFragment getSoftCheckContainerFragment() {
+        ImplFinder<ISoftCheckContainerFragment> finder = new ImplFinderFragmentFromActivityDefaultImpl<>(this);
+        try { return finder.findImpl(ISoftCheckContainerFragment.class); }
+        catch(FindableException ignore) { return null; }
+    }
+
+    public IOpenSoftCheckFragment getOpenSoftCheckFragment() {
+        ImplFinder<IOpenSoftCheckFragment> finder = new ImplFinderFragmentFromActivityDefaultImpl<>(this);
+        try { return finder.findImpl(IOpenSoftCheckFragment.class); }
+        catch(FindableException ignore) { return null; }
+    }
+
+    public ISoftCheckFragment getSoftCheckFragment() {
+        ImplFinder<ISoftCheckFragment> finder = new ImplFinderFragmentFromActivityDefaultImpl<>(this);
+        try { return finder.findImpl(ISoftCheckFragment.class); }
+        catch(FindableException ignore) { return null; }
+    }
+
     public IBindingContainerFragment getBindingContainerFragment() {
         try {
-            ImplFinder<ContainerFragment> cfFinder = new ImplFinderFragmentFromActivityDefaultImpl<>(this);
-            ContainerFragment cf = cfFinder.findImpl(ContainerFragment.class);
-
-            ImplFinder<IBindingContainerFragment> bcfFinder = new ImplFinderFragmentFromFragmentDefaultImpl<>(cf);
+            ImplFinder<IBindingContainerFragment> bcfFinder = new ImplFinderFragmentFromActivityDefaultImpl<>(this);
             return bcfFinder.findImpl(IBindingContainerFragment.class);
         } catch (FindableException ignore) {
             return null;

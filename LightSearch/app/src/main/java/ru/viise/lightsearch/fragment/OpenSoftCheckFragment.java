@@ -23,14 +23,22 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.Objects;
 
 import ru.viise.lightsearch.R;
+import ru.viise.lightsearch.activity.ManagerActivity;
 import ru.viise.lightsearch.activity.ManagerActivityHandler;
 import ru.viise.lightsearch.activity.ManagerActivityUI;
 import ru.viise.lightsearch.activity.scan.ScannerInit;
@@ -43,6 +51,9 @@ import ru.viise.lightsearch.data.v2.OpenSoftCheckCommandWithCardCode;
 import ru.viise.lightsearch.data.v2.OpenSoftCheckCommandWithToken;
 import ru.viise.lightsearch.data.v2.OpenSoftCheckCommandWithUserIdentifier;
 import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
+import ru.viise.lightsearch.exception.FindableException;
+import ru.viise.lightsearch.find.ImplFinder;
+import ru.viise.lightsearch.find.ImplFinderFragmentFromActivityDefaultImpl;
 import ru.viise.lightsearch.pref.PreferencesManager;
 import ru.viise.lightsearch.pref.PreferencesManagerInit;
 import ru.viise.lightsearch.pref.PreferencesManagerType;
@@ -71,6 +82,41 @@ public class OpenSoftCheckFragment extends Fragment implements IOpenSoftCheckFra
             ScannerInit.scanner(this.getActivity()).scan();
         });
 
+        EditText scanEditText = view.findViewById(R.id.editTextOpenSC);
+        scanEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String input = scanEditText.getText().toString();
+
+                if(input.length() < 2) {
+                    Toast t = Toast.makeText(Objects.requireNonNull(this.getActivity()).getApplicationContext(),
+                            "Введите не менее двух символов!", Toast.LENGTH_LONG);
+                    t.show();
+                } else {
+                    ((ManagerActivity) getActivity()).getSoftCheckContainerFragment().setCardCode(input);
+                    return true;
+                }
+                v.requestFocus();
+            }
+            return false;
+        });
+
+        scanEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String input = scanEditText.getText().toString();
+                if (scanEditText.getText().toString().length() == 13)
+                    ((ManagerActivity) getActivity()).getSoftCheckContainerFragment().setCardCode(input);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
         return view;
     }
 
@@ -84,7 +130,7 @@ public class OpenSoftCheckFragment extends Fragment implements IOpenSoftCheckFra
     @SuppressWarnings("unchecked")
     @Override
     public void setCardCode(String cardCode) {
-        SharedPreferences sPref = this.getActivity().getSharedPreferences(PREF, Context.MODE_PRIVATE);
+        SharedPreferences sPref = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
         PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
         prefManager.save(PreferencesManagerType.CARD_CODE_MANAGER, cardCode);
 
@@ -101,5 +147,11 @@ public class OpenSoftCheckFragment extends Fragment implements IOpenSoftCheckFra
                 queryDialog);
 
         networkAsyncTask.execute(command);
+    }
+
+    private ISoftCheckContainerFragment getSoftCheckContainerFragment() {
+        ImplFinder<ISoftCheckContainerFragment> finder = new ImplFinderFragmentFromActivityDefaultImpl<>(this.getActivity());
+        try { return finder.findImpl(ISoftCheckContainerFragment.class); }
+        catch(FindableException ignore) { return null; }
     }
 }

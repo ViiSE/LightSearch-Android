@@ -34,6 +34,9 @@ public class ConfirmSoftCheckProductsPojo implements SendForm {
     @SerializedName("card_code")
     @Expose
     private String cardCode;
+    @SerializedName("is_reserve")
+    @Expose
+    private boolean isReserve;
 
     private List<SoftCheckRecord> softCheckRecords;
     private String token;
@@ -73,6 +76,14 @@ public class ConfirmSoftCheckProductsPojo implements SendForm {
 
     public void setSoftCheckRecords(List<SoftCheckRecord> softCheckRecords) {
         this.softCheckRecords = softCheckRecords;
+    }
+
+    public boolean getIsReserve() {
+        return isReserve;
+    }
+
+    public void setIsReserve(boolean isReserve) {
+        this.isReserve = isReserve;
     }
 
     public List<SoftCheckRecord> getSoftCheckRecords() {

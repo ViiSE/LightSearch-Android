@@ -9,11 +9,36 @@
         <item name="actionBarSize">40dp</item>
         <item name="android:actionBarSize">40dp</item>
         <item name="android:navigationBarColor">@color/navBarColor</item>
+<!--        <item name="android:navigationBarColor">@color/colorPrimary</item>-->
         <item name="android:windowLightNavigationBar">true</item>
     </style>
 
     <style name="FragmentBindingContainerTabText" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <declare-styleable name="SwipeableViewPager">
+        <attr name="isSwipe" format="boolean"/>
+    </declare-styleable>
+
+    <style name="FullscreenFragmentDialog" parent="Theme.AppCompat.Light.DialogWhenLarge">
+<!--        <item name="android:windowNoTitle">true</item>-->
+        <item name="android:windowAnimationStyle">@style/Animation.AppCompat.Dialog</item>
+    </style>
+
+    <style name="FSDialogTheme" parent="android:Theme.Dialog">
+<!--        <item name="windowFixedWidthMajor">80%</item>-->
+<!--        <item name="windowFixedWidthMinor">80%</item>-->
+<!--        <item name="android:layout_width">match_parent</item>-->
+<!--        <item name="android:layout_height">match_parent</item>-->
+        <!-- No backgrounds, titles or window float -->
+<!--        <item name="android:windowNoTitle">true</item>-->
+<!--        <item name="android:windowIsFloating">false</item>-->
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+<!--        <item name="android:navigationBarColor">@color/navBarColor</item>-->
+<!--        <item name="android:windowLightNavigationBar">true</item>-->
     </style>
 
 </resources>

@@ -23,11 +23,14 @@ import java.io.IOException;
 import retrofit2.Response;
 import ru.viise.lightsearch.cmd.manager.NetworkService;
 import ru.viise.lightsearch.cmd.result.CommandResult;
+import ru.viise.lightsearch.cmd.result.creator.v2.CommandEmptyResultSearchCreatorV2Impl;
 import ru.viise.lightsearch.cmd.result.creator.v2.CommandResultSearchCreatorV2Impl;
+import ru.viise.lightsearch.cmd.result.creator.v2.CommandResultSearchSoftCheckCreatorV2Impl;
 import ru.viise.lightsearch.data.pojo.ErrorPojo;
 import ru.viise.lightsearch.data.pojo.SearchPojo;
 import ru.viise.lightsearch.data.pojo.SearchResultPojo;
 import ru.viise.lightsearch.data.v2.Command;
+import ru.viise.lightsearch.data.v2.SearchCommandType;
 
 public class SearchProcess implements Process<SearchPojo> {
 
@@ -48,27 +51,38 @@ public class SearchProcess implements Process<SearchPojo> {
             if(response.isSuccessful()) {
                 SearchResultPojo srp = response.body();
                 srp.setSubdivision(sp.getSubdivision());
-                return new CommandResultSearchCreatorV2Impl(srp).create();
+                return result(srp, sp.getType());
             } else {
                 String json = response.errorBody().string();
                 ErrorPojo ePojo = new Gson().fromJson(json, ErrorPojo.class);
                 return errorResult(
                         ePojo.getMessage(),
-                        sp.getSubdivision());
+                        sp.getSubdivision(),
+                        sp.getType());
             }
         } catch (IOException ex) {
             return errorResult(
                     ex.getMessage(),
-                    sp.getSubdivision());
+                    sp.getSubdivision(),
+                    sp.getType());
         }
 
     }
 
-    private CommandResult errorResult(String message, String subdivision) {
+    private CommandResult errorResult(String message, String subdivision, SearchCommandType type) {
         SearchResultPojo srp = new SearchResultPojo();
         srp.setIsDone(false);
         srp.setMessage(message);
         srp.setSubdivision(subdivision);
-        return new CommandResultSearchCreatorV2Impl(srp).create();
+        return result(srp, type);
+    }
+
+    private CommandResult result(SearchResultPojo srp, SearchCommandType type) {
+        if(type == SearchCommandType.SEARCH)
+            return new CommandResultSearchCreatorV2Impl(srp).create();
+        else if(type == SearchCommandType.SOFT_CHECK)
+            return new CommandResultSearchSoftCheckCreatorV2Impl(srp).create();
+        else
+            return new CommandEmptyResultSearchCreatorV2Impl().create();
     }
 }

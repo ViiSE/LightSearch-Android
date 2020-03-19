@@ -80,6 +80,7 @@ public class PreferencesManagerDefaultImpl implements PreferencesManager {
                 break;
             case CARD_CODE_MANAGER:
                 cardCodeManager.saveCardCode(value);
+                break;
             case TOKEN_MANAGER:
                 tokenPrefManager.saveToken(value);
                 break;

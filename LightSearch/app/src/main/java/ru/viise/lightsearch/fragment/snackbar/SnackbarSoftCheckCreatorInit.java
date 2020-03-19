@@ -16,13 +16,13 @@
 
 package ru.viise.lightsearch.fragment.snackbar;
 
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 public class SnackbarSoftCheckCreatorInit {
 
-    public static SnackbarSoftCheckCreator snackbarSoftCheckCreator(Fragment fragment,
-                        CoordinatorLayout coordLayout, String message) {
-        return new SnackbarSoftCheckCreatorDefaultImpl(fragment, coordLayout, message);
+    public static SnackbarSoftCheckCreator snackbarSoftCheckCreator(
+            Fragment fragment, View view, String message) {
+        return new SnackbarSoftCheckCreatorDefaultImpl(fragment, view, message);
     }
 }

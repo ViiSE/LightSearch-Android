@@ -19,5 +19,5 @@ package ru.viise.lightsearch.fragment;
 import ru.viise.lightsearch.find.Findable;
 
 public interface ISearchFragment extends Findable {
-    void setSearchBarcode(String barcode);
+    void setSearchBarcode(String barcode, boolean isRun);
 }

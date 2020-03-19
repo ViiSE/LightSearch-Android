@@ -26,22 +26,22 @@ public class ProductAmountFormatDefaultImpl implements ProductAmountFormat {
     @Override
     public float format(String currentAmount) {
         if(currentAmount.contains("-"))
-            return 0.2f;
+            return 0.25f;
         if(currentAmount.isEmpty())
-            return 0.2f;
+            return 0.25f;
         if(currentAmount.equals("."))
-            return 0.2f;
+            return 0.25f;
         else {
             Locale currentLocale = Locale.getDefault();
             DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols(currentLocale);
             formatSymbols.setDecimalSeparator('.');
-            DecimalFormat decimalFormat = new DecimalFormat("#.#", formatSymbols);
-            decimalFormat.setRoundingMode(RoundingMode.FLOOR);
+            DecimalFormat decimalFormat = new DecimalFormat("#.##", formatSymbols);
+            decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);
             float tempCurrentAmount = Float.parseFloat(currentAmount);
             float curAmount = Float.parseFloat(decimalFormat.format(tempCurrentAmount));
 
             if (curAmount < 0.2f)
-                return 0.2f;
+                return 0.25f;
 
             return curAmount;
         }

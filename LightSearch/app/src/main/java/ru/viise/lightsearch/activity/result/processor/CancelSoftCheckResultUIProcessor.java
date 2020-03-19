@@ -18,11 +18,12 @@ package ru.viise.lightsearch.activity.result.processor;
 
 import java.util.function.Function;
 
+import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.activity.ManagerActivity;
 import ru.viise.lightsearch.cmd.result.CancelSoftCheckCommandResult;
 import ru.viise.lightsearch.cmd.result.CommandResult;
-import ru.viise.lightsearch.fragment.IContainerFragment;
-import ru.viise.lightsearch.fragment.StackFragmentTitle;
+import ru.viise.lightsearch.fragment.ISoftCheckContainerFragment;
+import ru.viise.lightsearch.fragment.SoftCheckContainerFragment;
 
 public class CancelSoftCheckResultUIProcessor implements Function<CommandResult, Void> {
 
@@ -36,14 +37,14 @@ public class CancelSoftCheckResultUIProcessor implements Function<CommandResult,
     public Void apply(CommandResult commandResult) {
         CancelSoftCheckCommandResult cancelSCCmdRes = (CancelSoftCheckCommandResult)commandResult;
         if(cancelSCCmdRes.isDone()) {
-            if(cancelSCCmdRes.isCart()) {
-                activity.setTitle(StackFragmentTitle.pop());
-                activity.getSupportFragmentManager().popBackStack();
-            }
+            activity.setTitle(activity.getString(R.string.fragment_container));
+//            activity.getSupportFragmentManager().popBackStack(OpenSoftCheckFragment.TAG, 0);
+//            if(cancelSCCmdRes.isCart())
+//                activity.getSupportFragmentManager().popBackStack();
 
             activity.callDialogSuccess(cancelSCCmdRes.message());
-            IContainerFragment containerFragment = activity.getContainerFragment();
-
+//            activity.getSupportFragmentManager().popBackStack(SoftCheckContainerFragment.TAG, 0);
+            ISoftCheckContainerFragment containerFragment = activity.getSoftCheckContainerFragment();
             if(containerFragment != null)
                 containerFragment.switchToOpenSoftCheckFragment();
         } else if(cancelSCCmdRes.isReconnect()) {

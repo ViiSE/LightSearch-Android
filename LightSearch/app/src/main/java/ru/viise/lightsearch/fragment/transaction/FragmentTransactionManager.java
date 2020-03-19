@@ -29,7 +29,7 @@ public interface FragmentTransactionManager {
     void doResultSearchFragmentTransaction(String title, List<SearchRecord> searchRecords);
     void doCartFragmentTransaction(List<SoftCheckRecord> cartRecords);
     void doContainerFragmentTransactionFromCart();
-
+    void doOpenSoftCheckFragmentTransaction();
     void doResultBindFragmentTransaction(String title, BindCommandResult bindCmdRes);
     void doBindingContainerFragmentTransaction();
     void doBindingContainerFragmentTransactionFromResultBind();

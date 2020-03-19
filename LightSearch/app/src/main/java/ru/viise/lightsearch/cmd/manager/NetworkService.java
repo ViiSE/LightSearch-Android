@@ -27,7 +27,7 @@ public class NetworkService {
     private Retrofit retrofit;
     private static NetworkService networkService;
     private static String OLD_BASE_URL = "";
-    private static String BASE_URL = "";
+    private static String BASE_URL = "http://127.0.0.1:50000";
 
     public static void setBaseUrl(String host, String port) {
         OLD_BASE_URL = BASE_URL;
@@ -45,7 +45,7 @@ public class NetworkService {
     public static NetworkService getInstance() {
         if(networkService == null)
             networkService = new NetworkService();
-        if(!OLD_BASE_URL.isEmpty()) {
+        else if(!OLD_BASE_URL.isEmpty()) {
             networkService = new NetworkService();
             OLD_BASE_URL = "";
         }

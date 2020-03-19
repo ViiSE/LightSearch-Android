@@ -124,6 +124,11 @@ public class CartRecordDefaultImpl implements CartRecord {
     }
 
     @Override
+    public float refreshMaxAmount() {
+        return maxAmount();
+    }
+
+    @Override
     public void setMaxAmount(float maxAmount) {
         newMaxAmount = maxAmount;
     }

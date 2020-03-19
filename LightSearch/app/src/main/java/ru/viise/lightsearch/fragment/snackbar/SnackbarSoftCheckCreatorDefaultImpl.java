@@ -16,28 +16,28 @@
 
 package ru.viise.lightsearch.fragment.snackbar;
 
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 
 import ru.viise.lightsearch.R;
 
 public class SnackbarSoftCheckCreatorDefaultImpl implements SnackbarSoftCheckCreator {
 
     private final Fragment fragment;
-    private final CoordinatorLayout coordLayout;
+    private final View view;
     private final String message;
 
-    public SnackbarSoftCheckCreatorDefaultImpl(Fragment fragment, CoordinatorLayout coordLayout, String message) {
+    public SnackbarSoftCheckCreatorDefaultImpl(Fragment fragment, View view, String message) {
         this.fragment = fragment;
-        this.coordLayout = coordLayout;
+        this.view = view;
         this.message = message;
     }
 
     @Override
     public Snackbar createSnackbar() {
-        Snackbar snackbar = Snackbar.make(coordLayout, message, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
         snackbar.getView().setBackgroundColor(ContextCompat.getColor(fragment.getActivity(), R.color.colorSnackbar));
         snackbar.setActionTextColor(ContextCompat.getColor(fragment.getContext(), R.color.colorUndo));
         return snackbar;

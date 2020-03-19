@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_more">
+
+    <ImageView
+        android:id="@+id/imageViewMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_user"
+        android:background="@drawable/button_round"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/about_user"
+        android:layout_marginTop="20dp">
+    </ImageView>
+
+    <TextView
+        android:id="@+id/tvMoreUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:layout_marginTop="120dp">
+    </TextView>
+
+    <TextView
+        android:id="@+id/tvMoreUserIdent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvMoreUsername"
+        android:textAlignment="center"
+        android:textColor="@color/colorChange"
+        android:textSize="16sp"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tvMoreUserIdent"
+        android:layout_marginTop="70dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rwMore"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </FrameLayout>
+
+</RelativeLayout>

@@ -21,7 +21,8 @@ import java.util.function.Function;
 import ru.viise.lightsearch.activity.ManagerActivity;
 import ru.viise.lightsearch.cmd.result.CommandResult;
 import ru.viise.lightsearch.cmd.result.SearchSoftCheckCommandResult;
-import ru.viise.lightsearch.fragment.IContainerFragment;
+import ru.viise.lightsearch.fragment.ISoftCheckContainerFragment;
+import ru.viise.lightsearch.fragment.ISoftCheckFragment;
 
 public class SearchResultSoftCheckUIProcessor implements Function<CommandResult, Void> {
 
@@ -34,14 +35,16 @@ public class SearchResultSoftCheckUIProcessor implements Function<CommandResult,
     @Override
     public Void apply(CommandResult commandResult) {
         SearchSoftCheckCommandResult searchSCCmdRes = (SearchSoftCheckCommandResult) commandResult;
-        if(searchSCCmdRes.isDone())
-            if(searchSCCmdRes.record() != null) {
-                IContainerFragment containerFragment = activity.getContainerFragment();
-                if(containerFragment != null)
-                    containerFragment.addSoftCheckRecord(searchSCCmdRes.record());
+        if(searchSCCmdRes.isDone()) {
+            if (!searchSCCmdRes.records().isEmpty()) {
+                ISoftCheckContainerFragment softCheckContainerFragment = activity.getSoftCheckContainerFragment();
+                if (searchSCCmdRes.records().size() == 1) {
+                    softCheckContainerFragment.addSoftCheckRecord(searchSCCmdRes.records().get(0));
+                } else
+                    softCheckContainerFragment.showResultSearchSoftCheckFragment(searchSCCmdRes.records());
             } else
                 activity.callDialogNoResult();
-        else if(searchSCCmdRes.isReconnect()) {
+        } else if(searchSCCmdRes.isReconnect()) {
             // FIXME: 22.02.20 DO IT LATER
 //            SharedPreferences sPref = activity.getSharedPreferences("pref", Context.MODE_PRIVATE);
 //            PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);

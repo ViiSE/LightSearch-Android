@@ -16,10 +16,20 @@
 
 package ru.viise.lightsearch.cmd.result.creator.v2;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import ru.viise.lightsearch.cmd.result.CommandResult;
+import ru.viise.lightsearch.cmd.result.SearchCommandResultInit;
 import ru.viise.lightsearch.cmd.result.SearchSoftCheckCommandResultInit;
 import ru.viise.lightsearch.cmd.result.creator.CommandResultCreator;
+import ru.viise.lightsearch.data.SearchRecord;
+import ru.viise.lightsearch.data.SearchRecordInit;
+import ru.viise.lightsearch.data.SearchRecordList;
 import ru.viise.lightsearch.data.SoftCheckRecord;
+import ru.viise.lightsearch.data.SoftCheckRecordDefaultImpl;
 import ru.viise.lightsearch.data.SoftCheckRecordInit;
 import ru.viise.lightsearch.data.Subdivision;
 import ru.viise.lightsearch.data.SubdivisionInit;
@@ -38,39 +48,41 @@ public class CommandResultSearchSoftCheckCreatorV2Impl implements CommandResultC
 
     @Override
     public CommandResult create() {
-        if(pojo.getIsDone()) {
-
-            ProductPojo product = pojo.getData().get(0);
-            String barcode = product.getId();
-            String name = product.getName();
-            String price = product.getPrice();
-            String amountUnit = product.getEi();
-
-            SubdivisionList subdivisions = SubdivisionListInit.subdivisionList(amountUnit);
+        List<SoftCheckRecord> records = new ArrayList<>();
+        if (pojo.getIsDone()) {
 
             for (ProductPojo rec : pojo.getData()) {
+                String barcode = rec.getId();
+                String name = rec.getName();
+                String price = rec.getPrice();
+                String amountUnit = rec.getEi();
+
                 Subdivision subdivision = SubdivisionInit.subdivision(
                         rec.getSubdiv(),
                         rec.getAmount());
-                subdivisions.addSubdivision(subdivision);
-            }
-            SoftCheckRecord record = SoftCheckRecordInit.softCheckRecord(
-                    name,
-                    barcode,
-                    price,
-                    amountUnit,
-                    subdivisions);
 
-            return SearchSoftCheckCommandResultInit.searchSoftCheckCommandResult(
-                    pojo.getIsDone(),
-                    null,
-                    record,
-                    null);
-        } else
-            return SearchSoftCheckCommandResultInit.searchSoftCheckCommandResult(
-                            pojo.getIsDone(),
-                            pojo.getMessage(),
-                            null,
-                            null);
+                SubdivisionList subdivisions = SubdivisionListInit.subdivisionList(amountUnit);
+                subdivisions.addSubdivision(subdivision);
+
+                add(records, new SoftCheckRecordDefaultImpl(name, barcode, price, amountUnit, subdivisions), subdivision);
+            }
+        }
+
+        return SearchSoftCheckCommandResultInit.searchSoftCheckCommandResult(
+                pojo.getIsDone(),
+                null,
+                records,
+                null);
+    }
+
+    private void add(List<SoftCheckRecord> records, SoftCheckRecord record, Subdivision subdivision) {
+        for(int i = 0; i < records.size(); i++) {
+            if(records.get(i).barcode().equals(record.barcode())) {
+                records.get(i).subdivisions().addSubdivision(subdivision);
+                records.get(i).refreshMaxAmount();
+                return;
+            }
+        }
+        records.add(record);
     }
 }

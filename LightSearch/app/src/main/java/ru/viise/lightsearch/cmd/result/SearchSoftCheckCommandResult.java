@@ -16,8 +16,10 @@
 
 package ru.viise.lightsearch.cmd.result;
 
+import java.util.List;
+
 import ru.viise.lightsearch.data.SoftCheckRecord;
 
 public interface SearchSoftCheckCommandResult extends CommandResult {
-    SoftCheckRecord record();
+    List<SoftCheckRecord> records();
 }

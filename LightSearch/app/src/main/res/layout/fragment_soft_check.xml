@@ -1,132 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ConstraintLayout"
+<android.support.design.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
-    android:background="#00ffffff"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_sc"
     tools:activity="ru.viise.lightsearch.fragment.SoftCheckFragment">
 
-    <TableLayout
-        android:id="@+id/tableLayout"
-        android:layout_width="360dp"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewSoftCheck"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="90dp"
+        android:paddingBottom="90dp"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutSoftCheckPanel"/>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutSoftCheckPanel"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="160dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="670dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
+        android:background="@drawable/soft_check_panel_layer_list"
         app:layout_constraintTop_toTopOf="parent">
-
-        <TableRow
-            android:id="@+id/tableRowSC"
-            android:layout_width="360dp"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textViewSearchSC"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="3dp"
-                android:text="@string/search_label"
-                android:textSize="20sp" />
+        <LinearLayout
+            android:id="@+id/linearLayoutSoftCheck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
 
             <EditText
                 android:id="@+id/editTextSearchSC"
-                android:layout_width="179dp"
+                android:layout_width="0dp"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/edittextshape"
                 android:ems="10"
-                android:imeOptions="flagNoExtractUi"
-                android:selectAllOnFocus="true"
-                android:inputType="number" />
-
-            <ImageButton
-                android:id="@+id/imageButtonSearch"
-                android:layout_width="41dp"
-                android:layout_height="42dp"
-                android:layout_marginStart="10dp"
-                android:adjustViewBounds="true"
-                android:background="@drawable/button_round"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_magnifier_search" />
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:hint="@string/searchHint"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:selectAllOnFocus="true" />
 
             <ImageButton
                 android:id="@+id/imageButtonBarcode"
-                android:layout_width="41dp"
-                android:layout_height="42dp"
-                android:layout_marginStart="8dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="10dp"
                 android:adjustViewBounds="true"
                 android:background="@drawable/button_round"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_barcode" />
-        </TableRow>
+        </LinearLayout>
 
-    </TableLayout>
-
-    <TextView
-        android:id="@+id/textViewSoftCheckTotalCost"
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="15dp"
-        android:gravity="center"
-        android:text="@string/softCheckTotalCost_label"
-        android:textColor="@color/design_default_color_primary_dark"
-        android:textSize="17sp"
-        app:layout_constraintBottom_toTopOf="@+id/coordinatorLayoutSoftCheck"
-        app:layout_constraintEnd_toEndOf="@+id/tableLayout"
-        app:layout_constraintStart_toStartOf="@+id/tableLayout"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
-
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayoutSoftCheck"
-        android:layout_width="400dp"
-        android:layout_height="430dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/buttonCart"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewSoftCheck"
+        <TextView
+            android:id="@+id/textViewSoftCheckTotalCost"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/recycleViewBackgroundColor"
-            android:paddingStart="4dp"
-            android:paddingTop="5dp"
-            android:paddingEnd="8dp"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
-    </android.support.design.widget.CoordinatorLayout>
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:gravity="center"
+            android:text="@string/softCheckTotalCost_label"
+            android:textColor="@color/design_default_color_primary_dark"
+            android:textSize="17sp" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/buttonCart"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/buttonshape"
-        android:shadowColor="@color/buttonShadowColor"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="1"
-        android:text="@string/buttonCart_label"
-        android:textColor="@color/buttonTextColor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-</android.support.constraint.ConstraintLayout>
+    <com.andremion.counterfab.CounterFab
+        android:id="@+id/counterFabCart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:scaleType="center"
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_cart"
+        android:layout_gravity="end|bottom">
+    </com.andremion.counterfab.CounterFab>
+</android.support.design.widget.CoordinatorLayout>

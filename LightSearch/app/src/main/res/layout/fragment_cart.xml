@@ -6,113 +6,118 @@
     android:layout_height="match_parent"
     android:focusableInTouchMode="true">
 
-    <FrameLayout
-        android:id="@+id/frameLayoutCart"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewCart"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="90dp"
+        android:paddingBottom="90dp"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCartPanel" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutCartPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/soft_check_panel_layer_list"
         app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/textViewCartTotalCost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:text="@string/cartTotalCost_label"
-            android:textColor="@color/design_default_color_primary_dark"
-            android:textSize="17sp" />
-
-        <TextView
-            android:id="@+id/textViewCartTotalCostDynamic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="62dp"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/design_default_color_primary_dark"
-            android:textSize="17sp" />
-
-        <TextView
-            android:id="@+id/textViewCartTotalAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="190dp"
-            android:layout_marginTop="5dp"
-            android:text="@string/cartTotalAmount_label"
-            android:textColor="@color/colorChange"
-            android:textSize="17sp" />
-
-        <TextView
-            android:id="@+id/textViewCartTotalAmountDynamic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="270dp"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/colorChange"
-            android:textSize="17sp" />
-    </FrameLayout>
-
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayoutCart"
-        android:layout_width="400dp"
-        android:layout_height="470dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="9dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/frameLayoutCart"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerCartDeliveryType">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewCart"
+        <FrameLayout
+            android:id="@+id/frameLayoutCart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/recycleViewBackgroundColor"
-            android:paddingStart="4dp"
-            android:paddingTop="5dp"
-            android:paddingEnd="8dp"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
-    </android.support.design.widget.CoordinatorLayout>
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textViewCartTotalCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/cartTotalCost_label"
+                android:textColor="@color/design_default_color_primary_dark"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/textViewCartTotalCostDynamic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="62dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/design_default_color_primary_dark"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/textViewCartTotalAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="190dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/cartTotalAmount_label"
+                android:textColor="@color/colorChange"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/textViewCartTotalAmountDynamic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="270dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/colorChange"
+                android:textSize="17sp" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:id="@+id/textViewCartDeliveryType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/cartDeliveryType_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayoutCart" />
+
+            <Spinner
+                android:id="@+id/spinnerCartDeliveryType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="end"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textViewCartDeliveryType"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayoutCart" />
+        </LinearLayout>
+    </LinearLayout>
 
     <Button
-        android:id="@+id/buttonCloseSoftCheck"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/buttonshape"
-        android:text="@string/buttonCloseSC_label"
-        android:textColor="@color/buttonTextColor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewCartDeliveryType"
+        android:id="@+id/buttonCloseSC"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/cartDeliveryType_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayoutCart" />
-
-    <Spinner
-        android:id="@+id/spinnerCartDeliveryType"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="right"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:scaleType="center"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textViewCartDeliveryType"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayoutCart" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/button_without_corner"
+        android:elevation="18dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/buttonCloseSC_label"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:textColor="@android:color/white" />
 
 </android.support.constraint.ConstraintLayout>

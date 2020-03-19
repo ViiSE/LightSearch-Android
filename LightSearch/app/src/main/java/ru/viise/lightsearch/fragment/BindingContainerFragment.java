@@ -29,21 +29,30 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ru.viise.lightsearch.R;
+import ru.viise.lightsearch.activity.OnBackPressedListener;
+import ru.viise.lightsearch.activity.OnBackPressedListenerType;
 import ru.viise.lightsearch.data.BindRecord;
 import ru.viise.lightsearch.data.UnbindRecord;
+import ru.viise.lightsearch.dialog.alert.CancelBindingAlertDialogCreator;
+import ru.viise.lightsearch.dialog.alert.CancelBindingAlertDialogCreatorInit;
 import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.find.ImplFinder;
 import ru.viise.lightsearch.find.ImplFinderFragmentFromFragmentDefaultImpl;
 
 
-public class BindingContainerFragment extends Fragment implements IBindingContainerFragment {
+public class BindingContainerFragment extends Fragment implements IBindingContainerFragment, OnBackPressedListener {
 
     private static final String TAG = "ContainerFragment";
     private int selected = 0; // 0 - CheckBindingMode, 1 - BindingMode, 2 - BindingDone
+    private OnBackPressedListenerType onBackPressedListenerType;
+    private static final String ON_BACK_TYPE_BIND_CONT = "OnBackTypeBindCont";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null)
+            selected = savedInstanceState.getInt(ON_BACK_TYPE_BIND_CONT);
     }
 
     @Nullable
@@ -57,6 +66,11 @@ public class BindingContainerFragment extends Fragment implements IBindingContai
         TabLayout tabLayout = view.findViewById(R.id.TabLayoutBindCon);
         tabLayout.setupWithViewPager(viewPager);
 
+        if(selected == 0)
+            onBackPressedListenerType = OnBackPressedListenerType.BINDING_CHECK_FRAGMENT;
+        else if(selected == 1)
+            onBackPressedListenerType = OnBackPressedListenerType.BINDING_FRAGMENT;
+
         return view;
     }
 
@@ -68,6 +82,7 @@ public class BindingContainerFragment extends Fragment implements IBindingContai
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putInt(ON_BACK_TYPE_BIND_CONT, selected);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -85,7 +100,7 @@ public class BindingContainerFragment extends Fragment implements IBindingContai
         try {
             ImplFinder<ISearchFragment> finder = new ImplFinderFragmentFromFragmentDefaultImpl<>(this);
             ISearchFragment searchFragment = finder.findImpl(ISearchFragment.class);
-            searchFragment.setSearchBarcode(barcode);
+            searchFragment.setSearchBarcode(barcode, false);
         }
         catch(FindableException ignore) {}
     }
@@ -136,6 +151,7 @@ public class BindingContainerFragment extends Fragment implements IBindingContai
             if(bindingFragment.isVisible()) {
                 bindingFragment.switchToBind();
                 selected = 1;
+                onBackPressedListenerType = OnBackPressedListenerType.BINDING_FRAGMENT;
             }
         }
     }
@@ -146,6 +162,7 @@ public class BindingContainerFragment extends Fragment implements IBindingContai
         if(bindingFragment != null) {
             bindingFragment.switchToCheckBind();
             selected = 0;
+            onBackPressedListenerType = OnBackPressedListenerType.BINDING_CHECK_FRAGMENT;
         }
     }
 
@@ -162,6 +179,18 @@ public class BindingContainerFragment extends Fragment implements IBindingContai
         IUnbindingFragment unbindingFragment = getIUnbindingFragment();
         if(unbindingFragment != null) {
             unbindingFragment.showResult(record);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(onBackPressedListenerType == OnBackPressedListenerType.BINDING_FRAGMENT) {
+            CancelBindingAlertDialogCreator cancelBADCr =
+                    CancelBindingAlertDialogCreatorInit.cancelBindingAlertDialogCreator(this);
+            cancelBADCr.create().show();
+        } else {
+            this.getActivity().getSupportFragmentManager().popBackStack();
+            this.getActivity().setTitle(this.getString(R.string.fragment_container));
         }
     }
 }

@@ -54,6 +54,9 @@ public class AuthorizationProcess implements Process<LoginPojo> {
                 return errorResult(ePojo.getMessage());
             }
         } catch (IOException ex) {
+            if(ex.getMessage().equals("timeout"))
+                return errorResult("Не удалось установить связь с сервером.");
+
             return errorResult(ex.getMessage());
         }
 

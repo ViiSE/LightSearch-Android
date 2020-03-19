@@ -7,7 +7,9 @@
     <string name="search_label">Поиск:</string>
     <string name="host_label">Хост сервера:</string>
     <string name="port_label">Порт сервера:</string>
-    <string name="openSC_label">Мягкий чек не открыт.</string>
+    <string name="openSC_label">Откройте мягкий чек, считав код карточки при помощи сканера,
+        или при помощи камеры смартфона</string>
+    <string name="or_label">или</string>
     <string name="userIdent_label">Идентификатор пользователя:</string>
     <string name="softCheckTotalCost_label">Итого:</string>
     <string name="cartTotalCost_label">Итого:</string>
@@ -18,11 +20,20 @@
     <string name="default_ip">127.0.0.1</string>
     <string name="default_port">50000</string>
     <string name="bind_barcode">Привязка товара №</string>
+    <string name="tasks_welcome">Выберите задачу из списка</string>
+    <string name="about_identifier">Идентификатор</string>
+    <string name="about_user">О пользователе</string>
+    <string name="soft_check_result_search">Выберите товар из списка</string>
     <!-- ======== -->
 
     <!-- CheckBox -->
     <string name="checkBox_settings">Расширенные настройки</string>
     <!-- ======== -->
+
+    <!-- EditText hint -->
+    <string name="openSCHintScanner">Считайте карточку сканером</string>
+    <string name="searchHint">Поиск...</string>
+    <!-- ============= -->
 
     <!-- RadioButton -->
     <string name="skladRB">Склады</string>
@@ -35,13 +46,15 @@
     <string name="buttonBarcode_label">Сканировать штрих-код</string>
     <string name="buttonConnect_label">Подключиться</string>
     <string name="buttonChPass_label">Изменить пароль администратора</string>
-    <string name="buttonOpenSC_label">Открыть мягкий чек</string>
+    <string name="buttonOpenSC_label">Считайте карточку камерой</string>
     <string name="buttonCart_label">В корзину</string>
     <string name="buttonCloseSC_label">Закрыть мягкий чек</string>
     <string name="button_update">Обновить</string>
     <string name="button_update_later">Позже</string>
     <string name="button_bind_check">Проверить</string>
     <string name="button_bind">Привязать</string>
+    <string name="button_sf">Мягкий чек</string>
+    <string name="button_bu">Привязка товара</string>
     <!-- ====== -->
 
     <!-- Spinner -->
@@ -53,6 +66,7 @@
     <string name="dialog_error">Ошибка</string>
     <string name="dialog_fail">Провал</string>
     <string name="dialog_success">Успех</string>
+    <string name="dialog_about">О программе</string>
     <string name="dialog_pass_error">Введен неверный пароль!</string>
     <string name="dialog_OK">OK</string>
     <string name="dialog_cancel">Отмена</string>
@@ -63,6 +77,7 @@
     <string name="dialog_exit">Выход</string>
     <string name="dialog_exit_to_auth">Вы уверены, что хотите выйти в меню авторизации?</string>
     <string name="dialog_cancel_soft_check">Вы уверены, что хотите отменить текущий мягкий чек?</string>
+    <string name="dialog_cancel_soft_check_warn">Хотите его отменить?</string>
     <string name="dialog_cancel_binding">Вы уверены, что хотите отменить привязку по текущему товару?</string>
     <string name="dialog_exit_to_cart">Вы уверены, что хотите выйти из корзины? Это отменит текущий мягкий чек.</string>
     <string name="dialog_message">Сообщение</string>
@@ -93,7 +108,8 @@
     <!-- Toast -->
     <string name="toast_empty_cart">Корзина пуста!</string>
     <string name="toast_delivery_not_chosen">Выберите способ доставки!</string>
-    <string name="toast_barcode_not_enough_symbols">"Введите не менее пяти символов!"</string>
+    <string name="toast_cart_with_empty_products">Удалите из корзины товары с нулевым количеством!</string>
+    <string name="toast_barcode_not_enough_symbols">"Введите не менее двух символов!"</string>
     <string name="toast_empty_soft_check">"Мягкий чек пуст!"</string>
     <string name="toast_not_enough_auth_data">Заполните все поля, необходимые для регистрации!</string>
     <!-- ===== -->
@@ -118,17 +134,39 @@
     <string name="fragment_search">Поиск</string>
     <string name="fragment_soft_check">Мягкий чек</string>
     <string name="fragment_container">LightSearch</string>
+    <string name="fragment_result_soft_check">Выберите товар</string>
     <string name="fragment_result_search">Результат</string>
     <string name="fragment_result_bind">Результат</string>
     <string name="fragment_result_unbind">Результат</string>
     <string name="fragment_cart">Корзина</string>
     <string name="fragment_binding">Привязка товара</string>
+    <string name="fragment_binding_container">Операции</string>
     <string name="fragment_binding_unbinding">Операции</string>
+    <string name="fragment_tasks">Задачи</string>
+    <string name="fragment_more">Еще</string>
     <string name="fragment_unbinding">Отвязка товара</string>
     <!-- ============ -->
+
+    <!-- Bottom Nav -->
+    <string name="nav_search">Поиск</string>
+    <string name="nav_tasks">Задачи</string>
+    <string name="nav_more">Еще</string>
+    <!-- ========== -->
 
     <!-- App Updater -->
     <string name="update_url">http://192.168.3.215:50001/update/info/update.json</string>
     <!-- =========== -->
+
+    <!-- Content Description -->
+    <string name="search_desc">Начать поиск</string>
+    <string name="scan_desc">Сканировать штрих-код</string>
+    <!-- =================== -->
+
+    <string name="about_app">О приложении</string>
+    <string name="about_LightSearch">LightSearch</string>
+    <string name="about_version">Версия 1.5</string>
+    <string name="about_code_version">Код версии 6</string>
+    <string name="about_license">Данный программный продукт распространяется под лицензией Apache v2.0.</string>
+    <string name="search_result">Поиск:</string>
 
 </resources>

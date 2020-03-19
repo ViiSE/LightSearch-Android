@@ -28,6 +28,7 @@ public interface SoftCheckRecord extends Parcelable {
     String totalCostWithUnit();
     float totalCost();
     float maxAmount();
+    float refreshMaxAmount();
     void setMaxAmount(float maxAmount);
     String maxAmountWithUnit();
     void setProductsCount(float count);

@@ -21,7 +21,9 @@ import java.util.function.Function;
 import ru.viise.lightsearch.activity.ManagerActivity;
 import ru.viise.lightsearch.cmd.result.CommandResult;
 import ru.viise.lightsearch.cmd.result.OpenSoftCheckCommandResult;
-import ru.viise.lightsearch.fragment.IContainerFragment;
+import ru.viise.lightsearch.fragment.IOpenSoftCheckFragment;
+import ru.viise.lightsearch.fragment.ISoftCheckContainerFragment;
+import ru.viise.lightsearch.fragment.ISoftCheckFragment;
 
 public class OpenSoftCheckResultUIProcessor implements Function<CommandResult, Void> {
 
@@ -36,10 +38,9 @@ public class OpenSoftCheckResultUIProcessor implements Function<CommandResult, V
         OpenSoftCheckCommandResult openSCCmdRes = (OpenSoftCheckCommandResult)commandResult;
         if(openSCCmdRes.isDone()) {
             activity.callDialogSuccess(openSCCmdRes.message());
-            IContainerFragment containerFragment = activity.getContainerFragment();
-
-            if(containerFragment != null)
-                containerFragment.switchToSoftCheckFragment();
+            ISoftCheckContainerFragment softCheckContainerFragment = activity.getSoftCheckContainerFragment();
+            if(softCheckContainerFragment != null)
+                softCheckContainerFragment.switchToSoftCheckFragment();
         } else if(openSCCmdRes.isReconnect()) {
             // FIXME: 22.02.20 DO IT LATER
 //            SharedPreferences sPref = activity.getSharedPreferences("pref", Context.MODE_PRIVATE);
@@ -49,11 +50,7 @@ public class OpenSoftCheckResultUIProcessor implements Function<CommandResult, V
 //            ConnectionDTO connDTO = ConnectionDTOInit.connectionDTO(ip, port);
 //            activity.reconnect(connDTO, openSCCmdRes.reconnectDTO());
         } else {
-            activity.callDialogError(openSCCmdRes.message());
-            IContainerFragment containerFragment = activity.getContainerFragment();
-
-            if(containerFragment != null)
-                containerFragment.switchToSoftCheckFragment();
+            activity.callDialogCancelSoftCheck(openSCCmdRes.message());
         }
 
         return null;
