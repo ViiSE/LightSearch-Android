@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>LightSearch Android</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+</head>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+<style>
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .cBody {
+        position: absolute;
+        max-width: 100%;
+        padding: 1em;
+        height: 40em;
+        top:0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        background-color: #007dff;
+        animation: fadeIn ease 1500ms;
+        -webkit-animation: fadeIn ease 1500ms;
+        -moz-animation: fadeIn ease 1500ms;
+        -o-animation: fadeIn ease 1500ms;
+    }
+    @keyframes fadeIn{
+        0% {
+            opacity:0;
+        }
+        100% {
+            opacity:1;
+        }
+    }
+    .cText {
+        font-family: 'Open Sans', serif;
+        color: white;
+        text-align: center;
+        font-size: 60pt;
+    }
+</style>
+
+<body class="cBody">
+    <img src="ls_logo_svg.svg" width="450" height="450" alt="Logo" class="center" >
+    <div class="cText">
+        LightSearch Android
+    </div>
+</body>
+
+<footer>
+    <div class="cText" style="font-size: 14pt">
+        <a href="https://github.com/ViiSE/LightSearch-Android" class="cLink">GitHub</a>
+        <div class="cLink">2020 © ViiSE</div>
+    </div>
+</footer>
