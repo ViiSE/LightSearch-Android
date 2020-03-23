@@ -16,11 +16,17 @@
 
 package ru.viise.lightsearch.dialog.alert;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.fragment.StackFragmentTitle;
+import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManagerDefaultImpl;
+import ru.viise.lightsearch.pref.PreferencesManager;
+import ru.viise.lightsearch.pref.PreferencesManagerInit;
+import ru.viise.lightsearch.pref.PreferencesManagerType;
 
 public class ExitToAuthorizationAlertDialogCreatorDefaultImpl implements ExitToAuthorizationAlertDialogCreator {
 
@@ -45,7 +51,13 @@ public class ExitToAuthorizationAlertDialogCreatorDefaultImpl implements ExitToA
         dialogOKCancelContainer.buttonOK().setOnClickListener(viewOK -> {
             dialog.dismiss();
             activity.setTitle(StackFragmentTitle.pop());
-            activity.getSupportFragmentManager().popBackStack();
+            SharedPreferences sPref = activity.getSharedPreferences("pref", Context.MODE_PRIVATE);
+            PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
+            prefManager.save(PreferencesManagerType.TOKEN_MANAGER, "");
+            prefManager.save(PreferencesManagerType.USER_IDENT_MANAGER, "");
+            new FragmentTransactionManagerDefaultImpl(activity).doAuthorizationFragmentTransaction(true);
+
+//            activity.getSupportFragmentManager().popBackStack();
         });
 
         dialogOKCancelContainer.buttonCancel().setOnClickListener(viewCancel -> dialog.dismiss());

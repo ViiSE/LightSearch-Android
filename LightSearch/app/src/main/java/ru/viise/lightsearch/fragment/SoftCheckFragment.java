@@ -39,12 +39,11 @@ import ru.viise.lightsearch.data.SoftCheckRecord;
 import ru.viise.lightsearch.data.UnitsEnum;
 import ru.viise.lightsearch.data.pojo.ConfirmSoftCheckProductsPojo;
 import ru.viise.lightsearch.data.pojo.ConfirmTypes;
-import ru.viise.lightsearch.data.pojo.SearchPojo;
+import ru.viise.lightsearch.data.pojo.SearchSoftCheckPojo;
 import ru.viise.lightsearch.data.v2.Command;
 import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandSimple;
 import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithCardCode;
 import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithData;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithIsReserve;
 import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithSoftCheckRecords;
 import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithToken;
 import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithType;
@@ -52,13 +51,10 @@ import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithUserIdent
 import ru.viise.lightsearch.data.v2.ProductSimple;
 import ru.viise.lightsearch.data.v2.ProductWithAmount;
 import ru.viise.lightsearch.data.v2.ProductWithId;
-import ru.viise.lightsearch.data.v2.SearchCommandSimple;
-import ru.viise.lightsearch.data.v2.SearchCommandType;
-import ru.viise.lightsearch.data.v2.SearchCommandWithBarcode;
-import ru.viise.lightsearch.data.v2.SearchCommandWithSklad;
-import ru.viise.lightsearch.data.v2.SearchCommandWithTK;
-import ru.viise.lightsearch.data.v2.SearchCommandWithToken;
-import ru.viise.lightsearch.data.v2.SearchCommandWithType;
+import ru.viise.lightsearch.data.v2.SearchSoftCheckCommandSimple;
+import ru.viise.lightsearch.data.v2.SearchSoftCheckCommandWithBarcode;
+import ru.viise.lightsearch.data.v2.SearchSoftCheckCommandWithToken;
+import ru.viise.lightsearch.data.v2.SearchSoftCheckCommandWithUsername;
 import ru.viise.lightsearch.dialog.alert.InfoProductAlertDialogCreator;
 import ru.viise.lightsearch.dialog.alert.InfoProductAlertDialogCreatorInit;
 import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
@@ -158,8 +154,7 @@ public class SoftCheckFragment extends Fragment implements ISoftCheckFragment {
                 SharedPreferences sPref = this.getActivity().getSharedPreferences(PREF, Context.MODE_PRIVATE);
                 PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
 
-                Command<ConfirmSoftCheckProductsPojo> command = new ConfirmSoftCheckProductsCommandWithIsReserve(
-                    new ConfirmSoftCheckProductsCommandWithCardCode(
+                Command<ConfirmSoftCheckProductsPojo> command = new ConfirmSoftCheckProductsCommandWithCardCode(
                             new ConfirmSoftCheckProductsCommandWithUserIdentifier(
                                     new ConfirmSoftCheckProductsCommandWithType(
                                             new ConfirmSoftCheckProductsCommandWithData(
@@ -185,8 +180,7 @@ public class SoftCheckFragment extends Fragment implements ISoftCheckFragment {
                                     ),
                                     prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER)
                             ),
-                            prefManager.load(PreferencesManagerType.CARD_CODE_MANAGER)
-                    ), true);
+                            prefManager.load(PreferencesManagerType.CARD_CODE_MANAGER));
 
                 NetworkAsyncTask<ConfirmSoftCheckProductsPojo> networkAsyncTask = new NetworkAsyncTask<>(
                         managerActivityHandler,
@@ -209,12 +203,6 @@ public class SoftCheckFragment extends Fragment implements ISoftCheckFragment {
 
     public void init(List<SoftCheckRecord> softCheckRecords) {
         this.softCheckRecords = softCheckRecords;
-    }
-
-    private ISoftCheckContainerFragment getSoftCheckContainerFragment() {
-        ImplFinder<ISoftCheckContainerFragment> finder = new ImplFinderFragmentFromActivityDefaultImpl<>(this.getActivity());
-        try { return finder.findImpl(ISoftCheckContainerFragment.class); }
-        catch(FindableException ignore) { return null; }
     }
 
     private void initRecyclerView(TextView tvTotalCost) {
@@ -275,19 +263,27 @@ public class SoftCheckFragment extends Fragment implements ISoftCheckFragment {
         SharedPreferences sPref = this.getActivity().getSharedPreferences(PREF, Context.MODE_PRIVATE);
         PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
 
-        Command<SearchPojo> command = new SearchCommandWithType(
-                new SearchCommandWithSklad(
-                        new SearchCommandWithTK(
-                                new SearchCommandWithBarcode(
-                                        new SearchCommandWithToken(
-                                            new SearchCommandSimple(),
-                                            prefManager.load(PreferencesManagerType.TOKEN_MANAGER)
-                                        ), barcode
-                                ), "all"
-                        ), "all"
-                ), SearchCommandType.SOFT_CHECK);
+        Command<SearchSoftCheckPojo> command = new SearchSoftCheckCommandWithUsername(
+                new SearchSoftCheckCommandWithToken(
+                        new SearchSoftCheckCommandWithBarcode(
+                                new SearchSoftCheckCommandSimple(),
+                                barcode
+                        ), prefManager.load(PreferencesManagerType.TOKEN_MANAGER)
+                ), prefManager.load(PreferencesManagerType.USERNAME_MANAGER));
 
-        NetworkAsyncTask<SearchPojo> networkAsyncTask = new NetworkAsyncTask<>(
+//        Command<SearchPojo> command = new SearchCommandWithType(
+//                new SearchCommandWithSklad(
+//                        new SearchCommandWithTK(
+//                                new SearchCommandWithBarcode(
+//                                        new SearchCommandWithToken(
+//                                            new SearchCommandSimple(),
+//                                            prefManager.load(PreferencesManagerType.TOKEN_MANAGER)
+//                                        ), barcode
+//                                ), "all"
+//                        ), "all"
+//                ), SearchCommandType.SOFT_CHECK);
+
+        NetworkAsyncTask<SearchSoftCheckPojo> networkAsyncTask = new NetworkAsyncTask<>(
                 managerActivityHandler,
                 queryDialog);
         networkAsyncTask.execute(command);

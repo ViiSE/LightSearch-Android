@@ -16,25 +16,24 @@
 
 package ru.viise.lightsearch.data.v2;
 
-import ru.viise.lightsearch.data.pojo.ConfirmSoftCheckProductsPojo;
+import ru.viise.lightsearch.data.pojo.SearchSoftCheckPojo;
 
-public class ConfirmSoftCheckProductsCommandWithIsReserve implements Command<ConfirmSoftCheckProductsPojo> {
+public class SearchSoftCheckCommandWithUsername implements Command<SearchSoftCheckPojo> {
 
-    private final Command<ConfirmSoftCheckProductsPojo> command;
-    private final boolean isReserve;
+    private final Command<SearchSoftCheckPojo> command;
+    private final String username;
 
-    public ConfirmSoftCheckProductsCommandWithIsReserve(
-            Command<ConfirmSoftCheckProductsPojo> command,
-            boolean isReserve) {
+    public SearchSoftCheckCommandWithUsername(Command<SearchSoftCheckPojo> command, String username) {
         this.command = command;
-        this.isReserve = isReserve;
+        this.username = username;
     }
 
     @Override
-    public ConfirmSoftCheckProductsPojo formForSend() {
-        ConfirmSoftCheckProductsPojo confirmSoftCheckProductsPojo = command.formForSend();
-        confirmSoftCheckProductsPojo.setIsReserve(isReserve);
-        return confirmSoftCheckProductsPojo;
+    public SearchSoftCheckPojo formForSend() {
+        SearchSoftCheckPojo searchSoftCheckPojo = command.formForSend();
+        searchSoftCheckPojo.setUsername(username);
+
+        return searchSoftCheckPojo;
     }
 
     @Override

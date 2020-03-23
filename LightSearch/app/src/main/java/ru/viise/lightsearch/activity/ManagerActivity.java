@@ -42,6 +42,7 @@ import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.activity.result.holder.ResultCommandHolderUI;
 import ru.viise.lightsearch.activity.result.holder.ResultCommandUICreator;
 import ru.viise.lightsearch.activity.result.holder.ResultCommandUICreatorInit;
+import ru.viise.lightsearch.cmd.manager.NetworkService;
 import ru.viise.lightsearch.cmd.result.BindCommandResult;
 import ru.viise.lightsearch.cmd.result.CommandResult;
 import ru.viise.lightsearch.cmd.result.UnbindCommandResult;
@@ -61,14 +62,13 @@ import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreator;
 import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreatorInit;
 import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
 import ru.viise.lightsearch.exception.FindableException;
+import ru.viise.lightsearch.exception.JWTException;
 import ru.viise.lightsearch.find.ImplFinder;
 import ru.viise.lightsearch.find.ImplFinderFragmentFromActivityDefaultImpl;
 import ru.viise.lightsearch.fragment.BindingContainerFragment;
 import ru.viise.lightsearch.fragment.IBindingContainerFragment;
 import ru.viise.lightsearch.fragment.IContainerFragment;
-import ru.viise.lightsearch.fragment.IOpenSoftCheckFragment;
 import ru.viise.lightsearch.fragment.ISoftCheckContainerFragment;
-import ru.viise.lightsearch.fragment.ISoftCheckFragment;
 import ru.viise.lightsearch.fragment.SoftCheckContainerFragment;
 import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManager;
 import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManagerInit;
@@ -77,6 +77,8 @@ import ru.viise.lightsearch.pref.PreferencesManagerInit;
 import ru.viise.lightsearch.pref.PreferencesManagerType;
 import ru.viise.lightsearch.request.PhonePermission;
 import ru.viise.lightsearch.request.PhonePermissionInit;
+import ru.viise.lightsearch.security.JWTClient;
+import ru.viise.lightsearch.security.JWTClientWithPrefManager;
 import ru.viise.lightsearch.util.UpdateChecker;
 import ru.viise.lightsearch.util.UpdateCheckerInit;
 
@@ -105,15 +107,18 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         ResultCommandUICreator resCmdUiCr = ResultCommandUICreatorInit.resultCommandUICreator(this);
         commandHolderUI = resCmdUiCr.createResultCommandHolderUI();
 
-//        SharedPreferences sPref = this.getSharedPreferences("pref", Context.MODE_PRIVATE);
-//        PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
-//        JWTClient jwtClient = new JWTClientWithPrefManager(prefManager);
-//        try {
-//            jwtClient.check();
-//
-//        } catch (JWTException ex) {
-            doAuthorizationFragmentTransaction();
-//        }
+        SharedPreferences sPref = this.getSharedPreferences("pref", Context.MODE_PRIVATE);
+        PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
+        JWTClient jwtClient = new JWTClientWithPrefManager(prefManager);
+        try {
+            jwtClient.check();
+            NetworkService.setBaseUrl(
+                    prefManager.load(PreferencesManagerType.HOST_MANAGER),
+                    prefManager.load(PreferencesManagerType.PORT_MANAGER));
+            doContainerFragmentTransaction(new String[0], new String[0], false);
+        } catch (JWTException ex) {
+            doAuthorizationFragmentTransaction(false);
+        }
 
         UpdateChecker updateChecker = UpdateCheckerInit.updateChecker(ManagerActivity.this);
         updateChecker.checkUpdate();
@@ -125,7 +130,9 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
             ImplFinder<OnBackPressedListener> finder = new ImplFinderFragmentFromActivityDefaultImpl<>(this);
             OnBackPressedListener backPressedListener = finder.findImpl(OnBackPressedListener.class);
             backPressedListener.onBackPressed();
-        } catch(FindableException ex) { super.onBackPressed(); }
+        } catch(FindableException ex) {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -179,13 +186,13 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         phonePermission.requestPhonePermission();
     }
 
-    private void doAuthorizationFragmentTransaction() {
+    private void doAuthorizationFragmentTransaction(boolean isNeedAnimation) {
         FragmentTransactionManager fragmentTransactionManager =
                 FragmentTransactionManagerInit.fragmentTransactionManager(this);
-        fragmentTransactionManager.doAuthorizationFragmentTransaction();
+        fragmentTransactionManager.doAuthorizationFragmentTransaction(isNeedAnimation);
     }
 
-    public void doContainerFragmentTransaction(String[] skladArr, String[] TKArr) {
+    public void doContainerFragmentTransaction(String[] skladArr, String[] TKArr, boolean isNeedAnimation) {
         SharedPreferences sPref = this.getSharedPreferences("pref", Context.MODE_PRIVATE);
         PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
         if(prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER).equals("0")) {
@@ -195,7 +202,7 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         }
         FragmentTransactionManager fragmentTransactionManager =
                 FragmentTransactionManagerInit.fragmentTransactionManager(this);
-        fragmentTransactionManager.doContainerFragmentTransaction(skladArr, TKArr);
+        fragmentTransactionManager.doContainerFragmentTransaction(skladArr, TKArr, isNeedAnimation);
     }
 
     // TODO: 29.01.20 REMOVE THIS LATER
@@ -334,18 +341,6 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
     public ISoftCheckContainerFragment getSoftCheckContainerFragment() {
         ImplFinder<ISoftCheckContainerFragment> finder = new ImplFinderFragmentFromActivityDefaultImpl<>(this);
         try { return finder.findImpl(ISoftCheckContainerFragment.class); }
-        catch(FindableException ignore) { return null; }
-    }
-
-    public IOpenSoftCheckFragment getOpenSoftCheckFragment() {
-        ImplFinder<IOpenSoftCheckFragment> finder = new ImplFinderFragmentFromActivityDefaultImpl<>(this);
-        try { return finder.findImpl(IOpenSoftCheckFragment.class); }
-        catch(FindableException ignore) { return null; }
-    }
-
-    public ISoftCheckFragment getSoftCheckFragment() {
-        ImplFinder<ISoftCheckFragment> finder = new ImplFinderFragmentFromActivityDefaultImpl<>(this);
-        try { return finder.findImpl(ISoftCheckFragment.class); }
         catch(FindableException ignore) { return null; }
     }
 

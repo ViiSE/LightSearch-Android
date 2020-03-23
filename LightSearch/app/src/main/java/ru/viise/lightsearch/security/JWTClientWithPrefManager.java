@@ -16,7 +16,12 @@ public class JWTClientWithPrefManager implements JWTClient {
 
     @Override
     public void check() throws JWTException {
-        JWT jwt = new JWT(prefManager.load(PreferencesManagerType.TOKEN_MANAGER));
+        String token = prefManager.load(PreferencesManagerType.TOKEN_MANAGER);
+
+        if(token.equals(""))
+            throw new JWTException("JWT is expired");
+
+        JWT jwt = new JWT(token);
         boolean isExpired = jwt.isExpired(1);
         if(isExpired)
             throw new JWTException("JWT is expired");

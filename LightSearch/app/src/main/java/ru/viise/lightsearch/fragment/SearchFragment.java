@@ -30,12 +30,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
 import java.util.Objects;
 
 import ru.viise.lightsearch.R;
@@ -43,6 +43,8 @@ import ru.viise.lightsearch.activity.KeyboardHideToolInit;
 import ru.viise.lightsearch.activity.ManagerActivityHandler;
 import ru.viise.lightsearch.activity.ManagerActivityUI;
 import ru.viise.lightsearch.activity.scan.ScannerInit;
+import ru.viise.lightsearch.cmd.ClientCommands;
+import ru.viise.lightsearch.cmd.manager.task.v2.FillAdapterAsyncTask;
 import ru.viise.lightsearch.cmd.manager.task.v2.NetworkAsyncTask;
 import ru.viise.lightsearch.data.ScanType;
 import ru.viise.lightsearch.data.SearchFragmentContentEnum;
@@ -62,16 +64,14 @@ import ru.viise.lightsearch.pref.PreferencesManagerType;
 
 public class SearchFragment extends Fragment implements ISearchFragment {
 
-    private final String ALL_UI = SearchFragmentContentEnum.ALL_UI.stringValue();
-
     private final static String MENU_SELECTED = "selected";
     private final static String SKLAD_ARRAY = "sklad_array";
     private final static String TK_ARRAY = "tk_array";
     private int selected = 0; //0-sklad, 1-TK, 2 - ALL
 
     private AlertDialog queryDialog;
-    private Spinner skladSpinner;
-    private Spinner TKSpinner;
+    private SpinnerWithCallback skladSpinner;
+    private SpinnerWithCallback TKSpinner;
     private EditText searchEditText;
     private RadioButton skladRadioButton;
     private RadioButton TKRadioButton;
@@ -106,6 +106,9 @@ public class SearchFragment extends Fragment implements ISearchFragment {
         skladRadioButton = view.findViewById(R.id.radioButtonSklad);
         TKRadioButton = view.findViewById(R.id.radioButtonTK);
         AllRadioButton = view.findViewById(R.id.radioButtonAll);
+
+        TKSpinner.afterSetAdapterCallback(dataTK -> TKArray = dataTK);
+        skladSpinner.afterSetAdapterCallback(dataSklad -> skladArray = dataSklad);
 
         searchEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -152,11 +155,15 @@ public class SearchFragment extends Fragment implements ISearchFragment {
                 break;
         }
 
-        fillSpinner(skladSpinner, skladArray);
-        fillSpinner(TKSpinner, TKArray);
+        ProgressBar pBarSpinnerSklad = view.findViewById(R.id.pBarSpinnerSklad);
+        ProgressBar pBarSpinnerTK = view.findViewById(R.id.pBarSpinnerTK);
+
+        fillSpinner(pBarSpinnerSklad, ClientCommands.SKLAD_LIST, skladSpinner, skladArray);
+        fillSpinner(pBarSpinnerTK, ClientCommands.TK_LIST, TKSpinner, TKArray);
 
         skladRadioButton.setOnClickListener(view1 -> {
             skladSpinner.setEnabled(true);
+            System.out.println("I am here");
             TKSpinner.setEnabled(false);
             selected = 0;
         });
@@ -202,17 +209,13 @@ public class SearchFragment extends Fragment implements ISearchFragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void fillSpinner(Spinner spinner, String[] dataArray) {
-        String[] data = new String[dataArray.length + 1];
-        data[0] = ALL_UI;
-        System.arraycopy(dataArray, 0, data, 1, dataArray.length);
-        ArrayAdapter<String> adapter;
-        if (this.getParentFragment() != null) {
-            adapter = new ArrayAdapter<>(Objects.requireNonNull(this.getParentFragment().getContext()),
-                    R.layout.support_simple_spinner_dropdown_item, data);
-            adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
-        }
+    private void fillSpinner(ProgressBar progressBar, String commandName, SpinnerWithCallback spinner, String[] dataArray) {
+        FillAdapterAsyncTask fillTask = new FillAdapterAsyncTask(
+                new WeakReference<>(spinner),
+                new WeakReference<>(progressBar),
+                new WeakReference<>(this.getActivity()),
+                commandName);
+        fillTask.execute(dataArray);
     }
 
     private SearchFragmentContentEnum getSubdivision() {

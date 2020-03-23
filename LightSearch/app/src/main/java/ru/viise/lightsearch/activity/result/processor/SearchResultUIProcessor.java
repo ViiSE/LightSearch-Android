@@ -22,8 +22,6 @@ import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.activity.ManagerActivity;
 import ru.viise.lightsearch.cmd.result.CommandResult;
 import ru.viise.lightsearch.cmd.result.SearchCommandResult;
-import ru.viise.lightsearch.fragment.util.SearchResultTitleCreator;
-import ru.viise.lightsearch.fragment.util.SearchResultTitleCreatorInit;
 
 public class SearchResultUIProcessor implements Function<CommandResult, Void> {
 

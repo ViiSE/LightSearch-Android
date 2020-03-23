@@ -59,7 +59,6 @@ import ru.viise.lightsearch.data.v2.Command;
 import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandSimple;
 import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithCardCode;
 import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithData;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithIsReserve;
 import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithSoftCheckRecords;
 import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithToken;
 import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithType;
@@ -152,31 +151,29 @@ public class CartFragment extends Fragment implements ICartFragment {
                     SharedPreferences sPref = this.getActivity().getSharedPreferences(PREF, Context.MODE_PRIVATE);
                     PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
 
-                    Command<ConfirmSoftCheckProductsPojo> command = new ConfirmSoftCheckProductsCommandWithIsReserve(
-                            new ConfirmSoftCheckProductsCommandWithCardCode(
-                                    new ConfirmSoftCheckProductsCommandWithUserIdentifier(
-                                            new ConfirmSoftCheckProductsCommandWithType(
-                                                    new ConfirmSoftCheckProductsCommandWithData(
-                                                            new ConfirmSoftCheckProductsCommandWithSoftCheckRecords(
-                                                                    new ConfirmSoftCheckProductsCommandWithToken(
-                                                                            new ConfirmSoftCheckProductsCommandSimple(),
-                                                                            prefManager.load(PreferencesManagerType.TOKEN_MANAGER)
-                                                                    ), adapter.getData()
+                    Command<ConfirmSoftCheckProductsPojo> command = new ConfirmSoftCheckProductsCommandWithCardCode(
+                            new ConfirmSoftCheckProductsCommandWithUserIdentifier(
+                                    new ConfirmSoftCheckProductsCommandWithType(
+                                            new ConfirmSoftCheckProductsCommandWithData(
+                                                    new ConfirmSoftCheckProductsCommandWithSoftCheckRecords(
+                                                            new ConfirmSoftCheckProductsCommandWithToken(
+                                                                    new ConfirmSoftCheckProductsCommandSimple(),
+                                                                    prefManager.load(PreferencesManagerType.TOKEN_MANAGER)
                                                             ), adapter.getData()
-                                                            .stream()
-                                                            .map(rec ->
-                                                                    new ProductWithId(
-                                                                            new ProductWithAmount(
-                                                                                    new ProductSimple(),
-                                                                                    rec.currentAmount()
-                                                                            ),
-                                                                            rec.barcode()
-                                                                    ))
-                                                            .collect(Collectors.toList())
-                                                    ), ConfirmTypes.CART
-                                            ), prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER)
-                                    ), prefManager.load(PreferencesManagerType.CARD_CODE_MANAGER)
-                            ), false);
+                                                    ), adapter.getData()
+                                                    .stream()
+                                                    .map(rec ->
+                                                            new ProductWithId(
+                                                                    new ProductWithAmount(
+                                                                            new ProductSimple(),
+                                                                            rec.currentAmount()
+                                                                    ),
+                                                                    rec.barcode()
+                                                            ))
+                                                    .collect(Collectors.toList())
+                                            ), ConfirmTypes.CART
+                                    ), prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER)
+                            ), prefManager.load(PreferencesManagerType.CARD_CODE_MANAGER));
 
                     NetworkAsyncTask<ConfirmSoftCheckProductsPojo> networkAsyncTask = new NetworkAsyncTask<>(
                             managerActivityHandler,

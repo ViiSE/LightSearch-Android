@@ -17,20 +17,13 @@
 package ru.viise.lightsearch.cmd.result.creator.v2;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ru.viise.lightsearch.cmd.result.CommandResult;
-import ru.viise.lightsearch.cmd.result.SearchCommandResultInit;
 import ru.viise.lightsearch.cmd.result.SearchSoftCheckCommandResultInit;
 import ru.viise.lightsearch.cmd.result.creator.CommandResultCreator;
-import ru.viise.lightsearch.data.SearchRecord;
-import ru.viise.lightsearch.data.SearchRecordInit;
-import ru.viise.lightsearch.data.SearchRecordList;
 import ru.viise.lightsearch.data.SoftCheckRecord;
 import ru.viise.lightsearch.data.SoftCheckRecordDefaultImpl;
-import ru.viise.lightsearch.data.SoftCheckRecordInit;
 import ru.viise.lightsearch.data.Subdivision;
 import ru.viise.lightsearch.data.SubdivisionInit;
 import ru.viise.lightsearch.data.SubdivisionList;

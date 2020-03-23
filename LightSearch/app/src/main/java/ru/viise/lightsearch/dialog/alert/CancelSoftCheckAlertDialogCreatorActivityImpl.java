@@ -18,12 +18,10 @@ package ru.viise.lightsearch.dialog.alert;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.activity.ManagerActivity;
-import ru.viise.lightsearch.activity.ManagerActivityHandler;
 import ru.viise.lightsearch.cmd.manager.task.v2.NetworkAsyncTask;
 import ru.viise.lightsearch.data.pojo.CancelSoftCheckPojo;
 import ru.viise.lightsearch.data.v2.CancelSoftCheckCommandSimple;

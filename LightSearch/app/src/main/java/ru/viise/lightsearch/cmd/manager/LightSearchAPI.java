@@ -37,6 +37,8 @@ import ru.viise.lightsearch.data.pojo.LoginResultPojo;
 import ru.viise.lightsearch.data.pojo.OpenSoftCheckPojo;
 import ru.viise.lightsearch.data.pojo.OpenSoftCheckResultPojo;
 import ru.viise.lightsearch.data.pojo.SearchResultPojo;
+import ru.viise.lightsearch.data.pojo.SkladListResultPojo;
+import ru.viise.lightsearch.data.pojo.TKListResultPojo;
 import ru.viise.lightsearch.data.pojo.UnbindCheckPojo;
 import ru.viise.lightsearch.data.pojo.UnbindCheckResultPojo;
 import ru.viise.lightsearch.data.pojo.UnbindPojo;
@@ -73,6 +75,12 @@ public interface LightSearchAPI {
             @Header("authorization") String token,
             @Body UnbindPojo data);
 
+    @GET("/clients/softChecks/products")
+    Call<SearchResultPojo> searchSoftCheckProducts(
+            @Header("authorization") String token,
+            @Query("barcode") String barcode,
+            @Query("username") String username);
+
     @POST("/clients/softChecks/actions/open")
     Call<OpenSoftCheckResultPojo> openSoftCheck(
             @Header("authorization") String token,
@@ -92,4 +100,10 @@ public interface LightSearchAPI {
     Call<CloseSoftCheckResultPojo> closeSoftCheck(
             @Header("authorization") String token,
             @Body CloseSoftCheckPojo data);
+
+    @GET("/clients/skladList")
+    Call<SkladListResultPojo> skladList(@Header("authorization") String token);
+
+    @GET("/clients/tkList")
+    Call<TKListResultPojo> TKList(@Header("authorization") String token);
 }

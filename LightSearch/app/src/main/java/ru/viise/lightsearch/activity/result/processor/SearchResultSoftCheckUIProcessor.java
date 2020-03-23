@@ -22,7 +22,6 @@ import ru.viise.lightsearch.activity.ManagerActivity;
 import ru.viise.lightsearch.cmd.result.CommandResult;
 import ru.viise.lightsearch.cmd.result.SearchSoftCheckCommandResult;
 import ru.viise.lightsearch.fragment.ISoftCheckContainerFragment;
-import ru.viise.lightsearch.fragment.ISoftCheckFragment;
 
 public class SearchResultSoftCheckUIProcessor implements Function<CommandResult, Void> {
 

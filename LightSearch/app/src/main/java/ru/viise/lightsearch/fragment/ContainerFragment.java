@@ -17,8 +17,6 @@
 
 package ru.viise.lightsearch.fragment;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,16 +28,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ru.viise.lightsearch.R;
-import ru.viise.lightsearch.activity.ManagerActivityHandler;
 import ru.viise.lightsearch.activity.OnBackPressedListener;
 import ru.viise.lightsearch.activity.OnBackPressedListenerType;
-import ru.viise.lightsearch.dialog.alert.CancelBindingAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.CancelBindingAlertDialogCreatorInit;
-import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreatorInit;
-import ru.viise.lightsearch.dialog.alert.ExitToAuthorizationAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.ExitToAuthorizationAlertDialogCreatorInit;
-import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
 import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.find.ImplFinder;
 import ru.viise.lightsearch.find.ImplFinderFragmentFromFragmentDefaultImpl;
@@ -53,9 +43,6 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
     private String[] skladArray;
     private String[] TKArray;
 
-    private AlertDialog queryDialog;
-
-    private ManagerActivityHandler managerActivityHandler;
     private OnBackPressedListenerType onBackPressedListenerType;
 
     private static final String ON_BACK_TYPE = "OnBackType";
@@ -93,9 +80,6 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
             return true;
         });
 
-        queryDialog = SpotsDialogCreatorInit.spotsDialogCreator(this.getActivity(), R.string.spots_dialog_query_exec)
-                .create();
-
         if(selected == 0)
             onBackPressedListenerType = OnBackPressedListenerType.CONTAINER_FRAGMENT;
         else if(selected == 1)
@@ -104,12 +88,6 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
             onBackPressedListenerType = OnBackPressedListenerType.BINDING_FRAGMENT;
 
         return view;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        managerActivityHandler = (ManagerActivityHandler) this.getActivity();
     }
 
     @Override
@@ -137,25 +115,10 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
         onBackPressedListenerType = OnBackPressedListenerType.CONTAINER_FRAGMENT;
     }
 
-    private ISoftCheckContainerFragment getSoftCheckContainerFragment() {
-        ImplFinder<ISoftCheckContainerFragment> finder = new ImplFinderFragmentFromFragmentDefaultImpl<>(this);
-        try { return finder.findImpl(ISoftCheckContainerFragment.class); }
-        catch(FindableException ignore) { return null; }
-    }
-
-    private ISoftCheckFragment getSoftCheckFragment() {
-        ImplFinder<ISoftCheckFragment> finder = new ImplFinderFragmentFromFragmentDefaultImpl<>(this);
-        try { return finder.findImpl(ISoftCheckFragment.class); }
-        catch(FindableException ignore) { return null; }
-    }
-
     @Override
     public void onBackPressed() {
         if(onBackPressedListenerType == OnBackPressedListenerType.CONTAINER_FRAGMENT) {
-            ExitToAuthorizationAlertDialogCreator exitTAADCr =
-                    ExitToAuthorizationAlertDialogCreatorInit.exitToAuthorizationAlertDialogCreator(
-                            this.getActivity());
-            exitTAADCr.create().show();
+            getActivity().finish();
         }
     }
 

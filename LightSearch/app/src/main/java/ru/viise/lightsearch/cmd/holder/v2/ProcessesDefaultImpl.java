@@ -30,6 +30,9 @@ import ru.viise.lightsearch.cmd.process.v2.ConfirmSoftCheckProductsCommandProces
 import ru.viise.lightsearch.cmd.process.v2.OpenSoftCheckProcess;
 import ru.viise.lightsearch.cmd.process.v2.Process;
 import ru.viise.lightsearch.cmd.process.v2.SearchProcess;
+import ru.viise.lightsearch.cmd.process.v2.SearchSoftCheckProcess;
+import ru.viise.lightsearch.cmd.process.v2.SkladListProcess;
+import ru.viise.lightsearch.cmd.process.v2.TKListProcess;
 import ru.viise.lightsearch.cmd.process.v2.UnbindCheckProcess;
 import ru.viise.lightsearch.cmd.process.v2.UnbindProcess;
 import ru.viise.lightsearch.data.pojo.SendForm;
@@ -51,7 +54,9 @@ public class ProcessesDefaultImpl implements Processes {
             processes.put(ClientCommands.BIND_CHECK, new BindCheckProcess(networkService));
             processes.put(ClientCommands.UNBIND, new UnbindProcess(networkService));
             processes.put(ClientCommands.UNBIND_CHECK, new UnbindCheckProcess(networkService));
-
+            processes.put(ClientCommands.SEARCH_SOFT_CHECK, new SearchSoftCheckProcess(networkService));
+            processes.put(ClientCommands.SKLAD_LIST, new SkladListProcess(networkService));
+            processes.put(ClientCommands.TK_LIST, new TKListProcess(networkService));
         }
 
         if(isChange) {
@@ -65,6 +70,9 @@ public class ProcessesDefaultImpl implements Processes {
             processes.put(ClientCommands.BIND_CHECK, new BindCheckProcess(networkService));
             processes.put(ClientCommands.UNBIND, new UnbindProcess(networkService));
             processes.put(ClientCommands.UNBIND_CHECK, new UnbindCheckProcess(networkService));
+            processes.put(ClientCommands.SEARCH_SOFT_CHECK, new SearchSoftCheckProcess(networkService));
+            processes.put(ClientCommands.SKLAD_LIST, new SkladListProcess(networkService));
+            processes.put(ClientCommands.TK_LIST, new TKListProcess(networkService));
 
             ProcessesDefaultImpl.isChange = false;
         }

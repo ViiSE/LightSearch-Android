@@ -25,12 +25,8 @@ import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.cmd.result.BindCommandResult;
 import ru.viise.lightsearch.cmd.result.UnbindCommandResult;
 import ru.viise.lightsearch.data.SearchRecord;
-import ru.viise.lightsearch.data.SoftCheckRecord;
 import ru.viise.lightsearch.fragment.AuthorizationFragment;
-import ru.viise.lightsearch.fragment.BindingContainerFragment;
-import ru.viise.lightsearch.fragment.CartFragment;
 import ru.viise.lightsearch.fragment.ContainerFragment;
-import ru.viise.lightsearch.fragment.OpenSoftCheckFragment;
 import ru.viise.lightsearch.fragment.ResultBindFragment;
 import ru.viise.lightsearch.fragment.ResultSearchFragment;
 import ru.viise.lightsearch.fragment.ResultUnbindFragment;
@@ -45,21 +41,23 @@ public class FragmentTransactionManagerDefaultImpl implements FragmentTransactio
     }
 
     @Override
-    public void doAuthorizationFragmentTransaction() {
+    public void doAuthorizationFragmentTransaction(boolean isNeedAnimation) {
         AuthorizationFragment authorizationFragment = new AuthorizationFragment();
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+        if(isNeedAnimation)
+            transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
         transaction.replace(R.id.activity_manager, authorizationFragment);
-        transaction.addToBackStack(AuthorizationFragment.TAG);
         transaction.commit();
         activity.setTitle(activity.getString(R.string.fragment_authorization));
     }
 
     @Override
-    public void doContainerFragmentTransaction(String[] skladArray, String[] TKArray) {
+    public void doContainerFragmentTransaction(String[] skladArray, String[] TKArray, boolean isNeedAnimation) {
         ContainerFragment containerFragment = new ContainerFragment();
         containerFragment.setupSearchFragment(skladArray, TKArray);
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+        if(isNeedAnimation)
+            transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
         transaction.replace(R.id.activity_manager, containerFragment, ContainerFragment.TAG);
         transaction.addToBackStack(ContainerFragment.TAG);
         transaction.commit();
@@ -81,37 +79,6 @@ public class FragmentTransactionManagerDefaultImpl implements FragmentTransactio
     }
 
     @Override
-    public void doCartFragmentTransaction(List<SoftCheckRecord> cartRecords) {
-        CartFragment cartFragment = new CartFragment();
-        cartFragment.init(cartRecords);
-        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-        transaction.replace(R.id.activity_manager, cartFragment, activity.getString(R.string.fragment_cart));
-        transaction.addToBackStack(activity.getString(R.string.fragment_cart));
-        transaction.commit();
-        activity.setTitle(activity.getString(R.string.fragment_cart));
-        StackFragmentTitle.push(activity.getString(R.string.fragment_container));
-    }
-
-    @Override
-    public void doContainerFragmentTransactionFromCart() {
-        activity.getSupportFragmentManager().popBackStack();
-        activity.setTitle(activity.getString(R.string.fragment_container));
-        StackFragmentTitle.pop();
-    }
-
-    @Override
-    public void doOpenSoftCheckFragmentTransaction() {
-        OpenSoftCheckFragment scfr = new OpenSoftCheckFragment();
-        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.enter_from_down, R.anim.exit_to_up, R.anim.enter_from_up, R.anim.exit_to_down);
-        transaction.replace(R.id.activity_manager, scfr);
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        activity.setTitle(activity.getString(R.string.fragment_soft_check));
-        transaction.commit();
-    }
-
-    @Override
     public void doResultBindFragmentTransaction(String title, BindCommandResult bindCmdRes) {
         ResultBindFragment resultBindFragment = new ResultBindFragment();
         resultBindFragment.init(bindCmdRes.records(), bindCmdRes.factoryBarcode(), bindCmdRes.selected());
@@ -122,18 +89,6 @@ public class FragmentTransactionManagerDefaultImpl implements FragmentTransactio
         transaction.commit();
         activity.setTitle(title);
         StackFragmentTitle.push(activity.getString(R.string.fragment_container));
-    }
-
-    @Override
-    public void doBindingContainerFragmentTransaction() {
-        BindingContainerFragment bindingContainerFragment = new BindingContainerFragment();
-        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-        transaction.replace(R.id.activity_manager, bindingContainerFragment);
-        transaction.addToBackStack(activity.getString(R.string.fragment_container));
-        transaction.commit();
-        activity.setTitle(activity.getString(R.string.fragment_container));
-        StackFragmentTitle.push(activity.getString(R.string.fragment_authorization));
     }
 
     @Override
@@ -154,9 +109,5 @@ public class FragmentTransactionManagerDefaultImpl implements FragmentTransactio
         transaction.commit();
         activity.setTitle(title);
         StackFragmentTitle.push(activity.getString(R.string.fragment_container));
-    }
-
-    private int getFragmentCount() {
-        return activity.getSupportFragmentManager().getBackStackEntryCount();
     }
 }
