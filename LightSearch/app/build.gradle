@@ -7,8 +7,8 @@ android {
         applicationId "ru.viise.lightsearch"
         minSdkVersion 27
         targetSdkVersion 28
-        versionCode 7
-        versionName "1.6"
+        versionCode 10
+        versionName "1.9"
     }
     buildTypes {
         release {
