@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
@@ -37,11 +38,14 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.activity.result.holder.ResultCommandHolderUI;
 import ru.viise.lightsearch.activity.result.holder.ResultCommandUICreator;
 import ru.viise.lightsearch.activity.result.holder.ResultCommandUICreatorInit;
+import ru.viise.lightsearch.cmd.ClientCommands;
+import ru.viise.lightsearch.cmd.holder.v2.ProcessesDefaultImpl;
 import ru.viise.lightsearch.cmd.manager.NetworkService;
 import ru.viise.lightsearch.cmd.result.BindCommandResult;
 import ru.viise.lightsearch.cmd.result.CommandResult;
@@ -50,6 +54,9 @@ import ru.viise.lightsearch.data.BindRecord;
 import ru.viise.lightsearch.data.ScanType;
 import ru.viise.lightsearch.data.SearchRecord;
 import ru.viise.lightsearch.data.UnbindRecord;
+import ru.viise.lightsearch.data.v2.CheckAuthCommandSimple;
+import ru.viise.lightsearch.data.v2.CheckAuthCommandWithToken;
+import ru.viise.lightsearch.data.v2.Command;
 import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreator;
 import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreatorActivityImpl;
 import ru.viise.lightsearch.dialog.alert.ErrorAlertDialogCreator;
@@ -108,6 +115,7 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         commandHolderUI = resCmdUiCr.createResultCommandHolderUI();
 
         SharedPreferences sPref = this.getSharedPreferences("pref", Context.MODE_PRIVATE);
+
         PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
         JWTClient jwtClient = new JWTClientWithPrefManager(prefManager);
         try {
@@ -115,7 +123,31 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
             NetworkService.setBaseUrl(
                     prefManager.load(PreferencesManagerType.HOST_MANAGER),
                     prefManager.load(PreferencesManagerType.PORT_MANAGER));
-            doContainerFragmentTransaction(new String[0], new String[0], false);
+            boolean isDone = false;
+            try {
+                isDone = new AsyncTask<Void, Void, Boolean>() {
+                    @Override
+                    protected Boolean doInBackground(Void... voids) {
+                        CommandResult cmdRes = new ProcessesDefaultImpl(NetworkService.getInstance())
+                                .process(ClientCommands.CHECK_AUTH)
+                                .apply((Command)
+                                        new CheckAuthCommandWithToken(
+                                                new CheckAuthCommandSimple(),
+                                                prefManager.load(PreferencesManagerType.TOKEN_MANAGER)));
+                        return cmdRes.isDone();
+                    }
+                }.execute().get();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            if(isDone) {
+                doContainerFragmentTransaction(new String[0], new String[0], false);
+            } else {
+                doAuthorizationFragmentTransaction(false);
+            }
         } catch (JWTException ex) {
             doAuthorizationFragmentTransaction(false);
         }

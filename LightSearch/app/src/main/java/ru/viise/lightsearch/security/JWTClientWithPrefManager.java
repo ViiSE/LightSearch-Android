@@ -2,6 +2,8 @@ package ru.viise.lightsearch.security;
 
 import com.auth0.android.jwt.JWT;
 
+import java.util.Date;
+
 import ru.viise.lightsearch.exception.JWTException;
 import ru.viise.lightsearch.pref.PreferencesManager;
 import ru.viise.lightsearch.pref.PreferencesManagerType;
@@ -22,8 +24,9 @@ public class JWTClientWithPrefManager implements JWTClient {
             throw new JWTException("JWT is expired");
 
         JWT jwt = new JWT(token);
-        boolean isExpired = jwt.isExpired(1);
-        if(isExpired)
+        Date exp = jwt.getExpiresAt();
+        Date today = new Date();
+        if(today.after(exp))
             throw new JWTException("JWT is expired");
     }
 }

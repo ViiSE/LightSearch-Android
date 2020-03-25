@@ -25,6 +25,7 @@ import ru.viise.lightsearch.cmd.process.v2.AuthorizationProcess;
 import ru.viise.lightsearch.cmd.process.v2.BindCheckProcess;
 import ru.viise.lightsearch.cmd.process.v2.BindProcess;
 import ru.viise.lightsearch.cmd.process.v2.CancelSoftCheckProcess;
+import ru.viise.lightsearch.cmd.process.v2.CheckAuthProcess;
 import ru.viise.lightsearch.cmd.process.v2.CloseSoftCheckProcess;
 import ru.viise.lightsearch.cmd.process.v2.ConfirmSoftCheckProductsCommandProcess;
 import ru.viise.lightsearch.cmd.process.v2.OpenSoftCheckProcess;
@@ -57,6 +58,7 @@ public class ProcessesDefaultImpl implements Processes {
             processes.put(ClientCommands.SEARCH_SOFT_CHECK, new SearchSoftCheckProcess(networkService));
             processes.put(ClientCommands.SKLAD_LIST, new SkladListProcess(networkService));
             processes.put(ClientCommands.TK_LIST, new TKListProcess(networkService));
+            processes.put(ClientCommands.CHECK_AUTH, new CheckAuthProcess(networkService));
         }
 
         if(isChange) {

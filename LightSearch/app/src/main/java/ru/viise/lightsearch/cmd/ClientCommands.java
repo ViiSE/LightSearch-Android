@@ -34,4 +34,5 @@ public class ClientCommands {
     public final static String UNBIND = "unbind";
     public final static String TK_LIST = "tk_list";
     public final static String SKLAD_LIST = "sklad_list";
+    public final static String CHECK_AUTH = "check_auth";
 }

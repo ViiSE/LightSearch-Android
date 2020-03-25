@@ -28,6 +28,7 @@ import ru.viise.lightsearch.data.pojo.BindPojo;
 import ru.viise.lightsearch.data.pojo.BindResultPojo;
 import ru.viise.lightsearch.data.pojo.CancelSoftCheckPojo;
 import ru.viise.lightsearch.data.pojo.CancelSoftCheckResultPojo;
+import ru.viise.lightsearch.data.pojo.CheckAuthResultPojo;
 import ru.viise.lightsearch.data.pojo.CloseSoftCheckPojo;
 import ru.viise.lightsearch.data.pojo.CloseSoftCheckResultPojo;
 import ru.viise.lightsearch.data.pojo.ConfirmSoftCheckProductsPojo;
@@ -45,6 +46,9 @@ import ru.viise.lightsearch.data.pojo.UnbindPojo;
 import ru.viise.lightsearch.data.pojo.UnbindResultPojo;
 
 public interface LightSearchAPI {
+    @GET("/clients/checkAuth")
+    Call<CheckAuthResultPojo> checkAuth(@Header("authorization") String token);
+
     @POST("/clients/login")
     Call<LoginResultPojo> login(@Body LoginPojo data);
 

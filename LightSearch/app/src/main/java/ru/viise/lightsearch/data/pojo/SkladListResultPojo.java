@@ -16,6 +16,7 @@
 
 package ru.viise.lightsearch.data.pojo;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -23,11 +24,16 @@ import java.util.List;
 public class SkladListResultPojo implements SendForm {
 
     @SerializedName("is_done")
+    @Expose
     private boolean isDone;
     @SerializedName("message")
+    @Expose
     private String message;
     @SerializedName("sklad_list")
+    @Expose
     private List<String> skladList;
+
+    private ErrorPojo errorPojo;
 
     public void setIsDone(boolean isDone) {
         this.isDone = isDone;
@@ -51,5 +57,13 @@ public class SkladListResultPojo implements SendForm {
 
     public void setSkladList(List<String> skladList) {
         this.skladList = skladList;
+    }
+
+    public void setErrorPojo(ErrorPojo errorPojo) {
+        this.errorPojo = errorPojo;
+    }
+
+    public ErrorPojo getErrorPojo() {
+        return errorPojo;
     }
 }

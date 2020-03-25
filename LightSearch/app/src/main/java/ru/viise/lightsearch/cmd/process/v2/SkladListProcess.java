@@ -51,8 +51,17 @@ public class SkladListProcess implements Process<SkladListPojo> {
                 return result(srp);
             } else {
                 String json = response.errorBody().string();
-                ErrorPojo ePojo = new Gson().fromJson(json, ErrorPojo.class);
-                return errorResult(ePojo.getMessage());
+                if(json.isEmpty()) {
+                    int code = response.raw().code();
+                    ErrorPojo ePojo = new ErrorPojo();
+                    ePojo.setCode(String.valueOf(code));
+                    ePojo.setMessage(response.raw().message());
+
+                    return errorResult(ePojo);
+                } else {
+                    ErrorPojo ePojo = new Gson().fromJson(json, ErrorPojo.class);
+                    return errorResult(ePojo.getMessage());
+                }
             }
         } catch (IOException ex) {
             String message = ex.getMessage();
@@ -71,6 +80,15 @@ public class SkladListProcess implements Process<SkladListPojo> {
         srp.setIsDone(false);
         srp.setMessage(message);
         srp.setSkladList(new ArrayList<>());
+        return result(srp);
+    }
+
+    private CommandResult errorResult(ErrorPojo ePojo) {
+        SkladListResultPojo srp = new SkladListResultPojo();
+        srp.setIsDone(false);
+        srp.setMessage(ePojo.getMessage());
+        srp.setSkladList(new ArrayList<>());
+        srp.setErrorPojo(ePojo);
         return result(srp);
     }
 

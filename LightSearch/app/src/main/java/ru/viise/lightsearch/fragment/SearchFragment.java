@@ -231,16 +231,28 @@ public class SearchFragment extends Fragment implements ISearchFragment {
 
     private String getSelectedSklad() {
         String selectedSklad = skladSpinner.getSelectedItem().toString();
-        return selectedSklad.equals(SearchFragmentContentEnum.ALL_UI.stringValue())
-                ? "all"
-                : selectedSklad;
+        SearchFragmentContentEnum type = getSubdivision();
+        if(type == SearchFragmentContentEnum.ALL)
+            return SearchFragmentContentEnum.ALL.stringValue();
+        else if(type == SearchFragmentContentEnum.SKLAD)
+            return selectedSklad.equals(SearchFragmentContentEnum.ALL_UI.stringValue())
+                    ? SearchFragmentContentEnum.ALL.stringValue()
+                    : selectedSklad;
+        else
+            return SearchFragmentContentEnum.NULL.stringValue();
     }
 
     private String getSelectedTK() {
         String selectedTK = TKSpinner.getSelectedItem().toString();
-        return selectedTK.equals(SearchFragmentContentEnum.ALL_UI.stringValue())
-                ? "all"
+        SearchFragmentContentEnum type = getSubdivision();
+        if(type == SearchFragmentContentEnum.ALL)
+            return SearchFragmentContentEnum.ALL.stringValue();
+        else if(type == SearchFragmentContentEnum.TK)
+            return selectedTK.equals(SearchFragmentContentEnum.ALL_UI.stringValue())
+                ? SearchFragmentContentEnum.ALL.stringValue()
                 : selectedTK;
+        else
+            return SearchFragmentContentEnum.NULL.stringValue();
     }
 
     @Override
