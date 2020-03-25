@@ -116,6 +116,8 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
 
         SharedPreferences sPref = this.getSharedPreferences("pref", Context.MODE_PRIVATE);
 
+        System.out.println("fjfghaerjkglaerjkhrjk");
+
         PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
         JWTClient jwtClient = new JWTClientWithPrefManager(prefManager);
         try {
@@ -392,6 +394,12 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
 
     @Override
     public String getIMEI() {
+        if(IMEI == null) {
+            TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            if(ContextCompat.checkSelfPermission(ManagerActivity.this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED)
+                IMEI = tm.getDeviceId();
+        }
+
         return IMEI;
     }
 
