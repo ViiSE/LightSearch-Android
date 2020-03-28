@@ -20,6 +20,7 @@
     <color name="editTextSolidColor">#F2F2F2</color>
     <color name="blackColor">#000000</color>
     <color name="hintColor">#808080</color>
+    <color name="background">#FAFAFA</color>
 </resources>
 
 <!-- #007DFF - LightTheme -->

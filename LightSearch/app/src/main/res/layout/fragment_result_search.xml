@@ -4,7 +4,8 @@
     android:id="@+id/LinearLayoutSearchResult"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:activity="ru.viise.lightsearch.fragment.ResultSearchFragment">
+    tools:activity="ru.viise.lightsearch.fragment.ResultSearchFragment"
+    android:background="@color/background">
 
     <ListView
         android:id="@android:id/list"

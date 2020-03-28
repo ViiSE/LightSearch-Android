@@ -7,7 +7,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_sc"
-    tools:activity="ru.viise.lightsearch.fragment.SoftCheckFragment">
+    tools:activity="ru.viise.lightsearch.fragment.SoftCheckFragment"
+    android:background="@color/background">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewSoftCheck"

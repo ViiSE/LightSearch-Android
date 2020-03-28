@@ -6,13 +6,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:activity="ru.viise.lightsearch.fragment.ContainerFragment"
     android:orientation="vertical"
-    android:id="@+id/fragment_container_btm_nav">
+    android:id="@+id/fragment_container_btm_nav"
+    android:background="@color/background">
 
     <ru.viise.lightsearch.fragment.pager.SwipeableViewPager
         android:id="@+id/ViewPagerBtmNavBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:isSwipe="false">
+        app:isSwipe="false"
+        android:background="@color/background">
     </ru.viise.lightsearch.fragment.pager.SwipeableViewPager>
 
     <android.support.design.widget.BottomNavigationView

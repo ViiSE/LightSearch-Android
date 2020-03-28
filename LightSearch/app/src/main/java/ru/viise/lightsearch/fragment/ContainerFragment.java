@@ -33,7 +33,6 @@ import ru.viise.lightsearch.activity.OnBackPressedListenerType;
 import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.find.ImplFinder;
 import ru.viise.lightsearch.find.ImplFinderFragmentFromFragmentDefaultImpl;
-import ru.viise.lightsearch.fragment.pager.DepthPageTransformer;
 
 
 public class ContainerFragment extends Fragment implements OnBackPressedListener, IContainerFragment {
@@ -62,7 +61,6 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
         View view = inflater.inflate(R.layout.fragment_container_bottom_nav, container, false);
         ViewPager viewPager = view.findViewById(R.id.ViewPagerBtmNavBar);
         setupViewPager(viewPager);
-
         BottomNavigationView btmNavView = view.findViewById(R.id.btmNavViewCon);
 
         btmNavView.setOnNavigationItemSelectedListener(menuItem -> {
@@ -78,6 +76,15 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
                     break;
             }
             return true;
+        });
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            public void onPageSelected(int position) {
+                btmNavView.getMenu().getItem(position).setChecked(true);
+            }
         });
 
         if(selected == 0)
@@ -98,8 +105,8 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
 
     private void setupViewPager(ViewPager viewPager) {
         FragmentPageAdapter fragmentPageAdapter = new FragmentPageAdapter(getChildFragmentManager());
-        SearchFragment searchFragment = new SearchFragment();
 
+        SearchFragment searchFragment = new SearchFragment();
         TasksFragment tasksFragment = new TasksFragment();
         MoreFragment moreFragment = new MoreFragment();
 
@@ -109,7 +116,7 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
 
         searchFragment.init(skladArray, TKArray);
 
-        viewPager.setPageTransformer(true, new DepthPageTransformer());
+//        viewPager.setPageTransformer(true, new DepthPageTransformer());
         viewPager.setAdapter(fragmentPageAdapter);
 
         onBackPressedListenerType = OnBackPressedListenerType.CONTAINER_FRAGMENT;
