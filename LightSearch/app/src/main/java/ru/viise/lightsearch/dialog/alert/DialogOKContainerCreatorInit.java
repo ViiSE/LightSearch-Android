@@ -21,6 +21,6 @@ import android.app.Activity;
 public class DialogOKContainerCreatorInit {
 
     public static DialogOKViewCreator dialogOKContainerCreator(Activity activity) {
-        return new DialogOKContainerCreatorDefaultImpl(activity);
+        return new DialogOKContainerCreatorImpl(activity);
     }
 }

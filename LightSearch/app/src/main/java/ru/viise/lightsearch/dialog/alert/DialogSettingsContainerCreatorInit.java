@@ -21,6 +21,6 @@ import android.app.Activity;
 public class DialogSettingsContainerCreatorInit {
 
     public static DialogSettingsContainerCreator dialogSettingsContainerCreator(Activity activity) {
-        return new DialogSettingsContainerCreatorDefaultImpl(activity);
+        return new DialogSettingsContainerCreatorImpl(activity);
     }
 }

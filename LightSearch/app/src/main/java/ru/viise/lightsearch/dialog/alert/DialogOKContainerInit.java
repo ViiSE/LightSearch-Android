@@ -23,6 +23,6 @@ import android.widget.TextView;
 public class DialogOKContainerInit {
 
     public static DialogOKContainer dialogOKContainer(View dialogOKView, Button buttonOK, TextView textViewTitle, TextView textViewResult) {
-        return new DialogOKContainerDefaultImpl(dialogOKView, buttonOK, textViewTitle, textViewResult);
+        return new DialogOKContainerImpl(dialogOKView, buttonOK, textViewTitle, textViewResult);
     }
 }

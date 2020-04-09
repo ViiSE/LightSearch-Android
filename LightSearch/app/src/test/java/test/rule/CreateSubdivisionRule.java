@@ -21,7 +21,6 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 import ru.viise.lightsearch.data.Subdivision;
-import ru.viise.lightsearch.data.SubdivisionInit;
 
 public class CreateSubdivisionRule implements TestRule {
 

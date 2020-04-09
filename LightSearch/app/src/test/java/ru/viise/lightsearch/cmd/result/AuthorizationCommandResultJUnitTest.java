@@ -22,7 +22,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import ru.viise.lightsearch.data.ReconnectDTO;
 import test.rule.CreateAuthorizationCommandResultRule;
 
 import static test.TestMessage.testBegin;
@@ -65,7 +64,7 @@ public class AuthorizationCommandResultJUnitTest {
     public void reconnectDTO() {
         testBegin("AuthorizationCommandResult", "reconnectDTO()");
 
-        ReconnectDTO reconnectDTO = authorizationCommandResult.reconnectDTO();
+        ReconnectDTO reconnectDTO = authorizationCommandResult.lastCommand();
         System.out.println("reconnectDTO: " + reconnectDTO);
 
         testEnd("AuthorizationCommandResult", "reconnectDTO()");

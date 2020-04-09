@@ -35,30 +35,46 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.List;
 import java.util.Objects;
 
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.activity.KeyboardHideToolInit;
-import ru.viise.lightsearch.activity.ManagerActivityHandler;
 import ru.viise.lightsearch.activity.ManagerActivityUI;
 import ru.viise.lightsearch.activity.scan.ScannerInit;
-import ru.viise.lightsearch.cmd.manager.task.v2.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkCallback;
 import ru.viise.lightsearch.data.ScanType;
 import ru.viise.lightsearch.data.UnbindRecord;
+import ru.viise.lightsearch.data.entity.Command;
+import ru.viise.lightsearch.data.entity.CommandResult;
+import ru.viise.lightsearch.data.entity.UnbindCheckCommandSimple;
+import ru.viise.lightsearch.data.entity.UnbindCheckCommandWithBarcode;
+import ru.viise.lightsearch.data.entity.UnbindCheckCommandWithFactoryBarcode;
+import ru.viise.lightsearch.data.entity.UnbindCheckCommandWithToken;
 import ru.viise.lightsearch.data.pojo.UnbindCheckPojo;
-import ru.viise.lightsearch.data.v2.Command;
-import ru.viise.lightsearch.data.v2.UnbindCheckCommandSimple;
-import ru.viise.lightsearch.data.v2.UnbindCheckCommandWithBarcode;
-import ru.viise.lightsearch.data.v2.UnbindCheckCommandWithFactoryBarcode;
-import ru.viise.lightsearch.data.v2.UnbindCheckCommandWithToken;
+import ru.viise.lightsearch.data.pojo.UnbindCheckPojoResult;
+import ru.viise.lightsearch.data.pojo.UnbindPojo;
+import ru.viise.lightsearch.data.pojo.UnbindPojoResult;
+import ru.viise.lightsearch.dialog.alert.ErrorAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.NoResultAlertDialogCreator;
+import ru.viise.lightsearch.dialog.alert.NoResultAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.alert.OneResultAlertDialogCreator;
 import ru.viise.lightsearch.dialog.alert.OneResultAlertDialogCreatorUnbindImpl;
+import ru.viise.lightsearch.dialog.alert.ReconnectAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreator;
+import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
+import ru.viise.lightsearch.exception.FindableException;
+import ru.viise.lightsearch.find.ImplFinder;
+import ru.viise.lightsearch.find.ImplFinderFragmentFromActivityDefaultImpl;
+import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManager;
+import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManagerImpl;
 import ru.viise.lightsearch.pref.PreferencesManager;
 import ru.viise.lightsearch.pref.PreferencesManagerInit;
 import ru.viise.lightsearch.pref.PreferencesManagerType;
 
-public class UnbindingFragment extends Fragment implements IUnbindingFragment {
+public class UnbindingFragment extends Fragment implements IUnbindingFragment, NetworkCallback<UnbindCheckPojo, UnbindCheckPojoResult> {
 
     private final static String SEARCH_MODE_U = "searchModeU";
     private final static String FACTORY_BARCODE_U = "factoryBarcodeU";
@@ -69,7 +85,6 @@ public class UnbindingFragment extends Fragment implements IUnbindingFragment {
     private AlertDialog queryDialog;
     private EditText searchEditText;
 
-    private ManagerActivityHandler managerActivityHandler;
     private ManagerActivityUI managerActivityUI;
 
     @Override
@@ -154,7 +169,6 @@ public class UnbindingFragment extends Fragment implements IUnbindingFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        managerActivityHandler = (ManagerActivityHandler) this.getActivity();
         managerActivityUI = (ManagerActivityUI) this.getActivity();
     }
 
@@ -199,22 +213,106 @@ public class UnbindingFragment extends Fragment implements IUnbindingFragment {
                             ), input
                     ), factoryBarcode);
 
-            NetworkAsyncTask<UnbindCheckPojo> networkAsyncTask = new NetworkAsyncTask<>(
-                    managerActivityHandler,
+            NetworkAsyncTask<UnbindCheckPojo, UnbindCheckPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
+                    this,
                     queryDialog);
 
-            networkAsyncTask.execute(command);
+            networkAsyncTask.execute((Command) command);
         }
         searchEditText.clearFocus();
     }
 
     @Override
     public void showResult(UnbindRecord record) {
+        NetworkCallback<UnbindPojo, UnbindPojoResult> unbindCallback = new NetworkCallback<UnbindPojo, UnbindPojoResult>() {
+            @Override
+            public void handleResult(CommandResult<UnbindPojo, UnbindPojoResult> result) {
+                if(result.isDone()) {
+                    if (getBindingContainerFragment() == null)
+                        doBindingContainerFragmentTransactionFromResultBind();
+
+                    SuccessAlertDialogCreator successADCr =
+                            new SuccessAlertDialogCreatorImpl(getActivity(), result.data().getMessage());
+                    successADCr.create().show();
+                } else if(result.lastCommand() != null) {
+                    new ReconnectAlertDialogCreatorImpl(
+                            getActivity(),
+                            this,
+                            result.lastCommand()
+                    ).create().show();
+                } else
+                    new ErrorAlertDialogCreatorImpl(
+                            getActivity(),
+                            result.data().getMessage()
+                    ).create().show();
+            }
+        };
+
         OneResultAlertDialogCreator dialogCreator = new OneResultAlertDialogCreatorUnbindImpl(
                 this.getActivity(),
+                unbindCallback,
                 record,
                 queryDialog,
                 factoryBarcode);
         dialogCreator.create().show();
+    }
+
+    @Override
+    public void handleResult(CommandResult<UnbindCheckPojo, UnbindCheckPojoResult> result) {
+        if(result.isDone()) {
+            List<UnbindRecord> records = result.data().getRecords();
+            if(records != null) { // check unbind
+                if (records.size() != 0) {
+                    if (records.size() == 1)
+                        showResult(records.get(0));
+                    else {
+                        String title = this.getString(R.string.fragment_result_bind);
+                        doResultUnbindFragmentTransaction(title, result);
+                    }
+                } else {
+                    NoResultAlertDialogCreator noResADCr =
+                            new NoResultAlertDialogCreatorImpl(this.getActivity());
+                    noResADCr.create().show();
+                }
+            } else { //unbind done
+                if(getBindingContainerFragment() == null)
+                    doBindingContainerFragmentTransactionFromResultBind();
+
+                SuccessAlertDialogCreator successADCr =
+                        new SuccessAlertDialogCreatorImpl(this.getActivity(), result.data().getMessage());
+                successADCr.create().show();
+            }
+        } else if(result.lastCommand() != null) {
+            new ReconnectAlertDialogCreatorImpl(
+                    this.getActivity(),
+                    this,
+                    result.lastCommand()
+            ).create().show();
+        } else
+            new ErrorAlertDialogCreatorImpl(
+                    this.getActivity(),
+                    result.data().getMessage()
+            ).create().show();
+    }
+
+    private IBindingContainerFragment getBindingContainerFragment() {
+        try {
+            ImplFinder<IBindingContainerFragment> bcfFinder = new ImplFinderFragmentFromActivityDefaultImpl<>(this.getActivity());
+            return bcfFinder.findImpl(IBindingContainerFragment.class);
+        } catch (FindableException ignore) {
+            return null;
+        }
+    }
+
+    private void doResultUnbindFragmentTransaction(String title, CommandResult<UnbindCheckPojo, UnbindCheckPojoResult> result) {
+        FragmentTransactionManager fragmentTransactionManager =
+                new FragmentTransactionManagerImpl(this.getActivity());
+        fragmentTransactionManager.doResultUnbindFragmentTransaction(title, result);
+    }
+
+    private void doBindingContainerFragmentTransactionFromResultBind() {
+        FragmentTransactionManager fragmentTransactionManager =
+                new FragmentTransactionManagerImpl(this.getActivity());
+        fragmentTransactionManager.doBindingContainerFragmentTransactionFromResultBind();
     }
 }

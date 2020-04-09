@@ -31,10 +31,8 @@ import android.view.ViewGroup;
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.activity.OnBackPressedListener;
 import ru.viise.lightsearch.activity.OnBackPressedListenerType;
-import ru.viise.lightsearch.data.BindRecord;
-import ru.viise.lightsearch.data.UnbindRecord;
 import ru.viise.lightsearch.dialog.alert.CancelBindingAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.CancelBindingAlertDialogCreatorInit;
+import ru.viise.lightsearch.dialog.alert.CancelBindingAlertDialogCreatorImpl;
 import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.find.ImplFinder;
 import ru.viise.lightsearch.find.ImplFinderFragmentFromFragmentDefaultImpl;
@@ -167,26 +165,10 @@ public class BindingContainerFragment extends Fragment implements IBindingContai
     }
 
     @Override
-    public void showResult(BindRecord record) {
-        IBindingFragment bindingFragment = getIBindingFragment();
-        if(bindingFragment != null) {
-            bindingFragment.showResult(record);
-        }
-    }
-
-    @Override
-    public void showResult(UnbindRecord record) {
-        IUnbindingFragment unbindingFragment = getIUnbindingFragment();
-        if(unbindingFragment != null) {
-            unbindingFragment.showResult(record);
-        }
-    }
-
-    @Override
     public void onBackPressed() {
         if(onBackPressedListenerType == OnBackPressedListenerType.BINDING_FRAGMENT) {
             CancelBindingAlertDialogCreator cancelBADCr =
-                    CancelBindingAlertDialogCreatorInit.cancelBindingAlertDialogCreator(this);
+                    new CancelBindingAlertDialogCreatorImpl(this);
             cancelBADCr.create().show();
         } else {
             this.getActivity().getSupportFragmentManager().popBackStack();

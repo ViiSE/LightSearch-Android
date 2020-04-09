@@ -21,7 +21,7 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 import ru.viise.lightsearch.data.SoftCheckRecord;
-import ru.viise.lightsearch.data.SoftCheckRecordInit;
+import ru.viise.lightsearch.data.SoftCheckRecordImpl;
 import ru.viise.lightsearch.data.SubdivisionList;
 import ru.viise.lightsearch.data.UnitsEnum;
 
@@ -46,7 +46,7 @@ public class CreateSoftCheckRecordRule implements TestRule {
                 String amountUnit = UnitsEnum.CURRENT_AMOUNT_CART_UNIT.stringValue();
 
                 softCheckRecord =
-                        SoftCheckRecordInit.softCheckRecord(name, barcode, price, amountUnit, subdivisions);
+                        new SoftCheckRecordImpl(name, barcode, price, amountUnit, subdivisions);
 
                 base.evaluate();
             }

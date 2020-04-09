@@ -39,17 +39,27 @@ import java.util.Objects;
 
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.activity.ManagerActivity;
-import ru.viise.lightsearch.activity.ManagerActivityHandler;
 import ru.viise.lightsearch.activity.ManagerActivityUI;
 import ru.viise.lightsearch.activity.scan.ScannerInit;
-import ru.viise.lightsearch.cmd.manager.task.v2.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkCallback;
 import ru.viise.lightsearch.data.ScanType;
+import ru.viise.lightsearch.data.entity.Command;
+import ru.viise.lightsearch.data.entity.CommandResult;
+import ru.viise.lightsearch.data.entity.OpenSoftCheckCommandSimple;
+import ru.viise.lightsearch.data.entity.OpenSoftCheckCommandWithCardCode;
+import ru.viise.lightsearch.data.entity.OpenSoftCheckCommandWithToken;
+import ru.viise.lightsearch.data.entity.OpenSoftCheckCommandWithUserIdentifier;
+import ru.viise.lightsearch.data.pojo.CancelSoftCheckPojo;
+import ru.viise.lightsearch.data.pojo.CancelSoftCheckPojoResult;
 import ru.viise.lightsearch.data.pojo.OpenSoftCheckPojo;
-import ru.viise.lightsearch.data.v2.Command;
-import ru.viise.lightsearch.data.v2.OpenSoftCheckCommandSimple;
-import ru.viise.lightsearch.data.v2.OpenSoftCheckCommandWithCardCode;
-import ru.viise.lightsearch.data.v2.OpenSoftCheckCommandWithToken;
-import ru.viise.lightsearch.data.v2.OpenSoftCheckCommandWithUserIdentifier;
+import ru.viise.lightsearch.data.pojo.OpenSoftCheckPojoResult;
+import ru.viise.lightsearch.data.pojo.SendForm;
+import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreator;
+import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreatorActivityImpl;
+import ru.viise.lightsearch.dialog.alert.ErrorAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.ReconnectAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
 import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.find.ImplFinder;
@@ -58,12 +68,9 @@ import ru.viise.lightsearch.pref.PreferencesManager;
 import ru.viise.lightsearch.pref.PreferencesManagerInit;
 import ru.viise.lightsearch.pref.PreferencesManagerType;
 
-public class OpenSoftCheckFragment extends Fragment implements IOpenSoftCheckFragment {
-
-    private final String PREF = "pref";
+public class OpenSoftCheckFragment extends Fragment implements IOpenSoftCheckFragment, NetworkCallback<OpenSoftCheckPojo, OpenSoftCheckPojoResult> {
 
     private ManagerActivityUI managerActivityUI;
-    private ManagerActivityHandler managerActivityHandler;
 
     private AlertDialog queryDialog;
 
@@ -113,8 +120,7 @@ public class OpenSoftCheckFragment extends Fragment implements IOpenSoftCheckFra
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-            }
+            public void afterTextChanged(Editable editable) { }
         });
 
         return view;
@@ -124,7 +130,6 @@ public class OpenSoftCheckFragment extends Fragment implements IOpenSoftCheckFra
     public void onAttach(Context context) {
         super.onAttach(context);
         managerActivityUI = (ManagerActivityUI) this.getActivity();
-        managerActivityHandler = (ManagerActivityHandler) this.getActivity();
     }
 
     @SuppressWarnings("unchecked")
@@ -142,8 +147,8 @@ public class OpenSoftCheckFragment extends Fragment implements IOpenSoftCheckFra
                         ), prefManager.load(PreferencesManagerType.CARD_CODE_MANAGER)
                 ), prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER));
 
-        NetworkAsyncTask<OpenSoftCheckPojo> networkAsyncTask = new NetworkAsyncTask<>(
-                managerActivityHandler,
+        NetworkAsyncTask<OpenSoftCheckPojo, OpenSoftCheckPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
+                this,
                 queryDialog);
 
         networkAsyncTask.execute(command);
@@ -153,5 +158,64 @@ public class OpenSoftCheckFragment extends Fragment implements IOpenSoftCheckFra
         ImplFinder<ISoftCheckContainerFragment> finder = new ImplFinderFragmentFromActivityDefaultImpl<>(this.getActivity());
         try { return finder.findImpl(ISoftCheckContainerFragment.class); }
         catch(FindableException ignore) { return null; }
+    }
+
+    private void callDialogSuccess(String message) {
+        new SuccessAlertDialogCreatorImpl(this.getActivity(), message).create().show();
+    }
+
+    private void callDialogError(String message) {
+        new ErrorAlertDialogCreatorImpl(this.getActivity(), message).create().show();
+    }
+
+    private void callReconnectDialog(
+            NetworkCallback<? extends SendForm, ? extends SendForm> callback,
+            Command<? extends SendForm> lastCommand) {
+        new ReconnectAlertDialogCreatorImpl(
+                this.getActivity(),
+                callback,
+                lastCommand
+        ).create().show();
+    }
+
+    @Override
+    public void handleResult(CommandResult<OpenSoftCheckPojo, OpenSoftCheckPojoResult> result) {
+        if (result.isDone()) {
+            callDialogSuccess(result.data().getMessage());
+
+            ISoftCheckContainerFragment softCheckContainerFragment = getSoftCheckContainerFragment();
+            if (softCheckContainerFragment != null)
+                softCheckContainerFragment.switchToSoftCheckFragment();
+        } else if (result.lastCommand() != null) {
+            callReconnectDialog(this, result.lastCommand());
+        } else {
+            if (result.data().getMessage().contains("уже открыт")) {
+                NetworkCallback<CancelSoftCheckPojo, CancelSoftCheckPojoResult> cancelSCCallback =
+                        new NetworkCallback<CancelSoftCheckPojo, CancelSoftCheckPojoResult>() {
+                    @Override
+                    public void handleResult(CommandResult<CancelSoftCheckPojo, CancelSoftCheckPojoResult> resultCancelSC) {
+                        if (resultCancelSC.isDone()) {
+                            getActivity().setTitle(getString(R.string.fragment_container));
+                            callDialogSuccess(resultCancelSC.data().getMessage());
+                            ISoftCheckContainerFragment containerFragment = getSoftCheckContainerFragment();
+                            if (containerFragment != null)
+                                containerFragment.switchToOpenSoftCheckFragment();
+                        } else if (resultCancelSC.lastCommand() != null) {
+                            callReconnectDialog(this, resultCancelSC.lastCommand());
+                        } else
+                            callDialogError(resultCancelSC.data().getMessage());
+                    }
+                };
+
+                CancelSoftCheckAlertDialogCreator cscADCr =
+                        new CancelSoftCheckAlertDialogCreatorActivityImpl(
+                                this.getActivity(),
+                                cancelSCCallback,
+                                queryDialog,
+                                result.data().getMessage());
+                cscADCr.create().show();
+            } else
+                callDialogError(result.data().getMessage());
+        }
     }
 }

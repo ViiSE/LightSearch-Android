@@ -30,33 +30,40 @@ import java.util.stream.Collectors;
 
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.activity.KeyboardHideToolInit;
-import ru.viise.lightsearch.activity.ManagerActivityHandler;
 import ru.viise.lightsearch.activity.ManagerActivityUI;
 import ru.viise.lightsearch.activity.scan.ScannerInit;
-import ru.viise.lightsearch.cmd.manager.task.v2.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkCallback;
 import ru.viise.lightsearch.data.ScanType;
 import ru.viise.lightsearch.data.SoftCheckRecord;
 import ru.viise.lightsearch.data.UnitsEnum;
+import ru.viise.lightsearch.data.entity.Command;
+import ru.viise.lightsearch.data.entity.CommandResult;
+import ru.viise.lightsearch.data.entity.ConfirmSoftCheckProductsCommandSimple;
+import ru.viise.lightsearch.data.entity.ConfirmSoftCheckProductsCommandWithCardCode;
+import ru.viise.lightsearch.data.entity.ConfirmSoftCheckProductsCommandWithData;
+import ru.viise.lightsearch.data.entity.ConfirmSoftCheckProductsCommandWithSoftCheckRecords;
+import ru.viise.lightsearch.data.entity.ConfirmSoftCheckProductsCommandWithToken;
+import ru.viise.lightsearch.data.entity.ConfirmSoftCheckProductsCommandWithType;
+import ru.viise.lightsearch.data.entity.ConfirmSoftCheckProductsCommandWithUserIdentifier;
+import ru.viise.lightsearch.data.entity.ProductSimple;
+import ru.viise.lightsearch.data.entity.ProductWithAmount;
+import ru.viise.lightsearch.data.entity.ProductWithId;
+import ru.viise.lightsearch.data.entity.SearchSoftCheckCommandSimple;
+import ru.viise.lightsearch.data.entity.SearchSoftCheckCommandWithBarcode;
+import ru.viise.lightsearch.data.entity.SearchSoftCheckCommandWithToken;
+import ru.viise.lightsearch.data.entity.SearchSoftCheckCommandWithUsername;
 import ru.viise.lightsearch.data.pojo.ConfirmSoftCheckProductsPojo;
+import ru.viise.lightsearch.data.pojo.ConfirmSoftCheckProductsPojoResult;
 import ru.viise.lightsearch.data.pojo.ConfirmTypes;
 import ru.viise.lightsearch.data.pojo.SearchSoftCheckPojo;
-import ru.viise.lightsearch.data.v2.Command;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandSimple;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithCardCode;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithData;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithSoftCheckRecords;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithToken;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithType;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithUserIdentifier;
-import ru.viise.lightsearch.data.v2.ProductSimple;
-import ru.viise.lightsearch.data.v2.ProductWithAmount;
-import ru.viise.lightsearch.data.v2.ProductWithId;
-import ru.viise.lightsearch.data.v2.SearchSoftCheckCommandSimple;
-import ru.viise.lightsearch.data.v2.SearchSoftCheckCommandWithBarcode;
-import ru.viise.lightsearch.data.v2.SearchSoftCheckCommandWithToken;
-import ru.viise.lightsearch.data.v2.SearchSoftCheckCommandWithUsername;
+import ru.viise.lightsearch.data.pojo.SearchSoftCheckPojoResult;
+import ru.viise.lightsearch.data.pojo.SendForm;
+import ru.viise.lightsearch.dialog.alert.ErrorAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.alert.InfoProductAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.InfoProductAlertDialogCreatorInit;
+import ru.viise.lightsearch.dialog.alert.InfoProductAlertDialogCreatorSoftCheckImpl;
+import ru.viise.lightsearch.dialog.alert.NoResultAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.ReconnectAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
 import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.find.ImplFinder;
@@ -77,7 +84,6 @@ public class SoftCheckFragment extends Fragment implements ISoftCheckFragment {
     private final String PREF = "pref";
 
     private ManagerActivityUI managerActivityUI;
-    private ManagerActivityHandler managerActivityHandler;
 
     private List<SoftCheckRecord> softCheckRecords;
     private RecyclerView recyclerView;
@@ -182,13 +188,26 @@ public class SoftCheckFragment extends Fragment implements ISoftCheckFragment {
                             ),
                             prefManager.load(PreferencesManagerType.CARD_CODE_MANAGER));
 
-                NetworkAsyncTask<ConfirmSoftCheckProductsPojo> networkAsyncTask = new NetworkAsyncTask<>(
-                        managerActivityHandler,
-                        queryDialog);
+                NetworkCallback<ConfirmSoftCheckProductsPojo, ConfirmSoftCheckProductsPojoResult> confirmCallback =
+                        new NetworkCallback<ConfirmSoftCheckProductsPojo, ConfirmSoftCheckProductsPojoResult>() {
+                            @Override
+                            public void handleResult(CommandResult<ConfirmSoftCheckProductsPojo, ConfirmSoftCheckProductsPojoResult> result) {
+                                if(result.isDone()) {
+                                    ISoftCheckContainerFragment softCheckContainerFragment = getSoftCheckContainerFragment();
+                                    if (softCheckContainerFragment != null)
+                                        softCheckContainerFragment.switchToCartFragment(result.data().getRecords());
+                                } else if(result.lastCommand() != null) {
+                                    callReconnectDialog(this, result.lastCommand());
+                                } else
+                                    callDialogError(result.data().getMessage());
+                            }
+                        };
 
+                NetworkAsyncTask<ConfirmSoftCheckProductsPojo, ConfirmSoftCheckProductsPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
+                        confirmCallback,
+                        queryDialog);
                 networkAsyncTask.execute(command);
             }
-
         });
 
         return view;
@@ -198,7 +217,6 @@ public class SoftCheckFragment extends Fragment implements ISoftCheckFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         managerActivityUI = (ManagerActivityUI) this.getActivity();
-        managerActivityHandler = (ManagerActivityHandler) this.getActivity();
     }
 
     public void init(List<SoftCheckRecord> softCheckRecords) {
@@ -244,7 +262,7 @@ public class SoftCheckFragment extends Fragment implements ISoftCheckFragment {
                 final int position = viewHolder.getAdapterPosition();
                 adapter.notifyItemChanged(position);
                 InfoProductAlertDialogCreator infoProdADCr =
-                        InfoProductAlertDialogCreatorInit.infoProductAlertDialogCreator(getActivity(),
+                        new InfoProductAlertDialogCreatorSoftCheckImpl(getActivity(),
                                 adapter.getItem(position));
                 infoProdADCr.create().show();
             }
@@ -271,20 +289,33 @@ public class SoftCheckFragment extends Fragment implements ISoftCheckFragment {
                         ), prefManager.load(PreferencesManagerType.TOKEN_MANAGER)
                 ), prefManager.load(PreferencesManagerType.USERNAME_MANAGER));
 
-//        Command<SearchPojo> command = new SearchCommandWithType(
-//                new SearchCommandWithSklad(
-//                        new SearchCommandWithTK(
-//                                new SearchCommandWithBarcode(
-//                                        new SearchCommandWithToken(
-//                                            new SearchCommandSimple(),
-//                                            prefManager.load(PreferencesManagerType.TOKEN_MANAGER)
-//                                        ), barcode
-//                                ), "all"
-//                        ), "all"
-//                ), SearchCommandType.SOFT_CHECK);
+        NetworkCallback<SearchSoftCheckPojo, SearchSoftCheckPojoResult> searchSCCallback =
+                new NetworkCallback<SearchSoftCheckPojo, SearchSoftCheckPojoResult>() {
+                    @Override
+                    public void handleResult(CommandResult<SearchSoftCheckPojo, SearchSoftCheckPojoResult> result) {
+                        if(result.isDone()) {
+                            List<SoftCheckRecord> records = result.data().getRecords();
+                            if (!records.isEmpty()) {
+                                ISoftCheckContainerFragment scContainer = getSoftCheckContainerFragment();
+                                if(scContainer != null)
+                                    if (records.size() == 1) {
+                                        scContainer.addSoftCheckRecord(records.get(0));
+                                    } else
+                                        scContainer.showResultSearchSoftCheckFragment(records);
+                            } else {
+                                new NoResultAlertDialogCreatorImpl(
+                                        getActivity()
+                                ).create().show();
+                            }
+                        } else if(result.lastCommand() != null)
+                            callReconnectDialog(this, result.lastCommand());
+                        else
+                            callDialogError(result.data().getMessage());
+                    }
+                };
 
-        NetworkAsyncTask<SearchSoftCheckPojo> networkAsyncTask = new NetworkAsyncTask<>(
-                managerActivityHandler,
+        NetworkAsyncTask<SearchSoftCheckPojo, SearchSoftCheckPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
+                searchSCCallback,
                 queryDialog);
         networkAsyncTask.execute(command);
     }
@@ -311,5 +342,25 @@ public class SoftCheckFragment extends Fragment implements ISoftCheckFragment {
         transaction.addToBackStack(CartFragment.TAG);
         transaction.commit();
         this.getActivity().setTitle(R.string.fragment_cart);
+    }
+
+    private ISoftCheckContainerFragment getSoftCheckContainerFragment() {
+        ImplFinder<ISoftCheckContainerFragment> finder = new ImplFinderFragmentFromActivityDefaultImpl<>(this.getActivity());
+        try { return finder.findImpl(ISoftCheckContainerFragment.class); }
+        catch(FindableException ignore) { return null; }
+    }
+
+    private void callReconnectDialog(
+            NetworkCallback<? extends SendForm, ? extends SendForm> callback,
+            Command<? extends SendForm> lastCommand) {
+        new ReconnectAlertDialogCreatorImpl(
+                this.getActivity(),
+                callback,
+                lastCommand
+        ).create().show();
+    }
+
+    private void callDialogError(String message) {
+        new ErrorAlertDialogCreatorImpl(this.getActivity(), message).create().show();
     }
 }

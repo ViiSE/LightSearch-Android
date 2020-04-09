@@ -33,14 +33,22 @@ import java.util.List;
 
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.activity.KeyboardHideTool;
-import ru.viise.lightsearch.activity.KeyboardHideToolDefaultImpl;
-import ru.viise.lightsearch.activity.ManagerActivityHandler;
+import ru.viise.lightsearch.activity.KeyboardHideToolImpl;
 import ru.viise.lightsearch.activity.OnBackPressedListener;
 import ru.viise.lightsearch.activity.OnBackPressedListenerType;
+import ru.viise.lightsearch.cmd.network.task.NetworkCallback;
 import ru.viise.lightsearch.data.SoftCheckRecord;
+import ru.viise.lightsearch.data.entity.Command;
+import ru.viise.lightsearch.data.entity.CommandResult;
+import ru.viise.lightsearch.data.pojo.CancelSoftCheckPojo;
+import ru.viise.lightsearch.data.pojo.CancelSoftCheckPojoResult;
+import ru.viise.lightsearch.data.pojo.SendForm;
 import ru.viise.lightsearch.dialog.alert.AlertDialogUtil;
 import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreatorInit;
+import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreatorFragmentImpl;
+import ru.viise.lightsearch.dialog.alert.ErrorAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.ReconnectAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
 import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.find.ImplFinder;
@@ -159,11 +167,11 @@ public class SoftCheckContainerFragment extends Fragment implements ISoftCheckCo
         onBackPressedListenerType = OnBackPressedListenerType.CART_FRAGMENT;
     }
 
-    @Override
-    public void switchToSoftCheckFragment(SoftCheckRecord record) {
-        this.getActivity().setTitle(this.getActivity().getString(R.string.fragment_soft_check));
-        getSoftCheckFragment().addSoftCheckRecord(record);
-    }
+//    @Override
+//    public void switchToSoftCheckFragment(SoftCheckRecord record) {
+//        this.getActivity().setTitle(this.getActivity().getString(R.string.fragment_soft_check));
+//        getSoftCheckFragment().addSoftCheckRecord(record);
+//    }
 
     private ISoftCheckFragment getSoftCheckFragment() {
         ImplFinder<ISoftCheckFragment> scFinder = new ImplFinderFragmentFromActivityDefaultImpl<>(this.getActivity());
@@ -210,7 +218,7 @@ public class SoftCheckContainerFragment extends Fragment implements ISoftCheckCo
 
     @Override
     public void showResultSearchSoftCheckFragment(List<SoftCheckRecord> records) {
-        KeyboardHideTool khTool = new KeyboardHideToolDefaultImpl(this.getActivity());
+        KeyboardHideTool khTool = new KeyboardHideToolImpl(this.getActivity());
         khTool.hideKeyboard();
 
         View dialogView = this.getActivity().getLayoutInflater().inflate(R.layout.dialog_soft_check_result_search, null);
@@ -231,26 +239,56 @@ public class SoftCheckContainerFragment extends Fragment implements ISoftCheckCo
         dialogResult.show();
     }
 
+    private void callDialogSuccess(String message) {
+        new SuccessAlertDialogCreatorImpl(this.getActivity(), message).create().show();
+    }
+
+    private void callDialogError(String message) {
+        new ErrorAlertDialogCreatorImpl(this.getActivity(), message).create().show();
+    }
+
+    private void callReconnectDialog(
+            NetworkCallback<? extends SendForm, ? extends SendForm> callback,
+            Command<? extends SendForm> lastCommand) {
+        new ReconnectAlertDialogCreatorImpl(
+                this.getActivity(),
+                callback,
+                lastCommand
+        ).create().show();
+    }
+
     @Override
     public void onBackPressed() {
-        if(onBackPressedListenerType == OnBackPressedListenerType.SOFT_CHECK_FRAGMENT) {
-            CancelSoftCheckAlertDialogCreator cancelSCADCr =
-                    CancelSoftCheckAlertDialogCreatorInit.cancelSoftCheckAlertDialogCreator(
-                            this, (ManagerActivityHandler) this.getActivity(), queryDialog);
+        if(onBackPressedListenerType == OnBackPressedListenerType.SOFT_CHECK_FRAGMENT ||
+                onBackPressedListenerType == OnBackPressedListenerType.CART_FRAGMENT) {
+            NetworkCallback<CancelSoftCheckPojo, CancelSoftCheckPojoResult> cancelSCCallback =
+                    new NetworkCallback<CancelSoftCheckPojo, CancelSoftCheckPojoResult>() {
+                        @Override
+                        public void handleResult(CommandResult<CancelSoftCheckPojo, CancelSoftCheckPojoResult> resultCancelSC) {
+                            if (resultCancelSC.isDone()) {
+                                getActivity().setTitle(getString(R.string.fragment_container));
+                                callDialogSuccess(resultCancelSC.data().getMessage());
+                                switchToOpenSoftCheckFragment();
+                            } else if (resultCancelSC.lastCommand() != null) {
+                                callReconnectDialog(this, resultCancelSC.lastCommand());
+                            } else
+                                callDialogError(resultCancelSC.data().getMessage());
+                        }
+                    };
+
+            CancelSoftCheckAlertDialogCreator cancelSCADCr = new CancelSoftCheckAlertDialogCreatorFragmentImpl(
+                    this,
+                    cancelSCCallback,
+                    queryDialog);
             cancelSCADCr.create().show();
         } else if(onBackPressedListenerType == OnBackPressedListenerType.OPEN_SOFT_CHECK) {
             this.getActivity().getSupportFragmentManager().popBackStack(ContainerFragment.TAG, 0);
             this.getActivity().setTitle(this.getActivity().getString(R.string.fragment_container));
-        } else if(onBackPressedListenerType == OnBackPressedListenerType.CART_FRAGMENT) {
-            CancelSoftCheckAlertDialogCreator cancelSCADCr =
-                    CancelSoftCheckAlertDialogCreatorInit.cancelSoftCheckAlertDialogCreator(
-                            this, (ManagerActivityHandler) this.getActivity(), queryDialog);
-            cancelSCADCr.create().show();
         }
     }
 
-    @Override
-    public void refreshCartRecords(List<SoftCheckRecord> cartRecords) {
-        getCartFragment().refreshCartRecords(cartRecords);
-    }
+//    @Override
+//    public void refreshCartRecords(List<SoftCheckRecord> cartRecords) {
+//        getCartFragment().refreshCartRecords(cartRecords);
+//    }
 }

@@ -21,6 +21,6 @@ import android.content.SharedPreferences;
 public class PreferencesManagerInit {
 
     public static PreferencesManager preferencesManager(SharedPreferences sPref) {
-        return new PreferencesManagerDefaultImpl(sPref);
+        return new PreferencesManagerImpl(sPref);
     }
 }

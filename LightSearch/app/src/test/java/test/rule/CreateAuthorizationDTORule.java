@@ -20,9 +20,6 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-import ru.viise.lightsearch.data.AuthorizationDTO;
-import ru.viise.lightsearch.data.AuthorizationDTOInit;
-
 public class CreateAuthorizationDTORule implements TestRule {
 
     private AuthorizationDTO authDTO;

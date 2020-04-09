@@ -20,7 +20,7 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 
-import ru.viise.lightsearch.dialog.alert.UpdateAlertDialogCreatorInit;
+import ru.viise.lightsearch.dialog.alert.UpdateAlertDialogCreatorImpl;
 import ru.viise.lightsearch.util.appupdater.enums.AppUpdaterError;
 import ru.viise.lightsearch.util.appupdater.interfaces.IAppUpdater;
 import ru.viise.lightsearch.util.appupdater.objects.Update;
@@ -64,7 +64,7 @@ public class AppUpdater implements IAppUpdater {
                     Integer successfulChecks = libraryPreferences.getSuccessfulChecks();
 
                     AlertDialog alertDialog =
-                            UpdateAlertDialogCreatorInit.alertDialogUpdateCreator(activity, update)
+                            new UpdateAlertDialogCreatorImpl(activity, update)
                             .create();
 
                     alertDialog.setCanceledOnTouchOutside(false);

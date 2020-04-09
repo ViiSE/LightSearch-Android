@@ -19,6 +19,6 @@ package ru.viise.lightsearch.fragment.util;
 public class ViewFillerProxyInit {
 
     public static ViewFillerProxy viewFillerProxy() {
-        return new ViewFillerProxyDefaultImpl();
+        return new ViewFillerProxyImpl();
     }
 }

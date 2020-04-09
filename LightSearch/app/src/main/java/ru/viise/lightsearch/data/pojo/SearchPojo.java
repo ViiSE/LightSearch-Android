@@ -19,7 +19,7 @@ package ru.viise.lightsearch.data.pojo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import ru.viise.lightsearch.data.v2.SearchCommandType;
+import ru.viise.lightsearch.data.entity.SearchCommandType;
 
 public class SearchPojo implements SendForm {
 

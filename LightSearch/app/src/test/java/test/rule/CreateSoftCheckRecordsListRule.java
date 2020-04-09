@@ -23,7 +23,6 @@ import org.junit.runners.model.Statement;
 import java.util.List;
 
 import ru.viise.lightsearch.data.SoftCheckRecord;
-import ru.viise.lightsearch.data.SoftCheckRecordInit;
 import ru.viise.lightsearch.data.SubdivisionList;
 
 public class CreateSoftCheckRecordsListRule implements TestRule {

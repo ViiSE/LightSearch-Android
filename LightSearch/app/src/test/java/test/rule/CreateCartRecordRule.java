@@ -21,7 +21,6 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 import ru.viise.lightsearch.data.CartRecord;
-import ru.viise.lightsearch.data.CartRecordInit;
 import ru.viise.lightsearch.data.SubdivisionList;
 import ru.viise.lightsearch.data.UnitsEnum;
 

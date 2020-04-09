@@ -32,7 +32,7 @@ import java.util.List;
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.data.SearchRecord;
 import ru.viise.lightsearch.dialog.alert.OneResultAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.OneResultAlertDialogCreatorInit;
+import ru.viise.lightsearch.dialog.alert.OneResultAlertDialogCreatorImpl;
 import ru.viise.lightsearch.fragment.adapter.ResultSearchArrayAdapter;
 
 public class ResultSearchFragment extends ListFragment {
@@ -68,7 +68,8 @@ public class ResultSearchFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
 
         OneResultAlertDialogCreator oneResADCr =
-                OneResultAlertDialogCreatorInit.oneResultSearchAlertDialogCreator(this.getActivity(),
+                new OneResultAlertDialogCreatorImpl(
+                        this.getActivity(),
                         searchRecords.get(position));
         oneResADCr.create().show();
     }

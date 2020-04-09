@@ -23,15 +23,16 @@ import android.support.v4.text.HtmlCompat;
 import android.support.v7.app.AlertDialog;
 
 import ru.viise.lightsearch.R;
-import ru.viise.lightsearch.activity.ManagerActivityHandler;
-import ru.viise.lightsearch.cmd.manager.task.v2.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkCallback;
 import ru.viise.lightsearch.data.UnbindRecord;
+import ru.viise.lightsearch.data.entity.Command;
+import ru.viise.lightsearch.data.entity.UnbindCommandSimple;
+import ru.viise.lightsearch.data.entity.UnbindCommandWithFactoryBarcode;
+import ru.viise.lightsearch.data.entity.UnbindCommandWithToken;
+import ru.viise.lightsearch.data.entity.UnbindCommandWithUserIdentifier;
 import ru.viise.lightsearch.data.pojo.UnbindPojo;
-import ru.viise.lightsearch.data.v2.Command;
-import ru.viise.lightsearch.data.v2.UnbindCommandSimple;
-import ru.viise.lightsearch.data.v2.UnbindCommandWithFactoryBarcode;
-import ru.viise.lightsearch.data.v2.UnbindCommandWithToken;
-import ru.viise.lightsearch.data.v2.UnbindCommandWithUserIdentifier;
+import ru.viise.lightsearch.data.pojo.UnbindPojoResult;
 import ru.viise.lightsearch.pref.PreferencesManager;
 import ru.viise.lightsearch.pref.PreferencesManagerInit;
 import ru.viise.lightsearch.pref.PreferencesManagerType;
@@ -39,16 +40,19 @@ import ru.viise.lightsearch.pref.PreferencesManagerType;
 public class OneResultAlertDialogCreatorUnbindImpl implements OneResultAlertDialogCreator {
 
     private final Activity activity;
+    private final NetworkCallback<UnbindPojo, UnbindPojoResult> networkCallback;
     private final UnbindRecord unbindRecord;
     private final android.app.AlertDialog queryDialog;
     private final String factoryBarcode;
 
     public OneResultAlertDialogCreatorUnbindImpl(
             Activity activity,
+            NetworkCallback<UnbindPojo, UnbindPojoResult> networkCallback,
             UnbindRecord unbindRecord,
             android.app.AlertDialog queryDialog,
             String factoryBarcode) {
         this.activity = activity;
+        this.networkCallback = networkCallback;
         this.unbindRecord = unbindRecord;
         this.queryDialog = queryDialog;
         this.factoryBarcode = factoryBarcode;
@@ -67,7 +71,6 @@ public class OneResultAlertDialogCreatorUnbindImpl implements OneResultAlertDial
                 .dialogOKCancelContainerCreator(activity)
                 .create();
 
-
         okCancelContainer.textViewResult().setText(HtmlCompat.fromHtml(result, HtmlCompat.FROM_HTML_MODE_LEGACY));
         okCancelContainer.textViewTitle().setText(activity.getString(R.string.dialog_res_unbind));
 
@@ -79,7 +82,6 @@ public class OneResultAlertDialogCreatorUnbindImpl implements OneResultAlertDial
             SharedPreferences sPref = activity.getSharedPreferences("pref", Context.MODE_PRIVATE);
             PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
 
-
             Command<UnbindPojo> command = new UnbindCommandWithUserIdentifier(
                     new UnbindCommandWithFactoryBarcode(
                             new UnbindCommandWithToken(
@@ -88,14 +90,14 @@ public class OneResultAlertDialogCreatorUnbindImpl implements OneResultAlertDial
                             ), factoryBarcode),
                     prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER));
 
-            NetworkAsyncTask<UnbindPojo> networkAsyncTask = new NetworkAsyncTask<>(
-                    (ManagerActivityHandler) activity,
+            NetworkAsyncTask<UnbindPojo, UnbindPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
+                    networkCallback,
                     queryDialog);
             networkAsyncTask.execute(command);
-            dialog.dismiss();});
+            dialog.dismiss();
+        });
 
         okCancelContainer.buttonCancel().setOnClickListener(viewOK -> dialog.dismiss());
-
         AlertDialogUtil.setTransparentBackground(dialog);
 
         return dialog;

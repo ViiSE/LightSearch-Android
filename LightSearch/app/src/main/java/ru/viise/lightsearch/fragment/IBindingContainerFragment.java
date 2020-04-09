@@ -16,8 +16,6 @@
 
 package ru.viise.lightsearch.fragment;
 
-import ru.viise.lightsearch.data.BindRecord;
-import ru.viise.lightsearch.data.UnbindRecord;
 import ru.viise.lightsearch.find.Findable;
 
 public interface IBindingContainerFragment extends Findable {
@@ -26,6 +24,4 @@ public interface IBindingContainerFragment extends Findable {
     void setBindingBarcode(String barcode, boolean isRun);
     void switchToBind();
     void switchToCheckBind();
-    void showResult(BindRecord record);
-    void showResult(UnbindRecord record);
 }

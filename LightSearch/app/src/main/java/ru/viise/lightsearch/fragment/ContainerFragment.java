@@ -33,6 +33,7 @@ import ru.viise.lightsearch.activity.OnBackPressedListenerType;
 import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.find.ImplFinder;
 import ru.viise.lightsearch.find.ImplFinderFragmentFromFragmentDefaultImpl;
+import ru.viise.lightsearch.fragment.pager.ZoomOutPageTransformer;
 
 
 public class ContainerFragment extends Fragment implements OnBackPressedListener, IContainerFragment {
@@ -117,6 +118,7 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
         searchFragment.init(skladArray, TKArray);
 
 //        viewPager.setPageTransformer(true, new DepthPageTransformer());
+        viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         viewPager.setAdapter(fragmentPageAdapter);
 
         onBackPressedListenerType = OnBackPressedListenerType.CONTAINER_FRAGMENT;

@@ -20,9 +20,7 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-import ru.viise.lightsearch.data.SubdivisionInit;
 import ru.viise.lightsearch.data.SubdivisionList;
-import ru.viise.lightsearch.data.SubdivisionListInit;
 
 public class CreateSubdivisionsListRule implements TestRule {
 

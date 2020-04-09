@@ -24,10 +24,8 @@ import org.junit.rules.RuleChain;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.viise.lightsearch.data.ReconnectDTO;
 import ru.viise.lightsearch.data.SearchRecord;
 import ru.viise.lightsearch.data.SubdivisionList;
-import ru.viise.lightsearch.data.SubdivisionListInit;
 import ru.viise.lightsearch.data.UnitsEnum;
 import test.rule.CreateSearchCommandResultRule;
 import test.rule.CreateSearchRecordListRule;
@@ -82,7 +80,7 @@ public class SearchCommandResultJUnitTest {
     public void reconnectDTO() {
         testBegin("SearchCommandResult", "reconnectDTO()");
 
-        ReconnectDTO reconnectDTO = searchCommandResult.reconnectDTO();
+        ReconnectDTO reconnectDTO = searchCommandResult.lastCommand();
         System.out.println("reconnectDTO: " + reconnectDTO);
 
         testEnd("SearchCommandResult", "reconnectDTO()");

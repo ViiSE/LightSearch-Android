@@ -21,6 +21,6 @@ import android.app.Activity;
 public class KeyboardHideToolInit {
 
     public static KeyboardHideTool keyboardHideTool(Activity activity) {
-        return new KeyboardHideToolDefaultImpl(activity);
+        return new KeyboardHideToolImpl(activity);
     }
 }

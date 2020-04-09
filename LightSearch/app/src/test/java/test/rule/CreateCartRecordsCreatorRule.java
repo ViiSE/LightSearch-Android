@@ -24,7 +24,6 @@ import org.junit.runners.model.Statement;
 
 import java.util.List;
 
-import ru.viise.lightsearch.cmd.ClientCommandContentEnum;
 import ru.viise.lightsearch.data.SoftCheckRecord;
 import ru.viise.lightsearch.data.creator.CartRecordsCreator;
 import ru.viise.lightsearch.data.creator.CartRecordsCreatorInit;

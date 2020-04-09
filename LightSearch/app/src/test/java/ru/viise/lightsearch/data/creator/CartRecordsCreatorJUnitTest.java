@@ -27,7 +27,6 @@ import java.util.List;
 import ru.viise.lightsearch.data.CartRecord;
 import ru.viise.lightsearch.data.SoftCheckRecord;
 import ru.viise.lightsearch.data.SubdivisionList;
-import ru.viise.lightsearch.data.SubdivisionListInit;
 import ru.viise.lightsearch.data.UnitsEnum;
 import test.rule.CreateCartRecordsCreatorRule;
 import test.rule.CreateSoftCheckRecordsListRule;

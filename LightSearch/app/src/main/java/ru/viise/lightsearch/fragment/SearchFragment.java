@@ -36,33 +36,45 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 import java.util.Objects;
 
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.activity.KeyboardHideToolInit;
-import ru.viise.lightsearch.activity.ManagerActivityHandler;
 import ru.viise.lightsearch.activity.ManagerActivityUI;
 import ru.viise.lightsearch.activity.scan.ScannerInit;
 import ru.viise.lightsearch.cmd.ClientCommands;
-import ru.viise.lightsearch.cmd.manager.task.v2.FillAdapterAsyncTask;
-import ru.viise.lightsearch.cmd.manager.task.v2.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.FillAdapterAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkCallback;
 import ru.viise.lightsearch.data.ScanType;
 import ru.viise.lightsearch.data.SearchFragmentContentEnum;
+import ru.viise.lightsearch.data.SearchRecord;
+import ru.viise.lightsearch.data.entity.Command;
+import ru.viise.lightsearch.data.entity.CommandResult;
+import ru.viise.lightsearch.data.entity.SearchCommandSimple;
+import ru.viise.lightsearch.data.entity.SearchCommandWithBarcode;
+import ru.viise.lightsearch.data.entity.SearchCommandWithSklad;
+import ru.viise.lightsearch.data.entity.SearchCommandWithSubdivision;
+import ru.viise.lightsearch.data.entity.SearchCommandWithTK;
+import ru.viise.lightsearch.data.entity.SearchCommandWithToken;
 import ru.viise.lightsearch.data.pojo.SearchPojo;
-import ru.viise.lightsearch.data.v2.Command;
-import ru.viise.lightsearch.data.v2.SearchCommandSimple;
-import ru.viise.lightsearch.data.v2.SearchCommandWithBarcode;
-import ru.viise.lightsearch.data.v2.SearchCommandWithSklad;
-import ru.viise.lightsearch.data.v2.SearchCommandWithSubdivision;
-import ru.viise.lightsearch.data.v2.SearchCommandWithTK;
-import ru.viise.lightsearch.data.v2.SearchCommandWithToken;
+import ru.viise.lightsearch.data.pojo.SearchPojoResult;
+import ru.viise.lightsearch.dialog.alert.ErrorAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.NoResultAlertDialogCreator;
+import ru.viise.lightsearch.dialog.alert.NoResultAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.OneResultAlertDialogCreator;
+import ru.viise.lightsearch.dialog.alert.OneResultAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.ReconnectAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
+import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManager;
+import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManagerImpl;
 import ru.viise.lightsearch.pref.PreferencesManager;
 import ru.viise.lightsearch.pref.PreferencesManagerInit;
 import ru.viise.lightsearch.pref.PreferencesManagerType;
 
 
-public class SearchFragment extends Fragment implements ISearchFragment {
+public class SearchFragment extends Fragment implements ISearchFragment, NetworkCallback<SearchPojo, SearchPojoResult> {
 
     private final static String MENU_SELECTED = "selected";
     private final static String SKLAD_ARRAY = "sklad_array";
@@ -80,7 +92,6 @@ public class SearchFragment extends Fragment implements ISearchFragment {
     private String[] skladArray;
     private String[] TKArray;
 
-    private ManagerActivityHandler managerActivityHandler;
     private ManagerActivityUI managerActivityUI;
 
     @Override
@@ -195,7 +206,6 @@ public class SearchFragment extends Fragment implements ISearchFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        managerActivityHandler = (ManagerActivityHandler) this.getActivity();
         managerActivityUI = (ManagerActivityUI) this.getActivity();
     }
 
@@ -225,8 +235,8 @@ public class SearchFragment extends Fragment implements ISearchFragment {
             return SearchFragmentContentEnum.TK;
         else if(AllRadioButton.isChecked())
             return SearchFragmentContentEnum.ALL;
-
-        return null;
+        else
+            return SearchFragmentContentEnum.NULL;
     }
 
     private String getSelectedSklad() {
@@ -278,10 +288,45 @@ public class SearchFragment extends Fragment implements ISearchFragment {
                         ), getSelectedSklad()
                 ), barcode);
 
-        NetworkAsyncTask<SearchPojo> networkAsyncTask = new NetworkAsyncTask<>(
-                managerActivityHandler,
+        NetworkAsyncTask<SearchPojo, SearchPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
+                this,
                 queryDialog);
 
-        networkAsyncTask.execute(command);
+        networkAsyncTask.execute((Command) command);
+    }
+
+    @Override
+    public void handleResult(CommandResult<SearchPojo, SearchPojoResult> result) {
+        if(result.isDone()) {
+            List<SearchRecord> records = result.data().getRecords();
+            if (records.size() != 0) {
+                String title = this.getString(R.string.search_result) + " " + result.data().getSubdivision();
+                if (records.size() == 1) {
+                    OneResultAlertDialogCreator oneResADCr =
+                            new OneResultAlertDialogCreatorImpl(this.getActivity(), records.get(0));
+                    android.support.v7.app.AlertDialog oneResAD = oneResADCr.create();
+                    oneResAD.setCanceledOnTouchOutside(false);
+                    oneResAD.show();
+                } else {
+                    FragmentTransactionManager fragmentTransactionManager =
+                            new FragmentTransactionManagerImpl(this.getActivity());
+                    fragmentTransactionManager.doResultSearchFragmentTransaction(title, records);
+                }
+            } else {
+                NoResultAlertDialogCreator noResADCr =
+                        new NoResultAlertDialogCreatorImpl(this.getActivity());
+                noResADCr.create().show();
+            }
+        } else if(result.lastCommand() != null) {
+            new ReconnectAlertDialogCreatorImpl(
+                    this.getActivity(),
+                    this,
+                    result.lastCommand()
+            ).create().show();
+        } else
+            new ErrorAlertDialogCreatorImpl(
+                    this.getActivity(),
+                    result.data().getMessage()
+            ).create().show();
     }
 }

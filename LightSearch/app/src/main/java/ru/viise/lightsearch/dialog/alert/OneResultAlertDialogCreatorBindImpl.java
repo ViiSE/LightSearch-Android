@@ -23,17 +23,18 @@ import android.support.v4.text.HtmlCompat;
 import android.support.v7.app.AlertDialog;
 
 import ru.viise.lightsearch.R;
-import ru.viise.lightsearch.activity.ManagerActivityHandler;
-import ru.viise.lightsearch.cmd.manager.task.v2.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkCallback;
 import ru.viise.lightsearch.data.BindRecord;
+import ru.viise.lightsearch.data.entity.BindCommandSimple;
+import ru.viise.lightsearch.data.entity.BindCommandWithBarcode;
+import ru.viise.lightsearch.data.entity.BindCommandWithFactoryBarcode;
+import ru.viise.lightsearch.data.entity.BindCommandWithSelected;
+import ru.viise.lightsearch.data.entity.BindCommandWithToken;
+import ru.viise.lightsearch.data.entity.BindCommandWithUserIdentifier;
+import ru.viise.lightsearch.data.entity.Command;
 import ru.viise.lightsearch.data.pojo.BindPojo;
-import ru.viise.lightsearch.data.v2.BindCommandSimple;
-import ru.viise.lightsearch.data.v2.BindCommandWithBarcode;
-import ru.viise.lightsearch.data.v2.BindCommandWithFactoryBarcode;
-import ru.viise.lightsearch.data.v2.BindCommandWithSelected;
-import ru.viise.lightsearch.data.v2.BindCommandWithToken;
-import ru.viise.lightsearch.data.v2.BindCommandWithUserIdentifier;
-import ru.viise.lightsearch.data.v2.Command;
+import ru.viise.lightsearch.data.pojo.BindPojoResult;
 import ru.viise.lightsearch.pref.PreferencesManager;
 import ru.viise.lightsearch.pref.PreferencesManagerInit;
 import ru.viise.lightsearch.pref.PreferencesManagerType;
@@ -41,22 +42,24 @@ import ru.viise.lightsearch.pref.PreferencesManagerType;
 public class OneResultAlertDialogCreatorBindImpl implements OneResultAlertDialogCreator {
 
     private final Activity activity;
+    private final NetworkCallback<BindPojo, BindPojoResult> networkCallback;
     private final BindRecord bindRecord;
     private final android.app.AlertDialog queryDialog;
     private final String factoryBarcode;
 
     public OneResultAlertDialogCreatorBindImpl(
             Activity activity,
+            NetworkCallback<BindPojo, BindPojoResult> networkCallback,
             BindRecord bindRecord,
             android.app.AlertDialog queryDialog,
             String factoryBarcode) {
         this.activity = activity;
+        this.networkCallback = networkCallback;
         this.bindRecord = bindRecord;
         this.queryDialog = queryDialog;
         this.factoryBarcode = factoryBarcode;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public AlertDialog create() {
         String id = "<b>" + activity.getString(R.string.dialog_res_prod_id) + "</b>";
@@ -94,27 +97,14 @@ public class OneResultAlertDialogCreatorBindImpl implements OneResultAlertDialog
                             ), bindRecord.barcode()
                     ), prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER));
 
-            NetworkAsyncTask<BindPojo> networkAsyncTask = new NetworkAsyncTask<>(
-                    (ManagerActivityHandler) activity,
+            NetworkAsyncTask<BindPojo, BindPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
+                    networkCallback,
                     queryDialog);
-            networkAsyncTask.execute(command);
-
-//            CommandBindDTOCreator cmdBindDTOCr =
-//                    CommandBindDTOCreatorInit.commandBindDTOCreator(
-//                            bindRecord.barcode(), factoryBarcode, userPrefManager.loadUserIdentifier(), 2);
-//            CommandBindDTO cmdBindDTO = cmdBindDTOCr.create();
-//            CommandManagerAsyncTaskDTO cmdManagerATDTO =
-//                    CommandManagerAsyncTaskDTOInit.commandManagerAsyncTaskDTO(
-//                            ((ManagerActivityUI) activity).commandManager(),
-//                            CommandTypeEnum.BIND,
-//                            cmdBindDTO);
-//            CommandManagerAsyncTask cmdManagerAT = new CommandManagerAsyncTask(
-//                    (ManagerActivityHandler) activity, queryDialog);
-//            cmdManagerAT.execute(cmdManagerATDTO);
-            dialog.dismiss();});
+            networkAsyncTask.execute((Command) command);
+            dialog.dismiss();
+        });
 
         okCancelContainer.buttonCancel().setOnClickListener(viewOK -> dialog.dismiss());
-
         AlertDialogUtil.setTransparentBackground(dialog);
 
         return dialog;

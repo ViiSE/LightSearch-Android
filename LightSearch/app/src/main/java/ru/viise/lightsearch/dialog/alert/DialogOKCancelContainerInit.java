@@ -25,6 +25,6 @@ public class DialogOKCancelContainerInit {
     public static DialogOKCancelContainer dialogOKCancelContainer(
             View dialogOKCancelView, Button buttonOK, Button buttonCancel, TextView
             textViewTitle, TextView textViewResult) {
-        return new DialogOKCancelContainerDefaultImpl(dialogOKCancelView, buttonOK, buttonCancel, textViewTitle, textViewResult);
+        return new DialogOKCancelContainerImpl(dialogOKCancelView, buttonOK, buttonCancel, textViewTitle, textViewResult);
     }
 }

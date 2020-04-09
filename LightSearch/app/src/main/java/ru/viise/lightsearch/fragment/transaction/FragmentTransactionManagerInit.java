@@ -21,6 +21,6 @@ import android.support.v4.app.FragmentActivity;
 public class FragmentTransactionManagerInit {
 
     public static FragmentTransactionManager fragmentTransactionManager(FragmentActivity activity) {
-        return new FragmentTransactionManagerDefaultImpl(activity);
+        return new FragmentTransactionManagerImpl(activity);
     }
 }

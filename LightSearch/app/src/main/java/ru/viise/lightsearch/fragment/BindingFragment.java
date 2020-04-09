@@ -43,30 +43,49 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
 import java.util.Objects;
 
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.activity.KeyboardHideToolInit;
-import ru.viise.lightsearch.activity.ManagerActivityHandler;
 import ru.viise.lightsearch.activity.ManagerActivityUI;
-import ru.viise.lightsearch.activity.scan.ScannerInit;
-import ru.viise.lightsearch.cmd.manager.task.v2.NetworkAsyncTask;
+import ru.viise.lightsearch.activity.scan.ScannerZXingImpl;
+import ru.viise.lightsearch.cmd.network.task.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkCallback;
 import ru.viise.lightsearch.data.BindRecord;
 import ru.viise.lightsearch.data.ScanType;
+import ru.viise.lightsearch.data.entity.BindCheckCommandSimple;
+import ru.viise.lightsearch.data.entity.BindCheckCommandWithBarcode;
+import ru.viise.lightsearch.data.entity.BindCheckCommandWithCheckEAN13;
+import ru.viise.lightsearch.data.entity.BindCheckCommandWithFactoryBarcode;
+import ru.viise.lightsearch.data.entity.BindCheckCommandWithSelected;
+import ru.viise.lightsearch.data.entity.BindCheckCommandWithToken;
+import ru.viise.lightsearch.data.entity.Command;
+import ru.viise.lightsearch.data.entity.CommandResult;
 import ru.viise.lightsearch.data.pojo.BindCheckPojo;
-import ru.viise.lightsearch.data.v2.BindCheckCommandSimple;
-import ru.viise.lightsearch.data.v2.BindCheckCommandWithBarcode;
-import ru.viise.lightsearch.data.v2.BindCheckCommandWithCheckEAN13;
-import ru.viise.lightsearch.data.v2.BindCheckCommandWithFactoryBarcode;
-import ru.viise.lightsearch.data.v2.BindCheckCommandWithSelected;
-import ru.viise.lightsearch.data.v2.BindCheckCommandWithToken;
-import ru.viise.lightsearch.data.v2.Command;
+import ru.viise.lightsearch.data.pojo.BindCheckPojoResult;
+import ru.viise.lightsearch.data.pojo.BindPojo;
+import ru.viise.lightsearch.data.pojo.BindPojoResult;
+import ru.viise.lightsearch.dialog.alert.BindCheckNoResultAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.ErrorAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.NoResultAlertDialogCreator;
+import ru.viise.lightsearch.dialog.alert.NoResultAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.OneResultAlertDialogCreator;
+import ru.viise.lightsearch.dialog.alert.OneResultAlertDialogCreatorBindImpl;
+import ru.viise.lightsearch.dialog.alert.ReconnectAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreator;
+import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
+import ru.viise.lightsearch.exception.FindableException;
+import ru.viise.lightsearch.find.ImplFinder;
+import ru.viise.lightsearch.find.ImplFinderFragmentFromActivityDefaultImpl;
+import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManager;
+import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManagerImpl;
 import ru.viise.lightsearch.pref.PreferencesManager;
 import ru.viise.lightsearch.pref.PreferencesManagerInit;
 import ru.viise.lightsearch.pref.PreferencesManagerType;
 
-public class BindingFragment extends Fragment implements IBindingFragment {
+public class BindingFragment extends Fragment implements IBindingFragment, NetworkCallback<BindCheckPojo, BindCheckPojoResult> {
 
     private final static String MODE = "mode";
     private final static String SEARCH_MODE = "searchMode";
@@ -82,7 +101,6 @@ public class BindingFragment extends Fragment implements IBindingFragment {
     private TextView textViewFactoryBarcode;
     private CardView bindingOKCardView;
 
-    private ManagerActivityHandler managerActivityHandler;
     private ManagerActivityUI managerActivityUI;
 
     private LinearLayout linearLayoutBindFactoryBarcode;
@@ -130,7 +148,7 @@ public class BindingFragment extends Fragment implements IBindingFragment {
             view2.requestFocus();
 
             managerActivityUI.setScanType(ScanType.SEARCH_BIND);
-            ScannerInit.scanner(this.getActivity()).scan();
+            new ScannerZXingImpl(this.getActivity()).scan();
         });
 
         searchEditText.setOnEditorActionListener((v, actionId, event) -> {
@@ -163,32 +181,12 @@ public class BindingFragment extends Fragment implements IBindingFragment {
                     if(searchMode == 0) {
                         String input = searchEditText.getText().toString();
                         if (searchEditText.getText().toString().length() == 13) {
-                            SharedPreferences sPref = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
-                            PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
-
                             factoryBarcode = input;
                             textViewFactoryBarcode.setText("");
                             isCheckEan13 = true;
 
                             KeyboardHideToolInit.keyboardHideTool(getActivity()).hideKeyboard();
-
-                            Command<BindCheckPojo> command = new BindCheckCommandWithFactoryBarcode(
-                                    new BindCheckCommandWithBarcode(
-                                            new BindCheckCommandWithCheckEAN13(
-                                                    new BindCheckCommandWithSelected(
-                                                            new BindCheckCommandWithToken(
-                                                                    new BindCheckCommandSimple(),
-                                                                    prefManager.load(PreferencesManagerType.TOKEN_MANAGER)
-                                                            ), selected
-                                                    ), isCheckEan13
-                                            ), input
-                                    ), factoryBarcode);
-
-                            NetworkAsyncTask<BindCheckPojo> networkAsyncTask = new NetworkAsyncTask<>(
-                                    managerActivityHandler,
-                                    queryDialog);
-
-                            networkAsyncTask.execute(command);
+                            sendBindCheck(input);
                         }
                     } else
                         searchMode = 0;
@@ -196,9 +194,7 @@ public class BindingFragment extends Fragment implements IBindingFragment {
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
+            public void afterTextChanged(Editable editable) { }
         });
 
         return view;
@@ -215,7 +211,6 @@ public class BindingFragment extends Fragment implements IBindingFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        managerActivityHandler = (ManagerActivityHandler) this.getActivity();
         managerActivityUI = (ManagerActivityUI) this.getActivity();
     }
 
@@ -245,9 +240,6 @@ public class BindingFragment extends Fragment implements IBindingFragment {
                     "Введите не менее двух символов!", Toast.LENGTH_LONG);
             t.show();
         } else {
-            SharedPreferences sPref = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
-            PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
-
             if(selected == 0) {
                 factoryBarcode = input;
                 textViewFactoryBarcode.setText("");
@@ -257,28 +249,33 @@ public class BindingFragment extends Fragment implements IBindingFragment {
             } else if(selected == 2) {
                 isCheckEan13 = false;
             }
-
             KeyboardHideToolInit.keyboardHideTool(this.getActivity()).hideKeyboard();
-
-            Command<BindCheckPojo> command = new BindCheckCommandWithFactoryBarcode(
-                    new BindCheckCommandWithBarcode(
-                            new BindCheckCommandWithCheckEAN13(
-                                    new BindCheckCommandWithSelected(
-                                            new BindCheckCommandWithToken(
-                                                    new BindCheckCommandSimple(),
-                                                    prefManager.load(PreferencesManagerType.TOKEN_MANAGER)
-                                            ), selected
-                                    ), isCheckEan13
-                            ), input
-                    ), factoryBarcode);
-
-            NetworkAsyncTask<BindCheckPojo> networkAsyncTask = new NetworkAsyncTask<>(
-                    managerActivityHandler,
-                    queryDialog);
-
-            networkAsyncTask.execute(command);
+            sendBindCheck(input);
         }
         searchEditText.clearFocus();
+    }
+
+    private void sendBindCheck(String input) {
+        SharedPreferences sPref = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+        PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
+
+        Command<BindCheckPojo> command = new BindCheckCommandWithFactoryBarcode(
+                new BindCheckCommandWithBarcode(
+                        new BindCheckCommandWithCheckEAN13(
+                                new BindCheckCommandWithSelected(
+                                        new BindCheckCommandWithToken(
+                                                new BindCheckCommandSimple(),
+                                                prefManager.load(PreferencesManagerType.TOKEN_MANAGER)
+                                        ), selected
+                                ), isCheckEan13
+                        ), input
+                ), factoryBarcode);
+
+        NetworkAsyncTask<BindCheckPojo, BindCheckPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
+                this,
+                queryDialog);
+
+        networkAsyncTask.execute((Command) command);
     }
 
     @Override
@@ -392,9 +389,7 @@ public class BindingFragment extends Fragment implements IBindingFragment {
                 }
 
                 @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
+                public void onAnimationRepeat(Animation animation) { }
             });
             bindingOKCardView.startAnimation(in);
             showSnackbar();
@@ -413,9 +408,7 @@ public class BindingFragment extends Fragment implements IBindingFragment {
                 }
 
                 @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
+                public void onAnimationRepeat(Animation animation) { }
             });
 
             in.setAnimationListener(new Animation.AnimationListener() {
@@ -433,9 +426,7 @@ public class BindingFragment extends Fragment implements IBindingFragment {
                 }
 
                 @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
+                public void onAnimationRepeat(Animation animation) { }
             });
 
             bindingOKCardView.startAnimation(out);
@@ -450,5 +441,113 @@ public class BindingFragment extends Fragment implements IBindingFragment {
                 Snackbar.LENGTH_SHORT);
         snackbar.getView().setBackgroundColor(ContextCompat.getColor(this.getActivity(), R.color.colorChange));
         snackbar.show();
+    }
+
+    @Override
+    public void handleResult(CommandResult<BindCheckPojo, BindCheckPojoResult> result) {
+        System.out.println("sdjfhdsajkfhksdjds");
+        if(result.isDone()) {
+            BindCheckPojoResult resPojo = result.data();
+            if(resPojo.getSelected() == 0) { // check binding
+                List<BindRecord> records = resPojo.getRecords();
+                if (records.size() != 0) {
+                    if (records.size() == 1) {
+                        showResult(records.get(0));
+                    } else {
+                        String title = this.getString(R.string.fragment_result_bind);
+                        doResultBindFragmentTransaction(title, result);
+                    }
+                } else {
+                    String message = this.getString(R.string.dialog_bind_check_no_result);
+                    NoResultAlertDialogCreator noResADCr =
+                            new BindCheckNoResultAlertDialogCreatorImpl(this.getActivity(), message);
+                    noResADCr.create().show();
+
+                    if(getBindingContainerFragment() != null)
+                        getBindingContainerFragment().switchToBind();
+                }
+            } else if(resPojo.getSelected() == 1) { // binding
+                List<BindRecord> records = resPojo.getRecords();
+                if (records.size() != 0) {
+                    if (records.size() == 1) {
+                        NetworkCallback<BindPojo, BindPojoResult> bindCallback = new NetworkCallback<BindPojo, BindPojoResult>() {
+                            @Override
+                            public void handleResult(CommandResult<BindPojo, BindPojoResult> resultBind) {
+                                if(resultBind.data().getSelected() == 2) { //binding done
+                                    if(getBindingContainerFragment() == null)
+                                        doBindingContainerFragmentTransactionFromResultBind();
+
+                                    if(getBindingContainerFragment() != null)
+                                        getBindingContainerFragment().switchToCheckBind();
+
+                                    SuccessAlertDialogCreator successADCr =
+                                            new SuccessAlertDialogCreatorImpl(getActivity(), resultBind.data().getMessage());
+                                    successADCr.create().show();
+                                } else if(resultBind.lastCommand() != null) {
+                                    new ReconnectAlertDialogCreatorImpl(
+                                            getActivity(),
+                                            this,
+                                            resultBind.lastCommand()
+                                    ).create().show();
+                                } else
+                                    new ErrorAlertDialogCreatorImpl(
+                                            getActivity(),
+                                            resultBind.data().getMessage()
+                                    ).create().show();
+                            }
+                        };
+
+                        OneResultAlertDialogCreator oneResADCr =
+                                new OneResultAlertDialogCreatorBindImpl(
+                                        this.getActivity(),
+                                        bindCallback,
+                                        records.get(0),
+                                        queryDialog,
+                                        factoryBarcode);
+                        android.support.v7.app.AlertDialog oneResAD = oneResADCr.create();
+                        oneResAD.setCanceledOnTouchOutside(false);
+                        oneResAD.show();
+                    } else {
+                        String title = "Привязка к №" + resPojo.getFactoryBarcode();
+                        doResultBindFragmentTransaction(title, result);
+                    }
+                } else {
+                    NoResultAlertDialogCreator noResADCr =
+                            new NoResultAlertDialogCreatorImpl(this.getActivity());
+                    noResADCr.create().show();
+                }
+            }
+        } else if(result.lastCommand() != null) {
+            new ReconnectAlertDialogCreatorImpl(
+                    this.getActivity(),
+                    this,
+                    result.lastCommand()
+            ).create().show();
+        } else
+            new ErrorAlertDialogCreatorImpl(
+                    this.getActivity(),
+                    result.data().getMessage()
+            ).create().show();
+    }
+
+    private IBindingContainerFragment getBindingContainerFragment() {
+        try {
+            ImplFinder<IBindingContainerFragment> bcfFinder = new ImplFinderFragmentFromActivityDefaultImpl<>(this.getActivity());
+            return bcfFinder.findImpl(IBindingContainerFragment.class);
+        } catch (FindableException ignore) {
+            return null;
+        }
+    }
+
+    private void doResultBindFragmentTransaction(String title, CommandResult<BindCheckPojo, BindCheckPojoResult> result) {
+        FragmentTransactionManager fragmentTransactionManager =
+                new FragmentTransactionManagerImpl(this.getActivity());
+        fragmentTransactionManager.doResultBindFragmentTransaction(title, result);
+    }
+
+    private void doBindingContainerFragmentTransactionFromResultBind() {
+        FragmentTransactionManager fragmentTransactionManager =
+                new FragmentTransactionManagerImpl(this.getActivity());
+        fragmentTransactionManager.doBindingContainerFragmentTransactionFromResultBind();
     }
 }

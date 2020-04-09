@@ -37,37 +37,21 @@ import android.widget.EditText;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.util.List;
+import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutionException;
 
 import ru.viise.lightsearch.R;
-import ru.viise.lightsearch.activity.result.holder.ResultCommandHolderUI;
-import ru.viise.lightsearch.activity.result.holder.ResultCommandUICreator;
-import ru.viise.lightsearch.activity.result.holder.ResultCommandUICreatorInit;
 import ru.viise.lightsearch.cmd.ClientCommands;
-import ru.viise.lightsearch.cmd.holder.v2.ProcessesDefaultImpl;
-import ru.viise.lightsearch.cmd.manager.NetworkService;
-import ru.viise.lightsearch.cmd.result.BindCommandResult;
-import ru.viise.lightsearch.cmd.result.CommandResult;
-import ru.viise.lightsearch.cmd.result.UnbindCommandResult;
-import ru.viise.lightsearch.data.BindRecord;
+import ru.viise.lightsearch.cmd.network.NetworkService;
+import ru.viise.lightsearch.cmd.process.Processes;
+import ru.viise.lightsearch.cmd.process.ProcessesImpl;
 import ru.viise.lightsearch.data.ScanType;
-import ru.viise.lightsearch.data.SearchRecord;
-import ru.viise.lightsearch.data.UnbindRecord;
-import ru.viise.lightsearch.data.v2.CheckAuthCommandSimple;
-import ru.viise.lightsearch.data.v2.CheckAuthCommandWithToken;
-import ru.viise.lightsearch.data.v2.Command;
-import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreatorActivityImpl;
-import ru.viise.lightsearch.dialog.alert.ErrorAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.ErrorAlertDialogCreatorInit;
-import ru.viise.lightsearch.dialog.alert.NoResultAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.NoResultAlertDialogCreatorInit;
-import ru.viise.lightsearch.dialog.alert.OneResultAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.OneResultAlertDialogCreatorInit;
-import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreatorInit;
-import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
+import ru.viise.lightsearch.data.entity.CheckAuthCommandSimple;
+import ru.viise.lightsearch.data.entity.CheckAuthCommandWithToken;
+import ru.viise.lightsearch.data.entity.Command;
+import ru.viise.lightsearch.data.entity.CommandResult;
+import ru.viise.lightsearch.data.pojo.CheckAuthPojo;
+import ru.viise.lightsearch.data.pojo.CheckAuthPojoResult;
 import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.exception.JWTException;
 import ru.viise.lightsearch.find.ImplFinder;
@@ -83,17 +67,16 @@ import ru.viise.lightsearch.pref.PreferencesManager;
 import ru.viise.lightsearch.pref.PreferencesManagerInit;
 import ru.viise.lightsearch.pref.PreferencesManagerType;
 import ru.viise.lightsearch.request.PhonePermission;
-import ru.viise.lightsearch.request.PhonePermissionInit;
+import ru.viise.lightsearch.request.PhonePermissionImpl;
 import ru.viise.lightsearch.security.JWTClient;
 import ru.viise.lightsearch.security.JWTClientWithPrefManager;
 import ru.viise.lightsearch.util.UpdateChecker;
 import ru.viise.lightsearch.util.UpdateCheckerInit;
 
-public class ManagerActivity extends AppCompatActivity implements ManagerActivityHandler, ManagerActivityUI {
+public class ManagerActivity extends AppCompatActivity implements ManagerActivityUI {
 
     private String IMEI;
     private ScanType scanType;
-    private ResultCommandHolderUI commandHolderUI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,12 +94,7 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         }, 1);
 
-        ResultCommandUICreator resCmdUiCr = ResultCommandUICreatorInit.resultCommandUICreator(this);
-        commandHolderUI = resCmdUiCr.createResultCommandHolderUI();
-
         SharedPreferences sPref = this.getSharedPreferences("pref", Context.MODE_PRIVATE);
-
-        System.out.println("fjfghaerjkglaerjkhrjk");
 
         PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
         JWTClient jwtClient = new JWTClientWithPrefManager(prefManager);
@@ -127,21 +105,8 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
                     prefManager.load(PreferencesManagerType.PORT_MANAGER));
             boolean isDone = false;
             try {
-                isDone = new AsyncTask<Void, Void, Boolean>() {
-                    @Override
-                    protected Boolean doInBackground(Void... voids) {
-                        CommandResult cmdRes = new ProcessesDefaultImpl(NetworkService.getInstance())
-                                .process(ClientCommands.CHECK_AUTH)
-                                .apply((Command)
-                                        new CheckAuthCommandWithToken(
-                                                new CheckAuthCommandSimple(),
-                                                prefManager.load(PreferencesManagerType.TOKEN_MANAGER)));
-                        return cmdRes.isDone();
-                    }
-                }.execute().get();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+                isDone = new CheckAuthAsyncTask(new WeakReference<>(prefManager)).execute().get();
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
 
@@ -216,7 +181,7 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
     }
 
     private void reqPhonePermission() {
-        PhonePermission phonePermission = PhonePermissionInit.phonePermission(this);
+        PhonePermission phonePermission = new PhonePermissionImpl(this);
         phonePermission.requestPhonePermission();
     }
 
@@ -237,19 +202,6 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         FragmentTransactionManager fragmentTransactionManager =
                 FragmentTransactionManagerInit.fragmentTransactionManager(this);
         fragmentTransactionManager.doContainerFragmentTransaction(skladArr, TKArr, isNeedAnimation);
-    }
-
-    // TODO: 29.01.20 REMOVE THIS LATER
-    public void doBindingContainerFragmentTransactionFromResultBind() {
-        FragmentTransactionManager fragmentTransactionManager =
-                FragmentTransactionManagerInit.fragmentTransactionManager(this);
-        fragmentTransactionManager.doBindingContainerFragmentTransactionFromResultBind();
-    }
-
-    public void doResultSearchFragmentTransaction(String title, List<SearchRecord> searchRecords) {
-        FragmentTransactionManager fragmentTransactionManager =
-                FragmentTransactionManagerInit.fragmentTransactionManager(this);
-        fragmentTransactionManager.doResultSearchFragmentTransaction(title, searchRecords);
     }
 
     public void doSoftCheckContainerFragmentTransaction() {
@@ -273,97 +225,6 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         transaction.addToBackStack(this.getString(R.string.fragment_binding_container));
         this.setTitle(this.getString(R.string.fragment_binding_container));
         transaction.commit();
-    }
-
-    // TODO: 30.01.20 REMOVE THIS LATER
-    public void doResultBindFragmentTransaction(String title, BindCommandResult bindCmdRes) {
-        FragmentTransactionManager fragmentTransactionManager =
-                FragmentTransactionManagerInit.fragmentTransactionManager(this);
-        fragmentTransactionManager.doResultBindFragmentTransaction(title, bindCmdRes);
-    }
-
-    // TODO: 30.01.20 REMOVE THIS LATER
-    public void doResultUnbindFragmentTransaction(String title, UnbindCommandResult unbindCmdRes) {
-        FragmentTransactionManager fragmentTransactionManager =
-                FragmentTransactionManagerInit.fragmentTransactionManager(this);
-        fragmentTransactionManager.doResultUnbindFragmentTransaction(title, unbindCmdRes);
-    }
-
-    public void callDialogError(String errorMessage) {
-        ErrorAlertDialogCreator errADCr =
-                ErrorAlertDialogCreatorInit.errorAlertDialogCreator(this, errorMessage);
-        errADCr.create().show();
-    }
-
-    public void callDialogCancelSoftCheck(String errorMessage) {
-        CancelSoftCheckAlertDialogCreator cscADCr =
-                new CancelSoftCheckAlertDialogCreatorActivityImpl(
-                        this,
-                        SpotsDialogCreatorInit
-                                .spotsDialogCreator(
-                                        this,
-                                        R.string.spots_dialog_query_exec)
-                                .create(),
-                        errorMessage);
-        cscADCr.create().show();
-    }
-
-    public void callDialogSuccess(String message) {
-        SuccessAlertDialogCreator successADCr =
-                SuccessAlertDialogCreatorInit.successAlertDialogCreator(this, message);
-        successADCr.create().show();
-    }
-
-    public void callDialogNoResult() {
-        String message = this.getString(R.string.dialog_no_result);
-        NoResultAlertDialogCreator noResADCr =
-                NoResultAlertDialogCreatorInit.noResultAlertDialogCreator(this, message);
-        noResADCr.create().show();
-    }
-
-
-    // TODO: 30.01.20 REMOVE THIS LATER
-    public void callBindCheckDialogNoResult() {
-        String message = this.getString(R.string.dialog_bind_check_no_result);
-        NoResultAlertDialogCreator noResADCr =
-                NoResultAlertDialogCreatorInit.bindCheckNoResultAlertDialogCreator(this, message);
-        noResADCr.create().show();
-        getBindingContainerFragment().switchToBind();
-    }
-
-    public void callSearchDialogOneResult(SearchRecord searchRecord) {
-        OneResultAlertDialogCreator oneResADCr =
-                OneResultAlertDialogCreatorInit.oneResultSearchAlertDialogCreator(this, searchRecord);
-        android.support.v7.app.AlertDialog oneResAD = oneResADCr.create();
-        oneResAD.setCanceledOnTouchOutside(false);
-        oneResAD.show();
-    }
-
-    // TODO: 30.01.20 REMOVE THIS LATER
-    public void callBindCheckDialogOneResult(BindRecord bindRecord) {
-        IBindingContainerFragment bindingContainerFragment = getBindingContainerFragment();
-        bindingContainerFragment.showResult(bindRecord);
-    }
-
-    // TODO: 30.01.20 REMOVE THIS LATER
-    public void callUnbindCheckDialogOneResult(UnbindRecord unbindRecord) {
-        IBindingContainerFragment bindingContainerFragment = getBindingContainerFragment();
-        bindingContainerFragment.showResult(unbindRecord);
-    }
-
-    // TODO: 30.01.20 REMOVE THIS LATER
-    public void callBindDialogOneResult(BindRecord bindRecord, String factoryBarcode) {
-        OneResultAlertDialogCreator oneResADCr =
-                OneResultAlertDialogCreatorInit.oneResultBindAlertDialogCreator(
-                        this,
-                        bindRecord,
-                        SpotsDialogCreatorInit
-                                .spotsDialogCreator(this, R.string.spots_dialog_query_exec)
-                                .create(),
-                        factoryBarcode);
-        android.support.v7.app.AlertDialog oneResAD = oneResADCr.create();
-        oneResAD.setCanceledOnTouchOutside(false);
-        oneResAD.show();
     }
 
     public IContainerFragment getContainerFragment() {
@@ -403,9 +264,26 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         return IMEI;
     }
 
-    @Override
-    public void handleResult(CommandResult commandResult) {
-        if(commandHolderUI.get(commandResult) != null)
-            commandHolderUI.get(commandResult).apply(commandResult);
+    private static class CheckAuthAsyncTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final WeakReference<PreferencesManager> prefManager;
+
+        public CheckAuthAsyncTask(WeakReference<PreferencesManager> prefManager) {
+            this.prefManager = prefManager;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            Processes processes = new ProcessesImpl(NetworkService.getInstance());
+            Command<CheckAuthPojo> command = new CheckAuthCommandWithToken(
+                    new CheckAuthCommandSimple(),
+                    prefManager.get().load(PreferencesManagerType.TOKEN_MANAGER));
+
+            CommandResult<CheckAuthPojo, CheckAuthPojoResult> cmdRes = processes
+                    .process(ClientCommands.CHECK_AUTH)
+                    .apply((Command) command);
+            return cmdRes.isDone();
+        }
     }
 }

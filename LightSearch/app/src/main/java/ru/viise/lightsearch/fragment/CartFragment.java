@@ -41,36 +41,45 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ru.viise.lightsearch.R;
-import ru.viise.lightsearch.activity.ManagerActivityHandler;
-import ru.viise.lightsearch.cmd.manager.task.v2.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkCallback;
 import ru.viise.lightsearch.data.CartRecord;
 import ru.viise.lightsearch.data.DeliveryTypeEnum;
 import ru.viise.lightsearch.data.SoftCheckRecord;
 import ru.viise.lightsearch.data.UnitsEnum;
+import ru.viise.lightsearch.data.entity.CloseSoftCheckCommandSimple;
+import ru.viise.lightsearch.data.entity.CloseSoftCheckCommandWithCardCode;
+import ru.viise.lightsearch.data.entity.CloseSoftCheckCommandWithDelivery;
+import ru.viise.lightsearch.data.entity.CloseSoftCheckCommandWithToken;
+import ru.viise.lightsearch.data.entity.CloseSoftCheckCommandWithUserIdentifier;
+import ru.viise.lightsearch.data.entity.Command;
+import ru.viise.lightsearch.data.entity.CommandResult;
+import ru.viise.lightsearch.data.entity.ConfirmSoftCheckProductsCommandSimple;
+import ru.viise.lightsearch.data.entity.ConfirmSoftCheckProductsCommandWithCardCode;
+import ru.viise.lightsearch.data.entity.ConfirmSoftCheckProductsCommandWithData;
+import ru.viise.lightsearch.data.entity.ConfirmSoftCheckProductsCommandWithSoftCheckRecords;
+import ru.viise.lightsearch.data.entity.ConfirmSoftCheckProductsCommandWithToken;
+import ru.viise.lightsearch.data.entity.ConfirmSoftCheckProductsCommandWithType;
+import ru.viise.lightsearch.data.entity.ConfirmSoftCheckProductsCommandWithUserIdentifier;
+import ru.viise.lightsearch.data.entity.ProductSimple;
+import ru.viise.lightsearch.data.entity.ProductWithAmount;
+import ru.viise.lightsearch.data.entity.ProductWithId;
 import ru.viise.lightsearch.data.pojo.CloseSoftCheckPojo;
+import ru.viise.lightsearch.data.pojo.CloseSoftCheckPojoResult;
 import ru.viise.lightsearch.data.pojo.ConfirmSoftCheckProductsPojo;
+import ru.viise.lightsearch.data.pojo.ConfirmSoftCheckProductsPojoResult;
 import ru.viise.lightsearch.data.pojo.ConfirmTypes;
-import ru.viise.lightsearch.data.v2.CloseSoftCheckCommandSimple;
-import ru.viise.lightsearch.data.v2.CloseSoftCheckCommandWithCardCode;
-import ru.viise.lightsearch.data.v2.CloseSoftCheckCommandWithDelivery;
-import ru.viise.lightsearch.data.v2.CloseSoftCheckCommandWithToken;
-import ru.viise.lightsearch.data.v2.CloseSoftCheckCommandWithUserIdentifier;
-import ru.viise.lightsearch.data.v2.Command;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandSimple;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithCardCode;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithData;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithSoftCheckRecords;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithToken;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithType;
-import ru.viise.lightsearch.data.v2.ConfirmSoftCheckProductsCommandWithUserIdentifier;
-import ru.viise.lightsearch.data.v2.ProductSimple;
-import ru.viise.lightsearch.data.v2.ProductWithAmount;
-import ru.viise.lightsearch.data.v2.ProductWithId;
+import ru.viise.lightsearch.data.pojo.SendForm;
+import ru.viise.lightsearch.dialog.alert.ErrorAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.alert.InfoProductAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.InfoProductAlertDialogCreatorInit;
-import ru.viise.lightsearch.dialog.alert.UnconfirmedRecordAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.UnconfirmedRecordAlertDialogCreatorInit;
+import ru.viise.lightsearch.dialog.alert.InfoProductAlertDialogCreatorCartImpl;
+import ru.viise.lightsearch.dialog.alert.ReconnectAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.UnconfirmedRecordAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
+import ru.viise.lightsearch.exception.FindableException;
+import ru.viise.lightsearch.find.ImplFinder;
+import ru.viise.lightsearch.find.ImplFinderFragmentFromActivityDefaultImpl;
 import ru.viise.lightsearch.fragment.adapter.RecyclerViewAdapter;
 import ru.viise.lightsearch.fragment.adapter.SwipeToDeleteCallback;
 import ru.viise.lightsearch.fragment.adapter.SwipeToInfoCallback;
@@ -90,8 +99,6 @@ public class CartFragment extends Fragment implements ICartFragment {
     private final String SAMOVYVOZ_S_TK       = DeliveryTypeEnum.SAMOVYVOZ_S_TK.stringUIValue();
 
     private final String PREF = "pref";
-
-    private ManagerActivityHandler managerActivityHandler;
 
     private List<SoftCheckRecord> cartRecords;
     private RecyclerView recyclerView;
@@ -175,10 +182,23 @@ public class CartFragment extends Fragment implements ICartFragment {
                                     ), prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER)
                             ), prefManager.load(PreferencesManagerType.CARD_CODE_MANAGER));
 
-                    NetworkAsyncTask<ConfirmSoftCheckProductsPojo> networkAsyncTask = new NetworkAsyncTask<>(
-                            managerActivityHandler,
-                            queryDialog);
+                    NetworkCallback<ConfirmSoftCheckProductsPojo, ConfirmSoftCheckProductsPojoResult> confirmCallback =
+                            new NetworkCallback<ConfirmSoftCheckProductsPojo, ConfirmSoftCheckProductsPojoResult>() {
+                                @Override
+                                public void handleResult(CommandResult<ConfirmSoftCheckProductsPojo, ConfirmSoftCheckProductsPojoResult> result) {
+                                    if(result.isDone()) {
+                                        refreshCartRecords(result.data().getRecords());
+                                    } else if(result.lastCommand() != null) {
+                                        callReconnectDialog(this, result.lastCommand());
+                                    } else
+                                        callDialogError(result.data().getMessage());
+                                }
+                            };
 
+                    NetworkAsyncTask<ConfirmSoftCheckProductsPojo, ConfirmSoftCheckProductsPojoResult> networkAsyncTask =
+                            new NetworkAsyncTask<>(
+                                    confirmCallback,
+                                    queryDialog);
                     networkAsyncTask.execute(command);
                 }
             }
@@ -192,7 +212,6 @@ public class CartFragment extends Fragment implements ICartFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        managerActivityHandler = (ManagerActivityHandler) this.getActivity();
     }
 
     private void fillSpinnerDeliveryType() {
@@ -265,7 +284,7 @@ public class CartFragment extends Fragment implements ICartFragment {
                 final int position = viewHolder.getAdapterPosition();
                 adapter.notifyItemChanged(position);
                 InfoProductAlertDialogCreator infoProdADCr =
-                        InfoProductAlertDialogCreatorInit.infoProductAlertDialogCreator(getActivity(),
+                        new InfoProductAlertDialogCreatorCartImpl(getActivity(),
                                 (CartRecord)adapter.getItem(position));
                 infoProdADCr.create().show();
             }
@@ -292,8 +311,25 @@ public class CartFragment extends Fragment implements ICartFragment {
                             ), prefManager.load(PreferencesManagerType.CARD_CODE_MANAGER)
                     ), prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER));
 
-            NetworkAsyncTask<CloseSoftCheckPojo> networkAsyncTask = new NetworkAsyncTask<>(
-                    managerActivityHandler,
+            NetworkCallback<CloseSoftCheckPojo, CloseSoftCheckPojoResult> closeScCallback =
+                    new NetworkCallback<CloseSoftCheckPojo, CloseSoftCheckPojoResult>() {
+                        @Override
+                        public void handleResult(CommandResult<CloseSoftCheckPojo, CloseSoftCheckPojoResult> result) {
+                            if(result.isDone()) {
+                                callDialogSuccess(result.data().getMessage());
+                                getActivity().setTitle(getActivity().getString(R.string.fragment_container));
+                                ISoftCheckContainerFragment containerFragment = getSoftCheckContainerFragment();
+                                if(containerFragment != null)
+                                    containerFragment.switchToOpenSoftCheckFragment();
+                            } else if(result.lastCommand() != null) {
+                                callReconnectDialog(this, result.lastCommand());
+                            } else
+                                callDialogError(result.data().getMessage());
+                        }
+                    };
+
+            NetworkAsyncTask<CloseSoftCheckPojo, CloseSoftCheckPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
+                    closeScCallback,
                     queryDialog);
             networkAsyncTask.execute(command);
         }
@@ -314,9 +350,31 @@ public class CartFragment extends Fragment implements ICartFragment {
     }
 
     private void callDialogUnconfirmed() {
-        UnconfirmedRecordAlertDialogCreator unconRecADCr =
-                UnconfirmedRecordAlertDialogCreatorInit.unconfirmedRecordAlertDialogCreator(this.getActivity());
-        unconRecADCr.create().show();
+        new UnconfirmedRecordAlertDialogCreatorImpl(this.getActivity()).create().show();
+    }
+
+    private ISoftCheckContainerFragment getSoftCheckContainerFragment() {
+        ImplFinder<ISoftCheckContainerFragment> finder = new ImplFinderFragmentFromActivityDefaultImpl<>(this.getActivity());
+        try { return finder.findImpl(ISoftCheckContainerFragment.class); }
+        catch(FindableException ignore) { return null; }
+    }
+
+    private void callDialogSuccess(String message) {
+        new SuccessAlertDialogCreatorImpl(this.getActivity(), message).create().show();
+    }
+
+    private void callDialogError(String message) {
+        new ErrorAlertDialogCreatorImpl(this.getActivity(), message).create().show();
+    }
+
+    private void callReconnectDialog(
+            NetworkCallback<? extends SendForm, ? extends SendForm> callback,
+            Command<? extends SendForm> lastCommand) {
+        new ReconnectAlertDialogCreatorImpl(
+                this.getActivity(),
+                callback,
+                lastCommand
+        ).create().show();
     }
 
     private DeliveryTypeEnum getDeliveryType() {

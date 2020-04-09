@@ -24,10 +24,8 @@ import org.junit.rules.RuleChain;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.viise.lightsearch.data.ReconnectDTO;
 import ru.viise.lightsearch.data.SoftCheckRecord;
 import ru.viise.lightsearch.data.SubdivisionList;
-import ru.viise.lightsearch.data.SubdivisionListInit;
 import ru.viise.lightsearch.data.UnitsEnum;
 import test.rule.CreateConfirmSoftCheckProductsResultRule;
 import test.rule.CreateSoftCheckRecordsListRule;
@@ -83,7 +81,7 @@ public class ConfirmSoftCheckProductsResultJUnitTest {
     public void reconnectDTO() {
         testBegin("ConfirmSoftCheckProductsResult", "reconnectDTO()");
 
-        ReconnectDTO reconnectDTO = confirmSoftCheckProductsResult.reconnectDTO();
+        ReconnectDTO reconnectDTO = confirmSoftCheckProductsResult.lastCommand();
         System.out.println("reconnectDTO: " + reconnectDTO);
 
         testEnd("ConfirmSoftCheckProductsResult", "reconnectDTO()");

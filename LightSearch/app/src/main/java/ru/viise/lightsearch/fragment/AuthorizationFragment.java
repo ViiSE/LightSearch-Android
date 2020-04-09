@@ -36,38 +36,44 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ru.viise.lightsearch.R;
-import ru.viise.lightsearch.activity.ManagerActivityHandler;
 import ru.viise.lightsearch.activity.ManagerActivityUI;
 import ru.viise.lightsearch.check.FirstRunAppChecker;
-import ru.viise.lightsearch.check.FirstRunAppCheckerInit;
-import ru.viise.lightsearch.cmd.holder.v2.ProcessesDefaultImpl;
-import ru.viise.lightsearch.cmd.manager.NetworkService;
-import ru.viise.lightsearch.cmd.manager.task.v2.NetworkAsyncTask;
+import ru.viise.lightsearch.check.FirstRunAppCheckerImpl;
+import ru.viise.lightsearch.cmd.network.NetworkService;
+import ru.viise.lightsearch.cmd.network.task.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkCallback;
 import ru.viise.lightsearch.data.AlertDialogCreatorDTO;
-import ru.viise.lightsearch.data.AlertDialogCreatorDTOInit;
+import ru.viise.lightsearch.data.AlertDialogCreatorDTOImpl;
 import ru.viise.lightsearch.data.CreatePasswordInFirstTimeAlertDialogCreatorDTO;
-import ru.viise.lightsearch.data.CreatePasswordInFirstTimeAlertDialogCreatorDTOInit;
+import ru.viise.lightsearch.data.CreatePasswordInFirstTimeAlertDialogCreatorDTOImpl;
 import ru.viise.lightsearch.data.InputPasswordAlertDialogCreatorDTO;
-import ru.viise.lightsearch.data.InputPasswordAlertDialogCreatorDTOInit;
+import ru.viise.lightsearch.data.InputPasswordAlertDialogCreatorDTOImpl;
 import ru.viise.lightsearch.data.SettingsViewChangePasswordAlertDialogCreatorDTO;
-import ru.viise.lightsearch.data.SettingsViewChangePasswordAlertDialogCreatorDTOInit;
+import ru.viise.lightsearch.data.SettingsViewChangePasswordAlertDialogCreatorDTOImpl;
+import ru.viise.lightsearch.data.entity.Command;
+import ru.viise.lightsearch.data.entity.CommandResult;
+import ru.viise.lightsearch.data.entity.LoginCommandSimple;
+import ru.viise.lightsearch.data.entity.LoginCommandWithIMEI;
+import ru.viise.lightsearch.data.entity.LoginCommandWithIP;
+import ru.viise.lightsearch.data.entity.LoginCommandWithModel;
+import ru.viise.lightsearch.data.entity.LoginCommandWithOs;
+import ru.viise.lightsearch.data.entity.LoginCommandWithPassword;
+import ru.viise.lightsearch.data.entity.LoginCommandWithUserIdentifier;
+import ru.viise.lightsearch.data.entity.LoginCommandWithUsername;
 import ru.viise.lightsearch.data.pojo.LoginPojo;
-import ru.viise.lightsearch.data.v2.Command;
-import ru.viise.lightsearch.data.v2.LoginCommandSimple;
-import ru.viise.lightsearch.data.v2.LoginCommandWithIMEI;
-import ru.viise.lightsearch.data.v2.LoginCommandWithIP;
-import ru.viise.lightsearch.data.v2.LoginCommandWithModel;
-import ru.viise.lightsearch.data.v2.LoginCommandWithOs;
-import ru.viise.lightsearch.data.v2.LoginCommandWithPassword;
-import ru.viise.lightsearch.data.v2.LoginCommandWithUserIdentifier;
-import ru.viise.lightsearch.data.v2.LoginCommandWithUsername;
+import ru.viise.lightsearch.data.pojo.LoginPojoResult;
 import ru.viise.lightsearch.dialog.alert.CreatePasswordInFirstTimeAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.CreatePasswordInFirstTimeDialogAlertCreatorInit;
+import ru.viise.lightsearch.dialog.alert.CreatePasswordInFirstTimeAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.ErrorAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.alert.InputPasswordAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.InputPasswordAlertDialogCreatorInit;
+import ru.viise.lightsearch.dialog.alert.InputPasswordAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.alert.SettingsViewChangePasswordAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.SettingsViewChangePasswordAlertDialogCreatorInit;
+import ru.viise.lightsearch.dialog.alert.SettingsViewChangePasswordAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreator;
+import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
+import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManager;
+import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManagerImpl;
 import ru.viise.lightsearch.pref.PreferencesManager;
 import ru.viise.lightsearch.pref.PreferencesManagerInit;
 import ru.viise.lightsearch.pref.PreferencesManagerType;
@@ -80,10 +86,9 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.OnClickListener;
 
 
-public class AuthorizationFragment extends Fragment implements OnClickListener {
+public class AuthorizationFragment extends Fragment implements OnClickListener, NetworkCallback<LoginPojo, LoginPojoResult> {
 
     public static final String TAG = "AuthorizationFragment";
-    private final String PREF       = "pref";
 
     private EditText editTextUsername;
     private EditText editTextPassword;
@@ -103,7 +108,6 @@ public class AuthorizationFragment extends Fragment implements OnClickListener {
 
     private PreferencesManager prefManager;
     private ManagerActivityUI mIManagerActivity;
-    private ManagerActivityHandler managerActivityHandler;
 
     private Animation animAlpha;
 
@@ -116,16 +120,14 @@ public class AuthorizationFragment extends Fragment implements OnClickListener {
 
         animAlpha = AnimationUtils.loadAnimation(this.getActivity(), R.anim.alpha);
 
-        SharedPreferences sPref = this.getActivity().getSharedPreferences(PREF, Context.MODE_PRIVATE);
+        SharedPreferences sPref = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
         prefManager = PreferencesManagerInit.preferencesManager(sPref);
 
-        // Блок авторизации
         editTextUsername = view.findViewById(R.id.editTextUsername);
         editTextPassword = view.findViewById(R.id.editTextPassword);
         editTextUserIdent = view.findViewById(R.id.editTextUserIdent);
         Button buttonConnect = view.findViewById(R.id.buttonConnect);
 
-        // Блок с расширенными настройками
         editTextHost = view.findViewById(R.id.editTextHost);
         editTextPort = view.findViewById(R.id.editTextPort);
 
@@ -149,20 +151,19 @@ public class AuthorizationFragment extends Fragment implements OnClickListener {
         editTextPort.setText(prefManager.load(PreferencesManagerType.PORT_MANAGER));
         editTextUsername.setText(prefManager.load(PreferencesManagerType.USERNAME_MANAGER));
 
-        // Устанавливаем ClickListener на кнопки
         buttonConnect.setOnClickListener(this);
         buttonChPass.setOnClickListener(this);
         cbSettings.setOnClickListener(this);
 
         AlertDialogCreatorDTO aDCreatorDTO =
-                AlertDialogCreatorDTOInit.alertDialogCreatorDTO(this.getActivity(), inflater, sPref);
+                new AlertDialogCreatorDTOImpl(this.getActivity(), inflater, sPref);
         HashAlgorithm hashAlgorithm = HashAlgorithmInit.hashAlgorithm();
 
         createPassFirstDialog(aDCreatorDTO, hashAlgorithm);
         createInputPassDialog(aDCreatorDTO, hashAlgorithm);
         createSettingsViewChangePassDialog(aDCreatorDTO, hashAlgorithm);
 
-        FirstRunAppChecker firstRunAppChecker = FirstRunAppCheckerInit.firstRunAppChecker(sPref);
+        FirstRunAppChecker firstRunAppChecker = new FirstRunAppCheckerImpl(sPref);
         if(firstRunAppChecker.check())
             createPassFirst.show();
 
@@ -177,7 +178,6 @@ public class AuthorizationFragment extends Fragment implements OnClickListener {
     public void onAttach(Context context) {
         super.onAttach(context);
         mIManagerActivity = (ManagerActivityUI) this.getActivity();
-        managerActivityHandler = (ManagerActivityHandler) this.getActivity();
     }
 
     @SuppressWarnings("unchecked")
@@ -201,7 +201,6 @@ public class AuthorizationFragment extends Fragment implements OnClickListener {
                     else
                         prefManager.save(PreferencesManagerType.USER_IDENT_MANAGER, editTextUserIdent.getText().toString());
                     NetworkService.setBaseUrl(editTextHost.getText().toString(), editTextPort.getText().toString());
-                    ProcessesDefaultImpl.isChange = true;
                     IPAddressProvider ipAddrProvider = IPAddressProviderInit.ipAddressProvider();
                     String ip = ipAddrProvider.ipAddress(true);
                     String os = Build.VERSION.RELEASE;
@@ -222,24 +221,20 @@ public class AuthorizationFragment extends Fragment implements OnClickListener {
                                     ), editTextUsername.getText().toString()
                             ), mIManagerActivity.getIMEI());
 
-                    NetworkAsyncTask<LoginPojo> networkAsyncTask = new NetworkAsyncTask<>(
-                            managerActivityHandler,
+                    NetworkAsyncTask<LoginPojo, LoginPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
+                            this,
                             queryDialog);
                     networkAsyncTask.execute(command);
 
                     cbSettings.setChecked(false);
+                    hideSettings();
                 }
                 break;
             case R.id.checkBoxSettings:
                 if(cbSettings.isChecked()) {
                     inputPassword.show();
-                }
-                else {
-                    twHost.setVisibility(INVISIBLE);
-                    twPort.setVisibility(INVISIBLE);
-                    editTextHost.setVisibility(INVISIBLE);
-                    editTextPort.setVisibility(INVISIBLE);
-                    buttonChPass.setVisibility(INVISIBLE);
+                } else {
+                    hideSettings();
                 }
                 break;
             case R.id.buttonChangePass:
@@ -251,31 +246,71 @@ public class AuthorizationFragment extends Fragment implements OnClickListener {
 
     private void createPassFirstDialog(AlertDialogCreatorDTO aDCreatorDTO, HashAlgorithm hashAlgorithm) {
         CreatePasswordInFirstTimeAlertDialogCreatorDTO crPIFTADCreatorDTO =
-                CreatePasswordInFirstTimeAlertDialogCreatorDTOInit.createPasswordInFirstTimeAlertDialogCreatorDTO(
+                new CreatePasswordInFirstTimeAlertDialogCreatorDTOImpl(
                         aDCreatorDTO, hashAlgorithm);
         CreatePasswordInFirstTimeAlertDialogCreator crPIFTADCreator =
-                CreatePasswordInFirstTimeDialogAlertCreatorInit.createPasswordInFirstTimeAlertDialogCreator(
+                new CreatePasswordInFirstTimeAlertDialogCreatorImpl(
                         crPIFTADCreatorDTO);
         createPassFirst = crPIFTADCreator.create();
     }
 
     private void createInputPassDialog(AlertDialogCreatorDTO aDCreatorDTO, HashAlgorithm hashAlgorithm) {
         InputPasswordAlertDialogCreatorDTO iPADCreatorDTO =
-                InputPasswordAlertDialogCreatorDTOInit.inputPasswordAlertDialogCreatorDTO(aDCreatorDTO,
+                new InputPasswordAlertDialogCreatorDTOImpl(aDCreatorDTO,
                         hashAlgorithm, twHost, twPort, editTextHost, editTextPort, buttonChPass,
                         cbSettings);
         InputPasswordAlertDialogCreator iPADCreator =
-                InputPasswordAlertDialogCreatorInit.inputPasswordAlertDialogCreator(iPADCreatorDTO);
+                new InputPasswordAlertDialogCreatorImpl(iPADCreatorDTO);
         inputPassword = iPADCreator.create();
     }
 
     private void createSettingsViewChangePassDialog(AlertDialogCreatorDTO aDCreatorDTO, HashAlgorithm hashAlgorithm) {
         SettingsViewChangePasswordAlertDialogCreatorDTO sVCPADCreatorDTO =
-                SettingsViewChangePasswordAlertDialogCreatorDTOInit.settingsViewChangePasswordAlertDialogCreatorDTO(
+                new SettingsViewChangePasswordAlertDialogCreatorDTOImpl(
                         aDCreatorDTO, hashAlgorithm);
         SettingsViewChangePasswordAlertDialogCreator sVCPADCreator =
-                SettingsViewChangePasswordAlertDialogCreatorInit.settingsViewChangePasswordAlertDialogCreator(
+                new SettingsViewChangePasswordAlertDialogCreatorImpl(
                         sVCPADCreatorDTO);
         createPass = sVCPADCreator.create();
+    }
+
+    private void hideSettings() {
+        twHost.setVisibility(INVISIBLE);
+        twPort.setVisibility(INVISIBLE);
+        editTextHost.setVisibility(INVISIBLE);
+        editTextPort.setVisibility(INVISIBLE);
+        buttonChPass.setVisibility(INVISIBLE);
+    }
+
+    @Override
+    public void handleResult(CommandResult<LoginPojo, LoginPojoResult> result) {
+        if(result.isDone()) {
+            prefManager.save(PreferencesManagerType.TOKEN_MANAGER, result.data().getToken());
+            if(result.data().getUserIdentifier().equals("0")) {
+                prefManager.save(
+                        PreferencesManagerType.USER_IDENT_MANAGER,
+                        prefManager.load(PreferencesManagerType.USERNAME_MANAGER));
+            } else {
+                prefManager.save(
+                        PreferencesManagerType.USER_IDENT_MANAGER,
+                        result.data().getUserIdentifier());
+            }
+
+            SuccessAlertDialogCreator successADCr = new SuccessAlertDialogCreatorImpl(
+                    this.getActivity(),
+                    result.data().getMessage());
+            successADCr.create().show();
+
+            FragmentTransactionManager fragmentTransactionManager =
+                    new FragmentTransactionManagerImpl(this.getActivity());
+            fragmentTransactionManager.doContainerFragmentTransaction(
+                    result.data().getSkladList().toArray(new String[0]),
+                    result.data().getTKList().toArray(new String[0]),
+                    true);
+        } else
+             new ErrorAlertDialogCreatorImpl(
+                     this.getActivity(),
+                     result.data().getMessage()
+             ).create().show();
     }
 }

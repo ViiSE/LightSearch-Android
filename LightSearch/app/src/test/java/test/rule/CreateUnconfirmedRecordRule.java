@@ -21,7 +21,6 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 import ru.viise.lightsearch.data.UnconfirmedRecord;
-import ru.viise.lightsearch.data.UnconfirmedRecordInit;
 
 public class CreateUnconfirmedRecordRule implements TestRule {
 

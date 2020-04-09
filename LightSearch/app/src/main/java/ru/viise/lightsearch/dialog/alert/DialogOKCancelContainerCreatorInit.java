@@ -21,6 +21,6 @@ import android.app.Activity;
 public class DialogOKCancelContainerCreatorInit {
 
     public static DialogOKCancelContainerCreator dialogOKCancelContainerCreator(Activity activity) {
-        return new DialogOKCancelContainerCreatorDefaultImpl(activity);
+        return new DialogOKCancelContainerCreatorImpl(activity);
     }
 }

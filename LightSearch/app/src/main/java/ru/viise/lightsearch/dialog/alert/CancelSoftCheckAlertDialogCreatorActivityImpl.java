@@ -16,37 +16,40 @@
 
 package ru.viise.lightsearch.dialog.alert;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 
 import ru.viise.lightsearch.R;
-import ru.viise.lightsearch.activity.ManagerActivity;
-import ru.viise.lightsearch.cmd.manager.task.v2.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkAsyncTask;
+import ru.viise.lightsearch.cmd.network.task.NetworkCallback;
+import ru.viise.lightsearch.data.entity.CancelSoftCheckCommandSimple;
+import ru.viise.lightsearch.data.entity.CancelSoftCheckCommandWithCardCode;
+import ru.viise.lightsearch.data.entity.CancelSoftCheckCommandWithCartSign;
+import ru.viise.lightsearch.data.entity.CancelSoftCheckCommandWithToken;
+import ru.viise.lightsearch.data.entity.CancelSoftCheckCommandWithUserIdentifier;
+import ru.viise.lightsearch.data.entity.Command;
 import ru.viise.lightsearch.data.pojo.CancelSoftCheckPojo;
-import ru.viise.lightsearch.data.v2.CancelSoftCheckCommandSimple;
-import ru.viise.lightsearch.data.v2.CancelSoftCheckCommandWithCardCode;
-import ru.viise.lightsearch.data.v2.CancelSoftCheckCommandWithCartSign;
-import ru.viise.lightsearch.data.v2.CancelSoftCheckCommandWithToken;
-import ru.viise.lightsearch.data.v2.CancelSoftCheckCommandWithUserIdentifier;
-import ru.viise.lightsearch.data.v2.Command;
+import ru.viise.lightsearch.data.pojo.CancelSoftCheckPojoResult;
 import ru.viise.lightsearch.pref.PreferencesManager;
 import ru.viise.lightsearch.pref.PreferencesManagerInit;
 import ru.viise.lightsearch.pref.PreferencesManagerType;
 
 public class CancelSoftCheckAlertDialogCreatorActivityImpl implements CancelSoftCheckAlertDialogCreator {
 
-    private final String PREF = "pref";
-
-    private final ManagerActivity activity;
+    private final Activity activity;
+    private final NetworkCallback<CancelSoftCheckPojo, CancelSoftCheckPojoResult> networkCallback;
     private final android.app.AlertDialog queryDialog;
     private final String message;
 
     public CancelSoftCheckAlertDialogCreatorActivityImpl(
-            ManagerActivity activity,
+            Activity activity,
+            NetworkCallback<CancelSoftCheckPojo, CancelSoftCheckPojoResult> networkCallback,
             android.app.AlertDialog queryDialog,
             String message) {
         this.activity = activity;
+        this.networkCallback = networkCallback;
         this.queryDialog = queryDialog;
         this.message = message;
     }
@@ -67,7 +70,7 @@ public class CancelSoftCheckAlertDialogCreatorActivityImpl implements CancelSoft
                 dialogOKCancelContainer.dialogOKCancelView()).create();
 
         dialogOKCancelContainer.buttonOK().setOnClickListener(viewOK -> {
-            SharedPreferences sPref = activity.getSharedPreferences(PREF, Context.MODE_PRIVATE);
+            SharedPreferences sPref = activity.getSharedPreferences("pref", Context.MODE_PRIVATE);
             PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
 
             Command<CancelSoftCheckPojo> command = new CancelSoftCheckCommandWithCardCode(
@@ -80,8 +83,8 @@ public class CancelSoftCheckAlertDialogCreatorActivityImpl implements CancelSoft
                             ), prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER)
                     ), prefManager.load(PreferencesManagerType.CARD_CODE_MANAGER));
 
-            NetworkAsyncTask<CancelSoftCheckPojo> networkAsyncTask = new NetworkAsyncTask<>(
-                    activity,
+            NetworkAsyncTask<CancelSoftCheckPojo, CancelSoftCheckPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
+                    networkCallback,
                     queryDialog);
             networkAsyncTask.execute(command);
 

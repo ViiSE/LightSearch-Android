@@ -31,11 +31,25 @@ import java.util.List;
 import java.util.Objects;
 
 import ru.viise.lightsearch.R;
+import ru.viise.lightsearch.cmd.network.task.NetworkCallback;
 import ru.viise.lightsearch.data.BindRecord;
+import ru.viise.lightsearch.data.entity.CommandResult;
+import ru.viise.lightsearch.data.pojo.BindPojo;
+import ru.viise.lightsearch.data.pojo.BindPojoResult;
+import ru.viise.lightsearch.dialog.alert.ErrorAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.alert.OneResultAlertDialogCreator;
-import ru.viise.lightsearch.dialog.alert.OneResultAlertDialogCreatorInit;
+import ru.viise.lightsearch.dialog.alert.OneResultAlertDialogCreatorBindCheckImpl;
+import ru.viise.lightsearch.dialog.alert.OneResultAlertDialogCreatorBindImpl;
+import ru.viise.lightsearch.dialog.alert.ReconnectAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreator;
+import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
+import ru.viise.lightsearch.exception.FindableException;
+import ru.viise.lightsearch.find.ImplFinder;
+import ru.viise.lightsearch.find.ImplFinderFragmentFromActivityDefaultImpl;
 import ru.viise.lightsearch.fragment.adapter.ResultBindArrayAdapter;
+import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManager;
+import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManagerImpl;
 
 public class ResultBindFragment extends ListFragment {
 
@@ -78,14 +92,42 @@ public class ResultBindFragment extends ListFragment {
 
         if(selected == 0) {
             OneResultAlertDialogCreator oneResADCr =
-                    OneResultAlertDialogCreatorInit.oneResultBindCheckAlertDialogCreator(
+                    new OneResultAlertDialogCreatorBindCheckImpl(
                             this.getActivity(),
                             bindRecords.get(position));
             oneResADCr.create().show();
         } else if(selected == 1) {
+            NetworkCallback<BindPojo, BindPojoResult> bindCallback = new NetworkCallback<BindPojo, BindPojoResult>() {
+                @Override
+                public void handleResult(CommandResult<BindPojo, BindPojoResult> resultBind) {
+                    if(resultBind.data().getSelected() == 2) { //binding done
+                        if(getBindingContainerFragment() == null)
+                            doBindingContainerFragmentTransactionFromResultBind();
+
+                        if(getBindingContainerFragment() != null)
+                            getBindingContainerFragment().switchToCheckBind();
+
+                        SuccessAlertDialogCreator successADCr =
+                                new SuccessAlertDialogCreatorImpl(getActivity(), resultBind.data().getMessage());
+                        successADCr.create().show();
+                    } else if(resultBind.lastCommand() != null) {
+                        new ReconnectAlertDialogCreatorImpl(
+                                getActivity(),
+                                this,
+                                resultBind.lastCommand()
+                        ).create().show();
+                    } else
+                        new ErrorAlertDialogCreatorImpl(
+                                getActivity(),
+                                resultBind.data().getMessage()
+                        ).create().show();
+                }
+            };
+
             OneResultAlertDialogCreator oneResADCr =
-                    OneResultAlertDialogCreatorInit.oneResultBindAlertDialogCreator(
+                    new OneResultAlertDialogCreatorBindImpl(
                             this.getActivity(),
+                            bindCallback,
                             bindRecords.get(position),
                             SpotsDialogCreatorInit
                                     .spotsDialogCreator(this.getActivity(), R.string.spots_dialog_query_exec)
@@ -112,5 +154,20 @@ public class ResultBindFragment extends ListFragment {
             }
             return false;
         });
+    }
+
+    private IBindingContainerFragment getBindingContainerFragment() {
+        try {
+            ImplFinder<IBindingContainerFragment> bcfFinder = new ImplFinderFragmentFromActivityDefaultImpl<>(this.getActivity());
+            return bcfFinder.findImpl(IBindingContainerFragment.class);
+        } catch (FindableException ignore) {
+            return null;
+        }
+    }
+
+    private void doBindingContainerFragmentTransactionFromResultBind() {
+        FragmentTransactionManager fragmentTransactionManager =
+                new FragmentTransactionManagerImpl(this.getActivity());
+        fragmentTransactionManager.doBindingContainerFragmentTransactionFromResultBind();
     }
 }

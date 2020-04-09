@@ -29,8 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.viise.lightsearch.R;
-import ru.viise.lightsearch.dialog.alert.AboutAlertDialogCreatorDefaultImpl;
-import ru.viise.lightsearch.dialog.alert.ExitToAuthorizationAlertDialogCreatorDefaultImpl;
+import ru.viise.lightsearch.dialog.alert.AboutAlertDialogCreatorImpl;
+import ru.viise.lightsearch.dialog.alert.ExitToAuthorizationAlertDialogCreatorImpl;
 
 public class RecyclerViewAdapterMore extends RecyclerView.Adapter<RecyclerViewAdapterMore.DefaultViewHolder> {
 
@@ -67,11 +67,11 @@ public class RecyclerViewAdapterMore extends RecyclerView.Adapter<RecyclerViewAd
         holder.tvMore.setText(data.get(position));
         if(position == 0) {
             holder.itemView.setOnClickListener(view ->
-                    new AboutAlertDialogCreatorDefaultImpl(activity).create().show());
+                    new AboutAlertDialogCreatorImpl(activity).create().show());
         } else if(position == 1) {
             holder.tvMore.setTextColor(context.getColor(R.color.colorDelete));
             holder.itemView.setOnClickListener(view ->
-                    new ExitToAuthorizationAlertDialogCreatorDefaultImpl(activity).create().show());
+                    new ExitToAuthorizationAlertDialogCreatorImpl(activity).create().show());
         }
     }
 

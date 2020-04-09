@@ -20,7 +20,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import ru.viise.lightsearch.data.ReconnectDTO;
 import test.rule.CreateOpenSoftCheckCommandResultRule;
 
 import static test.TestMessage.testBegin;
@@ -63,7 +62,7 @@ public class OpenSoftCheckCommandResultJUnitTest {
     public void reconnectDTO() {
         testBegin("OpenSoftCheckCommandResult", "reconnectDTO()");
 
-        ReconnectDTO reconnectDTO = openSoftCheckCommandResult.reconnectDTO();
+        ReconnectDTO reconnectDTO = openSoftCheckCommandResult.lastCommand();
         System.out.println("reconnectDTO: " + reconnectDTO);
 
         testEnd("OpenSoftCheckCommandResult", "reconnectDTO()");

@@ -24,6 +24,7 @@
     <string name="about_identifier">Идентификатор</string>
     <string name="about_user">О пользователе</string>
     <string name="soft_check_result_search">Выберите товар из списка</string>
+    <string name="need_auth">Для продолжения необходимо авторизоваться</string>
     <!-- ======== -->
 
     <!-- CheckBox -->
@@ -103,8 +104,9 @@
     <string name="dialog_res_prod_new_max_amount">Общее кол-во ПОСЛЕ</string>
     <string name="dialog_res_prod_subdivisions">Подразделения</string>
     <string name="dialog_update_title">Доступно обновление!</string>
-    <string name="dialog_update_downloading_description">Обновление загружается. Статус загрузки и файл обновления доступны в шторке уведомлений.</string>
+    <string name="dialog_update_downloading_description">Статус загрузки и файл обновления доступны в шторке уведомлений.</string>
     <string name="dialog_update_downloading_title">Обновление загружается!</string>
+    <string name="dialog_reconnect">Авторизация</string>
     <!-- ============= -->
 
     <!-- Toast -->
@@ -168,8 +170,8 @@
 
     <string name="about_app">О приложении</string>
     <string name="about_LightSearch">LightSearch</string>
-    <string name="about_version">Версия 1.10</string>
-    <string name="about_code_version">Код версии 11</string>
+    <string name="about_version">Версия 1.13</string>
+    <string name="about_code_version">Код версии 14</string>
     <string name="about_license">Данный программный продукт распространяется под лицензией Apache v2.0.</string>
     <string name="search_result">Поиск:</string>
 

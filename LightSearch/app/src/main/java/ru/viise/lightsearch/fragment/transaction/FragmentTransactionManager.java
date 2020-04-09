@@ -18,16 +18,18 @@ package ru.viise.lightsearch.fragment.transaction;
 
 import java.util.List;
 
-import ru.viise.lightsearch.cmd.result.BindCommandResult;
-import ru.viise.lightsearch.cmd.result.UnbindCommandResult;
 import ru.viise.lightsearch.data.SearchRecord;
-import ru.viise.lightsearch.data.SoftCheckRecord;
+import ru.viise.lightsearch.data.entity.CommandResult;
+import ru.viise.lightsearch.data.pojo.BindCheckPojo;
+import ru.viise.lightsearch.data.pojo.BindCheckPojoResult;
+import ru.viise.lightsearch.data.pojo.UnbindCheckPojo;
+import ru.viise.lightsearch.data.pojo.UnbindCheckPojoResult;
 
 public interface FragmentTransactionManager {
     void doAuthorizationFragmentTransaction(boolean isNeedAnimation);
     void doContainerFragmentTransaction(String[] skladArray, String[] TKArray, boolean isNeedAnimation);
     void doResultSearchFragmentTransaction(String title, List<SearchRecord> searchRecords);
-    void doResultBindFragmentTransaction(String title, BindCommandResult bindCmdRes);
+    void doResultBindFragmentTransaction(String title, CommandResult<BindCheckPojo, BindCheckPojoResult> result);
     void doBindingContainerFragmentTransactionFromResultBind();
-    void doResultUnbindFragmentTransaction(String title, UnbindCommandResult unbindCmdRes);
+    void doResultUnbindFragmentTransaction(String title, CommandResult<UnbindCheckPojo, UnbindCheckPojoResult> result);
 }

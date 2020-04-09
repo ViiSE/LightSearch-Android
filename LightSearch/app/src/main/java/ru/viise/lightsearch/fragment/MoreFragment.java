@@ -41,7 +41,6 @@ import ru.viise.lightsearch.pref.PreferencesManagerType;
 public class MoreFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private RecyclerViewAdapterMore adapter;
 
     @Nullable
     @Override
@@ -72,7 +71,7 @@ public class MoreFragment extends Fragment {
     }
 
     private void initRecyclerView() {
-        adapter = new RecyclerViewAdapterMore(this.getContext(), this.getActivity());
+        RecyclerViewAdapterMore adapter = new RecyclerViewAdapterMore(this.getContext(), this.getActivity());
         recyclerView.setAdapter(adapter);
     }
 }

@@ -26,7 +26,7 @@ public class DialogSettingsContainerInit {
     public static DialogSettingsContainer dialogSettingsContainer(
             View dialogSettingsView, EditText editText, TextView textViewTitle, TextView textViewResult,
             Button buttonOK, Button buttonCancel) {
-        return new DialogSettingsContainerDefaultImpl(dialogSettingsView, editText, textViewTitle,
+        return new DialogSettingsContainerImpl(dialogSettingsView, editText, textViewTitle,
                 textViewResult, buttonOK, buttonCancel);
     }
 }

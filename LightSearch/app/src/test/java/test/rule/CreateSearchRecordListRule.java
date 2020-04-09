@@ -23,7 +23,6 @@ import org.junit.runners.model.Statement;
 import java.util.List;
 
 import ru.viise.lightsearch.data.SearchRecord;
-import ru.viise.lightsearch.data.SearchRecordInit;
 import ru.viise.lightsearch.data.SubdivisionList;
 
 public class CreateSearchRecordListRule implements TestRule {
