@@ -45,3 +45,4 @@ LightSearch Android - Мобильное клиентское приложени
 - [AppUpdater](https://github.com/javiersantos/AppUpdater)
 - [JUnit 5](https://junit.org/junit5/)
 - [Mockito](https://github.com/mockito/mockito)
+- [CounterFab](https://github.com/andremion/CounterFab)
