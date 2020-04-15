@@ -18,8 +18,9 @@ package ru.viise.lightsearch.data;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
+
+import androidx.annotation.NonNull;
 
 public class AlertDialogCreatorDTOImpl implements AlertDialogCreatorDTO {
 

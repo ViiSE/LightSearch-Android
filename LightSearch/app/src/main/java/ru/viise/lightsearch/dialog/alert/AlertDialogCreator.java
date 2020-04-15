@@ -16,7 +16,7 @@
 
 package ru.viise.lightsearch.dialog.alert;
 
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 
 public interface AlertDialogCreator {
     AlertDialog create();

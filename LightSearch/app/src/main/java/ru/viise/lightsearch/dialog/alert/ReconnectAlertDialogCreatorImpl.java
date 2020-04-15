@@ -21,15 +21,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+
 import java.lang.ref.WeakReference;
 
-import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.activity.ManagerActivityUI;
 import ru.viise.lightsearch.cmd.network.NetworkService;

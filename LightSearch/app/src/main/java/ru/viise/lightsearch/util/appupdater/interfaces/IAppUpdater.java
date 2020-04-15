@@ -16,7 +16,7 @@
 
 package ru.viise.lightsearch.util.appupdater.interfaces;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import ru.viise.lightsearch.util.appupdater.AppUpdater;
 import ru.viise.lightsearch.util.appupdater.enums.AppUpdaterError;

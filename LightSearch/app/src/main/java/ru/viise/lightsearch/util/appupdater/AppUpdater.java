@@ -17,8 +17,9 @@
 package ru.viise.lightsearch.util.appupdater;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import ru.viise.lightsearch.dialog.alert.UpdateAlertDialogCreatorImpl;
 import ru.viise.lightsearch.util.appupdater.enums.AppUpdaterError;

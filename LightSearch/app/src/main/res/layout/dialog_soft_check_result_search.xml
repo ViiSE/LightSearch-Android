@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
-    tools:activity="ru.viise.lightsearch.fragment.ResultSearchDialogFragment">
+    tools:activity="ru.viise.lightsearch.fragment.ResultSearchDialogFragment"
+    android:clipToPadding="false">
 
     <TextView
         android:layout_width="match_parent"

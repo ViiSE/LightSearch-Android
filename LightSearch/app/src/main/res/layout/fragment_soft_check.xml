@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
@@ -10,14 +10,14 @@
     tools:activity="ru.viise.lightsearch.fragment.SoftCheckFragment"
     android:background="@color/background">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewSoftCheck"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingTop="90dp"
         android:paddingBottom="90dp"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutSoftCheckPanel"/>
 
     <LinearLayout
@@ -86,4 +86,4 @@
         app:srcCompat="@drawable/ic_cart"
         android:layout_gravity="end|bottom">
     </com.andremion.counterfab.CounterFab>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -18,15 +18,16 @@ package ru.viise.lightsearch.fragment;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -225,7 +226,7 @@ public class SoftCheckContainerFragment extends Fragment implements ISoftCheckCo
         ImageButton buttonCancel = dialogView.findViewById(R.id.imageButtonCancel);
         ListView listView = dialogView.findViewById(R.id.listViewSoftCheckResult);
         listView.setAdapter(new ResultSearchSoftCheckArrayAdapter(this.getActivity(), R.id.cardViewRS, records));
-        android.support.v7.app.AlertDialog dialogResult = new android.support.v7.app.AlertDialog
+        androidx.appcompat.app.AlertDialog dialogResult = new androidx.appcompat.app.AlertDialog
                 .Builder(this.getActivity(), R.style.FSDialogTheme)
                 .setView(dialogView)
                 .create();

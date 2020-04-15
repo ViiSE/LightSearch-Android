@@ -9,7 +9,7 @@
     android:id="@+id/fragment_container"
     android:background="@color/background">
 
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/TabLayoutBindCon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,11 +24,11 @@
         app:tabIndicatorHeight="3dp"
         />
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/ViewPagerBindCon"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </android.support.v4.view.ViewPager>
+    </androidx.viewpager.widget.ViewPager>
 
 </LinearLayout>

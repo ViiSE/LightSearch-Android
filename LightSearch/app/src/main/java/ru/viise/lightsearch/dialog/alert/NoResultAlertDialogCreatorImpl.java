@@ -17,7 +17,8 @@
 package ru.viise.lightsearch.dialog.alert;
 
 import android.app.Activity;
-import android.support.v7.app.AlertDialog;
+
+import androidx.appcompat.app.AlertDialog;
 
 import ru.viise.lightsearch.R;
 

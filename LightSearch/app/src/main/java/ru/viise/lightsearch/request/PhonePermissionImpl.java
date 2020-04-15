@@ -18,7 +18,8 @@ package ru.viise.lightsearch.request;
 
 import android.Manifest;
 import android.app.Activity;
-import android.support.v4.app.ActivityCompat;
+
+import androidx.core.app.ActivityCompat;
 
 import ru.viise.lightsearch.dialog.alert.RequestPhonePermissionAlertDialogCreator;
 import ru.viise.lightsearch.dialog.alert.RequestPhonePermissionAlertDialogCreatorImpl;

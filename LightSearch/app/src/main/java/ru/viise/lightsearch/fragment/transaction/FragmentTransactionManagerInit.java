@@ -16,7 +16,7 @@
 
 package ru.viise.lightsearch.fragment.transaction;
 
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 
 public class FragmentTransactionManagerInit {
 

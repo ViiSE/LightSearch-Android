@@ -16,11 +16,12 @@
 
 package ru.viise.lightsearch.fragment.util;
 
-import android.support.v7.widget.CardView;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
 
 import ru.viise.lightsearch.data.Subdivision;
 

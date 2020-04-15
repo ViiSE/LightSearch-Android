@@ -18,8 +18,9 @@ package ru.viise.lightsearch.dialog.alert;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.cmd.network.task.NetworkAsyncTask;

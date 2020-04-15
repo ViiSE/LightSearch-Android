@@ -18,7 +18,8 @@ package ru.viise.lightsearch.dialog.alert;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AlertDialog;
+
+import androidx.appcompat.app.AlertDialog;
 
 import java.util.Objects;
 

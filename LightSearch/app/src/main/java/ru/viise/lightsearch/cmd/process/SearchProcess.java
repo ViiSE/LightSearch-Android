@@ -60,6 +60,14 @@ public class SearchProcess implements Process<SearchPojo, SearchPojoResult> {
                         "}"
                         : response.errorBody().string();
                 ErrorPojo ePojo = new Gson().fromJson(json, ErrorPojo.class);
+                if(ePojo == null) {
+                    ePojo = new Gson().fromJson(
+                            "{" +
+                                    "\"message\":\"Неизвестная ошибка. Попробуйте выполнить запрос позже.\"," +
+                                    "\"code\":\"502\"" +
+                                    "}",
+                            ErrorPojo.class);
+                }
 
                 System.out.println(response.code());
 

@@ -16,7 +16,7 @@
 
 package ru.viise.lightsearch.fragment.snackbar;
 
-import android.support.design.widget.Snackbar;
+import com.google.android.material.snackbar.Snackbar;
 
 public interface SnackbarSoftCheckCreator {
     Snackbar createSnackbar();

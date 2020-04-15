@@ -1,7 +1,8 @@
 package ru.viise.lightsearch.fragment.pager;
 
-import android.support.v4.view.ViewPager;
 import android.view.View;
+
+import androidx.viewpager.widget.ViewPager;
 
 public class ZoomOutPageTransformer implements ViewPager.PageTransformer {
     private static final float MIN_SCALE = 0.85f;

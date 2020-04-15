@@ -22,10 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +30,12 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -304,7 +306,7 @@ public class SearchFragment extends Fragment implements ISearchFragment, Network
                 if (records.size() == 1) {
                     OneResultAlertDialogCreator oneResADCr =
                             new OneResultAlertDialogCreatorImpl(this.getActivity(), records.get(0));
-                    android.support.v7.app.AlertDialog oneResAD = oneResADCr.create();
+                    androidx.appcompat.app.AlertDialog oneResAD = oneResADCr.create();
                     oneResAD.setCanceledOnTouchOutside(false);
                     oneResAD.show();
                 } else {

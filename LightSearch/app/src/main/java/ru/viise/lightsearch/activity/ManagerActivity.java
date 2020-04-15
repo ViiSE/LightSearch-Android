@@ -24,15 +24,16 @@ import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -136,6 +137,8 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if(scanningResult.getContents() != null) {
             String scanContent = scanningResult.getContents();
@@ -268,7 +271,7 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
 
         private final WeakReference<PreferencesManager> prefManager;
 
-        public CheckAuthAsyncTask(WeakReference<PreferencesManager> prefManager) {
+        CheckAuthAsyncTask(WeakReference<PreferencesManager> prefManager) {
             this.prefManager = prefManager;
         }
 

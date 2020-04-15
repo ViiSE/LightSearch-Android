@@ -18,7 +18,8 @@ package ru.viise.lightsearch.dialog.alert;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.support.v7.app.AlertDialog;
+
+import androidx.appcompat.app.AlertDialog;
 
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.data.AuthorizationPreferenceEnum;

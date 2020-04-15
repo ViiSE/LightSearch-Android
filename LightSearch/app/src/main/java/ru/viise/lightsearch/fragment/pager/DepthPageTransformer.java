@@ -1,7 +1,8 @@
 package ru.viise.lightsearch.fragment.pager;
 
-import android.support.v4.view.ViewPager;
 import android.view.View;
+
+import androidx.viewpager.widget.ViewPager;
 
 public class DepthPageTransformer implements ViewPager.PageTransformer {
 

@@ -17,9 +17,10 @@
 package ru.viise.lightsearch.dialog.alert;
 
 import android.app.Activity;
-import android.support.v4.text.HtmlCompat;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.text.HtmlCompat;
 
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.data.CartRecord;

@@ -17,7 +17,8 @@
 package ru.viise.lightsearch.dialog.spots;
 
 import android.app.Activity;
-import android.support.annotation.StringRes;
+
+import androidx.annotation.StringRes;
 
 public class SpotsDialogCreatorInit {
 
