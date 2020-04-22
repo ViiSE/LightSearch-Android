@@ -32,5 +32,8 @@ public class BindCheckCommandSimple implements Command<BindCheckPojo> {
         return ClientCommands.BIND_CHECK;
     }
 
-
+    @Override
+    public void updateToken(String token) {
+        //nothing
+    }
 }

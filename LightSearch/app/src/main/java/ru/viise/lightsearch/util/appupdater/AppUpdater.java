@@ -77,7 +77,7 @@ public class AppUpdater implements IAppUpdater {
 
             @Override
             public void onFailed(AppUpdaterError error) {
-                    throw new IllegalArgumentException("JSON file is not valid!");
+                    //ignore
             }
         });
 

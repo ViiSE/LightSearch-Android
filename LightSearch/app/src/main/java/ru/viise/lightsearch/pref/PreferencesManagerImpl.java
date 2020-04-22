@@ -21,21 +21,27 @@ import android.content.SharedPreferences;
 public class PreferencesManagerImpl implements PreferencesManager {
 
     private final UsernamePreferencesManager usernamePrefManager;
-    private final HostPreferencesManager hostPrefManager;
-    private final PortPreferencesManager portPrefManager;
+    private final HostPreferencesManager hostServerPrefManager;
+    private final PortPreferencesManager portServerPrefManager;
+    private final HostPreferencesManager hostUpdaterPrefManager;
+    private final PortPreferencesManager portUpdaterPrefManager;
     private final UserIdentifierPreferencesManager userIdentManager;
     private final PasswordPreferencesManager passPrefManager;
     private final CardCodePreferencesManager cardCodeManager;
     private final TokenPreferencesManager tokenPrefManager;
+    private final SuperuserPreferencesManager superuserPrefManager;
 
     public PreferencesManagerImpl(SharedPreferences sPref) {
-        usernamePrefManager = UsernamePreferencesManagerInit.usernamePreferencesManager(sPref);
-        portPrefManager     = PortReferencesManagerInit.portPreferencesManager(sPref);
-        hostPrefManager     = HostPreferencesManagerInit.hostPreferencesManager(sPref);
-        userIdentManager    = UserIdentifierPreferencesManagerInit.userIdentifierPreferencesManager(sPref);
-        passPrefManager     = PasswordPreferencesManagerInit.passwordPreferencesManager(sPref);
-        cardCodeManager     = CardCodePreferencesManagerInit.cardCodePreferencesManager(sPref);
-        tokenPrefManager    = new TokenPreferencesManagerDefaultImpl(sPref);
+        usernamePrefManager    = UsernamePreferencesManagerInit.usernamePreferencesManager(sPref);
+        portServerPrefManager  = PortReferencesManagerInit.portPreferencesManager(sPref);
+        hostServerPrefManager  = HostPreferencesManagerInit.hostPreferencesManager(sPref);
+        hostUpdaterPrefManager = new HostPreferencesManagerUpdaterImpl(sPref);
+        portUpdaterPrefManager = new PortReferencesManagerUpdaterImpl(sPref);
+        userIdentManager       = UserIdentifierPreferencesManagerInit.userIdentifierPreferencesManager(sPref);
+        passPrefManager        = PasswordPreferencesManagerInit.passwordPreferencesManager(sPref);
+        cardCodeManager        = CardCodePreferencesManagerInit.cardCodePreferencesManager(sPref);
+        tokenPrefManager       = new TokenPreferencesManagerDefaultImpl(sPref);
+        superuserPrefManager   = new SuperuserPreferencesManagerImpl(sPref);
     }
 
     @Override
@@ -43,10 +49,14 @@ public class PreferencesManagerImpl implements PreferencesManager {
         switch (type) {
             case USERNAME_MANAGER:
                 return usernamePrefManager.loadUsername();
-            case HOST_MANAGER:
-                return hostPrefManager.loadHost();
-            case PORT_MANAGER:
-                return portPrefManager.loadPort();
+            case HOST_SERVER_MANAGER:
+                return hostServerPrefManager.loadHost();
+            case PORT_SERVER_MANAGER:
+                return portServerPrefManager.loadPort();
+            case HOST_UPDATER_MANAGER:
+                return hostUpdaterPrefManager.loadHost();
+            case PORT_UPDATER_MANAGER:
+                return portUpdaterPrefManager.loadPort();
             case USER_IDENT_MANAGER:
                 return userIdentManager.loadUserIdentifier();
             case PASS_MANAGER:
@@ -55,6 +65,8 @@ public class PreferencesManagerImpl implements PreferencesManager {
                 return cardCodeManager.loadCardCode();
             case TOKEN_MANAGER:
                 return tokenPrefManager.loadToken();
+            case SUPERUSER:
+                return superuserPrefManager.loadPassHash();
             default:
                 return null;
         }
@@ -66,11 +78,17 @@ public class PreferencesManagerImpl implements PreferencesManager {
             case USERNAME_MANAGER:
                 usernamePrefManager.saveUsername(value);
                 break;
-            case HOST_MANAGER:
-                hostPrefManager.saveHost(value);
+            case HOST_SERVER_MANAGER:
+                hostServerPrefManager.saveHost(value);
                 break;
-            case PORT_MANAGER:
-                portPrefManager.savePort(value);
+            case PORT_SERVER_MANAGER:
+                portServerPrefManager.savePort(value);
+                break;
+            case HOST_UPDATER_MANAGER:
+                hostUpdaterPrefManager.saveHost(value);
+                break;
+            case PORT_UPDATER_MANAGER:
+                portUpdaterPrefManager.savePort(value);
                 break;
             case USER_IDENT_MANAGER:
                 userIdentManager.saveUserIdentifier(value);
@@ -83,6 +101,9 @@ public class PreferencesManagerImpl implements PreferencesManager {
                 break;
             case TOKEN_MANAGER:
                 tokenPrefManager.saveToken(value);
+                break;
+            case SUPERUSER:
+                superuserPrefManager.savePassHash(value);
                 break;
         }
     }

@@ -20,14 +20,14 @@ import android.content.SharedPreferences;
 
 import ru.viise.lightsearch.data.AuthorizationPreferenceEnum;
 
-public class PortReferencesManagerDefaultImpl implements PortPreferencesManager {
+public class PortReferencesManagerUpdaterImpl implements PortPreferencesManager {
 
-    private final String PORT       = AuthorizationPreferenceEnum.PORT.stringValue();
-    private final String PORT_VALUE = "50000";
+    private final String PORT       = AuthorizationPreferenceEnum.PORT_UPDATER.stringValue();
+    private final String PORT_VALUE = "50001";
 
     private final SharedPreferences sPref;
 
-    public PortReferencesManagerDefaultImpl(SharedPreferences sPref) {
+    public PortReferencesManagerUpdaterImpl(SharedPreferences sPref) {
         this.sPref = sPref;
     }
 

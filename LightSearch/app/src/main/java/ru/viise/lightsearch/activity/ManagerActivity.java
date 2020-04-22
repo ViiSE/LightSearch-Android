@@ -23,7 +23,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.view.MotionEvent;
 import android.view.View;
@@ -58,6 +60,7 @@ import ru.viise.lightsearch.exception.JWTException;
 import ru.viise.lightsearch.find.ImplFinder;
 import ru.viise.lightsearch.find.ImplFinderFragmentFromActivityDefaultImpl;
 import ru.viise.lightsearch.fragment.BindingContainerFragment;
+import ru.viise.lightsearch.fragment.DocsFragment;
 import ru.viise.lightsearch.fragment.IBindingContainerFragment;
 import ru.viise.lightsearch.fragment.IContainerFragment;
 import ru.viise.lightsearch.fragment.ISoftCheckContainerFragment;
@@ -86,27 +89,33 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        if(ContextCompat.checkSelfPermission(ManagerActivity.this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED)
-            IMEI = tm.getDeviceId();
-        else
-            reqPhonePermission();
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            IMEI = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        } else {
+            if (ContextCompat.checkSelfPermission(ManagerActivity.this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED)
+                IMEI = tm.getDeviceId();
+            else
+                reqPhonePermission();
+        }
 
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         }, 1);
 
         SharedPreferences sPref = this.getSharedPreferences("pref", Context.MODE_PRIVATE);
-
         PreferencesManager prefManager = PreferencesManagerInit.preferencesManager(sPref);
+        NetworkService.setBaseUrl(
+                prefManager.load(PreferencesManagerType.HOST_SERVER_MANAGER),
+                prefManager.load(PreferencesManagerType.PORT_SERVER_MANAGER));
+
         JWTClient jwtClient = new JWTClientWithPrefManager(prefManager);
         try {
             jwtClient.check();
-            NetworkService.setBaseUrl(
-                    prefManager.load(PreferencesManagerType.HOST_MANAGER),
-                    prefManager.load(PreferencesManagerType.PORT_MANAGER));
             boolean isDone = false;
             try {
                 isDone = new CheckAuthAsyncTask(new WeakReference<>(prefManager)).execute().get();
+                NetworkService.setTimeout(30);
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
@@ -120,7 +129,7 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
             doAuthorizationFragmentTransaction(false);
         }
 
-        UpdateChecker updateChecker = UpdateCheckerInit.updateChecker(ManagerActivity.this);
+        UpdateChecker updateChecker = UpdateCheckerInit.updateChecker(ManagerActivity.this, prefManager);
         updateChecker.checkUpdate();
     }
 
@@ -219,6 +228,17 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         transaction.commit();
     }
 
+    public void doDocsFragmentTransaction() {
+        DocsFragment df = new DocsFragment();
+        FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter_from_down, R.anim.exit_to_up, R.anim.enter_from_up, R.anim.exit_to_down);
+        transaction.replace(R.id.activity_manager, df, DocsFragment.TAG);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.addToBackStack(DocsFragment.TAG);
+        this.setTitle(this.getString(R.string.fragment_docs));
+        transaction.commit();
+    }
+
     public void doBindingContainerFragmentTransaction() {
         BindingContainerFragment bcf = new BindingContainerFragment();
         FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
@@ -278,6 +298,7 @@ public class ManagerActivity extends AppCompatActivity implements ManagerActivit
         @SuppressWarnings("unchecked")
         @Override
         protected Boolean doInBackground(Void... voids) {
+            NetworkService.setTimeout(1);
             Processes processes = new ProcessesImpl(NetworkService.getInstance());
             Command<CheckAuthPojo> command = new CheckAuthCommandWithToken(
                     new CheckAuthCommandSimple(),

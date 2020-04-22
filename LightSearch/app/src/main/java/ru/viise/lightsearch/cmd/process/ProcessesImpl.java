@@ -28,26 +28,33 @@ public class ProcessesImpl implements Processes {
     private static final Map<String, Process<? extends SendForm, ? extends SendForm>> processes = new HashMap<>();
 
     public ProcessesImpl(NetworkService networkService) {
-        if(processes.isEmpty()) {
-            processes.put(ClientCommands.LOGIN, new AuthorizationProcess(networkService));
-            processes.put(ClientCommands.SEARCH, new SearchProcess(networkService));
-            processes.put(ClientCommands.OPEN_SOFT_CHECK, new OpenSoftCheckProcess(networkService));
-            processes.put(ClientCommands.CANCEL_SOFT_CHECK, new CancelSoftCheckProcess(networkService));
-            processes.put(ClientCommands.CLOSE_SOFT_CHECK, new CloseSoftCheckProcess(networkService));
-            processes.put(ClientCommands.CONFIRM_SOFT_CHECK_PRODUCTS, new ConfirmSoftCheckProductsCommandProcess(networkService));
-            processes.put(ClientCommands.BIND, new BindProcess(networkService));
-            processes.put(ClientCommands.BIND_CHECK, new BindCheckProcess(networkService));
-            processes.put(ClientCommands.UNBIND, new UnbindProcess(networkService));
-            processes.put(ClientCommands.UNBIND_CHECK, new UnbindCheckProcess(networkService));
-            processes.put(ClientCommands.SEARCH_SOFT_CHECK, new SearchSoftCheckProcess(networkService));
-            processes.put(ClientCommands.SKLAD_LIST, new SkladListProcess(networkService));
-            processes.put(ClientCommands.TK_LIST, new TKListProcess(networkService));
-            processes.put(ClientCommands.CHECK_AUTH, new CheckAuthProcess(networkService));
+        if(NetworkService.isChange()) {
+            fillProcess(networkService);
+            NetworkService.setChange(false);
+        } else if(processes.isEmpty()) {
+            fillProcess(networkService);
         }
     }
 
     @Override
     public Process<? extends SendForm, ? extends SendForm> process(String name) {
         return processes.get(name);
+    }
+
+    private void fillProcess(NetworkService networkService) {
+        processes.put(ClientCommands.LOGIN, new AuthorizationProcess(networkService));
+        processes.put(ClientCommands.SEARCH, new SearchProcess(networkService));
+        processes.put(ClientCommands.OPEN_SOFT_CHECK, new OpenSoftCheckProcess(networkService));
+        processes.put(ClientCommands.CANCEL_SOFT_CHECK, new CancelSoftCheckProcess(networkService));
+        processes.put(ClientCommands.CLOSE_SOFT_CHECK, new CloseSoftCheckProcess(networkService));
+        processes.put(ClientCommands.CONFIRM_SOFT_CHECK_PRODUCTS, new ConfirmSoftCheckProductsCommandProcess(networkService));
+        processes.put(ClientCommands.BIND, new BindProcess(networkService));
+        processes.put(ClientCommands.BIND_CHECK, new BindCheckProcess(networkService));
+        processes.put(ClientCommands.UNBIND, new UnbindProcess(networkService));
+        processes.put(ClientCommands.UNBIND_CHECK, new UnbindCheckProcess(networkService));
+        processes.put(ClientCommands.SEARCH_SOFT_CHECK, new SearchSoftCheckProcess(networkService));
+        processes.put(ClientCommands.SKLAD_LIST, new SkladListProcess(networkService));
+        processes.put(ClientCommands.TK_LIST, new TKListProcess(networkService));
+        processes.put(ClientCommands.CHECK_AUTH, new CheckAuthProcess(networkService));
     }
 }

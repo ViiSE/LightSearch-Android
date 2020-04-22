@@ -30,4 +30,9 @@ public class TKListCommandSimple implements Command<TKListPojo> {
     public String name() {
         return ClientCommands.TK_LIST;
     }
+
+    @Override
+    public void updateToken(String token) {
+        //nothing
+    }
 }

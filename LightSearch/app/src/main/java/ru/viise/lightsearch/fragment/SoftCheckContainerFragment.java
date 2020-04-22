@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -44,7 +45,6 @@ import ru.viise.lightsearch.data.entity.CommandResult;
 import ru.viise.lightsearch.data.pojo.CancelSoftCheckPojo;
 import ru.viise.lightsearch.data.pojo.CancelSoftCheckPojoResult;
 import ru.viise.lightsearch.data.pojo.SendForm;
-import ru.viise.lightsearch.dialog.alert.AlertDialogUtil;
 import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreator;
 import ru.viise.lightsearch.dialog.alert.CancelSoftCheckAlertDialogCreatorFragmentImpl;
 import ru.viise.lightsearch.dialog.alert.ErrorAlertDialogCreatorImpl;
@@ -230,13 +230,14 @@ public class SoftCheckContainerFragment extends Fragment implements ISoftCheckCo
                 .Builder(this.getActivity(), R.style.FSDialogTheme)
                 .setView(dialogView)
                 .create();
+        dialogResult.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT);
         listView.setOnItemClickListener((adapterView, v, position, id) -> {
             addSoftCheckRecord(records.get(position));
             dialogResult.dismiss();
         });
 
         buttonCancel.setOnClickListener(view -> dialogResult.dismiss());
-        AlertDialogUtil.setTransparentBackground(dialogResult);
         dialogResult.show();
     }
 

@@ -5,8 +5,10 @@
     <string name="username_label">Имя пользователя:</string>
     <string name="password_label">Пароль:</string>
     <string name="search_label">Поиск:</string>
-    <string name="host_label">Хост сервера:</string>
-    <string name="port_label">Порт сервера:</string>
+    <string name="server_host_label">Хост LightSearch Server:</string>
+    <string name="server_port_label">Порт LightSearch Server:</string>
+    <string name="updater_host_label">Хост LightSearch Updater:</string>
+    <string name="updater_port_label">Порт LightSearch Updater:</string>
     <string name="openSC_label">Откройте мягкий чек, считав код карточки при помощи сканера,
         или при помощи камеры смартфона</string>
     <string name="or_label">или</string>
@@ -18,13 +20,16 @@
     <string name="current_amount_cart_unit">ед.</string>
     <string name="current_price_unit">руб.</string>
     <string name="default_ip">127.0.0.1</string>
-    <string name="default_port">50000</string>
+    <string name="default_server_port">50000</string>
+    <string name="default_updater_port">50001</string>
     <string name="bind_barcode">Привязка товара №</string>
     <string name="tasks_welcome">Выберите задачу из списка</string>
     <string name="about_identifier">Идентификатор</string>
     <string name="about_user">О пользователе</string>
     <string name="soft_check_result_search">Выберите товар из списка</string>
     <string name="need_auth">Для продолжения необходимо авторизоваться</string>
+    <string name="settings">Настройки</string>
+    <string name="docs_load_failed">Не удалось загрузить документацию :(\nПопробуйте позже.</string>
     <!-- ======== -->
 
     <!-- CheckBox -->
@@ -56,6 +61,7 @@
     <string name="button_bind">Привязать</string>
     <string name="button_sf">Мягкий чек</string>
     <string name="button_bu">Привязка товара</string>
+    <string name="button_save_settings">Сохранить настройки</string>
     <!-- ====== -->
 
     <!-- Spinner -->
@@ -116,6 +122,8 @@
     <string name="toast_barcode_not_enough_symbols">"Введите не менее двух символов!"</string>
     <string name="toast_empty_soft_check">"Мягкий чек пуст!"</string>
     <string name="toast_not_enough_auth_data">Заполните все поля, необходимые для регистрации!</string>
+    <string name="toast_not_enough_settings_data">Заполните все поля!</string>
+    <string name="toast_settings_is_saved">Настройки сохранены!</string>
     <!-- ===== -->
 
     <!-- Snackbar -->
@@ -137,6 +145,7 @@
     <string name="fragment_authorization">Авторизация</string>
     <string name="fragment_search">Поиск</string>
     <string name="fragment_soft_check">Мягкий чек</string>
+    <string name="fragment_docs">Документация</string>
     <string name="fragment_container">LightSearch</string>
     <string name="fragment_result_soft_check">Выберите товар</string>
     <string name="fragment_result_search">Результат</string>
@@ -158,7 +167,6 @@
     <!-- ========== -->
 
     <!-- App Updater -->
-    <string name="update_url">http://192.168.3.215:50001/update/info/update.json</string>
     <string name="download_title">LightSearch</string>
     <string name="download_description">Загрузка обновления…</string>
     <!-- =========== -->
@@ -170,9 +178,19 @@
 
     <string name="about_app">О приложении</string>
     <string name="about_LightSearch">LightSearch</string>
-    <string name="about_version">Версия 1.14</string>
-    <string name="about_code_version">Код версии 15</string>
+    <string name="about_version">Версия 1.15</string>
+    <string name="about_code_version">Код версии 16</string>
     <string name="about_license">Данный программный продукт распространяется под лицензией Apache v2.0.</string>
     <string name="search_result">Поиск:</string>
+
+    <!-- Toolbar -->
+    <string name="toolbar_auth">Авторизация</string>
+    <!-- =================== -->
+
+    <!-- Fragment More -->
+    <string name="fm_about_app">О приложении</string>
+    <string name="fm_doc">Документация</string>
+    <string name="fm_exit">Выйти</string>
+    <!-- ============= -->
 
 </resources>

@@ -30,4 +30,9 @@ public class BindCommandSimple implements Command<BindPojo> {
     public String name() {
         return ClientCommands.BIND;
     }
+
+    @Override
+    public void updateToken(String token) {
+        //nothing
+    }
 }

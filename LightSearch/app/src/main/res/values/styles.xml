@@ -26,19 +26,13 @@
         <item name="android:windowAnimationStyle">@style/Animation.AppCompat.Dialog</item>
     </style>
 
-    <style name="FSDialogTheme" parent="android:Theme.Dialog">
-<!--        <item name="windowFixedWidthMajor">80%</item>-->
-<!--        <item name="windowFixedWidthMinor">80%</item>-->
-<!--        <item name="android:layout_width">match_parent</item>-->
-<!--        <item name="android:layout_height">match_parent</item>-->
-        <!-- No backgrounds, titles or window float -->
-<!--        <item name="android:windowNoTitle">true</item>-->
-<!--        <item name="android:windowIsFloating">false</item>-->
-        <item name="android:windowBackground">@null</item>
-        <item name="android:windowNoTitle">true</item>
+    <style name="FSDialogTheme" parent="AppTheme">
+        <item name="android:windowBackground">@color/navBarColor</item>
         <item name="android:windowIsFloating">false</item>
-<!--        <item name="android:navigationBarColor">@color/navBarColor</item>-->
-<!--        <item name="android:windowLightNavigationBar">true</item>-->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="windowActionBar">true</item>
     </style>
 
 </resources>

@@ -38,6 +38,14 @@ public enum AuthorizationPreferenceEnum {
         @Override
         public String stringValue() { return "port"; }
     },
+    HOST_UPDATER {
+        @Override
+        public String stringValue() { return "hostU"; }
+    },
+    PORT_UPDATER {
+        @Override
+        public String stringValue() { return "portU"; }
+    },
     TOKEN {
         @Override
         public String stringValue() { return "token"; }

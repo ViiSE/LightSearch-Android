@@ -77,11 +77,11 @@ public class ReconnectAlertDialogCreatorImpl implements SuccessAlertDialogCreato
     @Override
     public AlertDialog create() {
         View dialogView = this.activity.getLayoutInflater().inflate(R.layout.dialog_reconnect, null);
-        CircularProgressButton buttonConnect = dialogView.findViewById(R.id.buttonDialogReconnect);
         EditText etUsername = dialogView.findViewById(R.id.etUsername);
         EditText etPassword = dialogView.findViewById(R.id.etPassword);
         EditText etUserIdent = dialogView.findViewById(R.id.etUserIdent);
         TextView tvAuthFailed = dialogView.findViewById(R.id.twAuthFailed);
+        CircularProgressButton buttonConnect = dialogView.findViewById(R.id.buttonDialogReconnect);
 
         AlertDialog dialog = new AlertDialog.Builder(activity).setView(dialogView).create();
         buttonConnect.setOnClickListener(viewOK -> {
@@ -191,6 +191,7 @@ public class ReconnectAlertDialogCreatorImpl implements SuccessAlertDialogCreato
                         new NetworkAsyncTask<>(
                                 fragmentCallback.get(),
                                 new SpotsDialogCreatorDmaxImpl(activity.get(), R.string.spots_dialog_query_exec).create());
+                command.get().updateToken(cmdRes.data().getToken());
                 networkAsyncTask.execute((Command) command.get());
             } else {
                 tvAuthFailed.get().setText(cmdRes.data().getMessage());

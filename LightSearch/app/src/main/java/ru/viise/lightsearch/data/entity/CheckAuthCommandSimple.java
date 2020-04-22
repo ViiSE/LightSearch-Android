@@ -31,4 +31,9 @@ public class CheckAuthCommandSimple implements Command<CheckAuthPojo> {
     public String name() {
         return ClientCommands.CHECK_AUTH;
     }
+
+    @Override
+    public void updateToken(String token) {
+        //nothing
+    }
 }

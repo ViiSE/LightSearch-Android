@@ -26,12 +26,18 @@ public class NetworkService {
 
     private Retrofit retrofit;
     private static NetworkService networkService;
-    private static String OLD_BASE_URL = "";
     private static String BASE_URL = "http://127.0.0.1:50000";
+    private static boolean isChange = false;
 
     public static void setBaseUrl(String host, String port) {
-        OLD_BASE_URL = BASE_URL;
         BASE_URL = "http://" + host + ":" + port;
+        networkService = new NetworkService(BASE_URL);
+        isChange = true;
+    }
+
+    public static void setTimeout(int timeout) {
+        networkService = new NetworkService(timeout);
+        isChange = true;
     }
 
     private NetworkService() {
@@ -42,13 +48,25 @@ public class NetworkService {
                 .build();
     }
 
+    private NetworkService(String baseUrl) {
+        retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(provideOkHttpClient())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+
+    private NetworkService(int timeout) {
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(provideOkHttpClient(timeout))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+
     public static NetworkService getInstance() {
         if(networkService == null)
             networkService = new NetworkService();
-        else if(!OLD_BASE_URL.isEmpty()) {
-            networkService = new NetworkService();
-            OLD_BASE_URL = "";
-        }
         return networkService;
     }
 
@@ -56,9 +74,25 @@ public class NetworkService {
         return retrofit.create(LightSearchAPI.class);
     }
 
+    public static boolean isChange() {
+        return isChange;
+    }
+
+    public static void setChange(boolean isChange) {
+        NetworkService.isChange = isChange;
+    }
+
     private OkHttpClient provideOkHttpClient() {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
         okHttpClientBuilder.connectTimeout(30, TimeUnit.SECONDS);
+        okHttpClientBuilder.readTimeout(30, TimeUnit.SECONDS);
+        okHttpClientBuilder.writeTimeout(30, TimeUnit.SECONDS);
+        return okHttpClientBuilder.build();
+    }
+
+    private OkHttpClient provideOkHttpClient(int timeout) {
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
+        okHttpClientBuilder.connectTimeout(timeout, TimeUnit.SECONDS);
         okHttpClientBuilder.readTimeout(30, TimeUnit.SECONDS);
         okHttpClientBuilder.writeTimeout(30, TimeUnit.SECONDS);
         return okHttpClientBuilder.build();

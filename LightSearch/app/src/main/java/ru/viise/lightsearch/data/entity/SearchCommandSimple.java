@@ -30,4 +30,9 @@ public class SearchCommandSimple implements Command<SearchPojo> {
     public String name() {
         return ClientCommands.SEARCH;
     }
+
+    @Override
+    public void updateToken(String token) {
+        // nothing
+    }
 }

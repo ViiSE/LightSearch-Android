@@ -30,4 +30,9 @@ public class UnbindCommandSimple implements Command<UnbindPojo> {
     public String name() {
         return ClientCommands.UNBIND;
     }
+
+    @Override
+    public void updateToken(String token) {
+        //nothing
+    }
 }

@@ -78,7 +78,7 @@ public class CardViewRowResultFillerSubdivisionImpl implements ViewFiller {
         tvSubdivAmountRS.setId(View.generateViewId());
         tvSubdivAmountRS.setLayoutParams(tvSubdivRSAmountLayout);
         tvSubdivAmountRS.setTextSize(15);
-        tvSubdivAmountRS.setGravity(Gravity.RIGHT);
+        tvSubdivAmountRS.setGravity(Gravity.END);
         tvSubdivAmountRS.setTextColor(color);
         tvSubdivAmountRS.setText(String.format("%s %s", subdivision.productAmount(), amountUnit));
 

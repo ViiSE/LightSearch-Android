@@ -20,8 +20,7 @@
         app:tabIndicatorColor="@color/tabIndicatorColor"
         app:tabSelectedTextColor="@color/tabTextSelectedColor"
         android:background="@color/tabColor"
-        app:tabIndicatorHeight="5dp"
-        />
+        app:tabIndicatorHeight="5dp"/>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/ViewPagerCon"

@@ -21,7 +21,7 @@ import ru.viise.lightsearch.data.pojo.BindPojo;
 public class BindCommandWithToken implements Command<BindPojo> {
 
     private final Command<BindPojo> command;
-    private final String token;
+    private String token;
 
     public BindCommandWithToken(Command<BindPojo> command, String token) {
         this.command = command;
@@ -39,5 +39,10 @@ public class BindCommandWithToken implements Command<BindPojo> {
     @Override
     public String name() {
         return command.name();
+    }
+
+    @Override
+    public void updateToken(String token) {
+        this.token = token;
     }
 }

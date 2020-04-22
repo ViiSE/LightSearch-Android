@@ -31,4 +31,9 @@ public class CloseSoftCheckCommandSimple implements Command<CloseSoftCheckPojo> 
     public String name() {
         return ClientCommands.CLOSE_SOFT_CHECK;
     }
+
+    @Override
+    public void updateToken(String token) {
+        // nothing
+    }
 }

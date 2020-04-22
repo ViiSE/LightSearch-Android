@@ -31,4 +31,9 @@ public class UnbindCheckCommandSimple implements Command<UnbindCheckPojo> {
         return ClientCommands.UNBIND_CHECK;
     }
 
+    @Override
+    public void updateToken(String token) {
+        //nothing
+    }
+
 }

@@ -21,7 +21,7 @@ import ru.viise.lightsearch.data.pojo.SkladListPojo;
 public class SkladListCommandWithToken implements Command<SkladListPojo> {
 
     private final Command<SkladListPojo> command;
-    private final String token;
+    private String token;
 
     public SkladListCommandWithToken(Command<SkladListPojo> command, String token) {
         this.command = command;
@@ -38,5 +38,10 @@ public class SkladListCommandWithToken implements Command<SkladListPojo> {
     @Override
     public String name() {
         return command.name();
+    }
+
+    @Override
+    public void updateToken(String token) {
+        this.token = token;
     }
 }

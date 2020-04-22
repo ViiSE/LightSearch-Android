@@ -18,15 +18,18 @@ package ru.viise.lightsearch.util;
 
 import android.app.Activity;
 
-import ru.viise.lightsearch.R;
+import ru.viise.lightsearch.pref.PreferencesManager;
+import ru.viise.lightsearch.pref.PreferencesManagerType;
 import ru.viise.lightsearch.util.appupdater.AppUpdater;
 
 public class UpdateCheckerAppUpdaterImpl implements UpdateChecker {
 
     private final Activity activity;
+    private final PreferencesManager prefManager;
 
-    public UpdateCheckerAppUpdaterImpl(Activity activity) {
+    public UpdateCheckerAppUpdaterImpl(Activity activity, PreferencesManager prefManager) {
         this.activity = activity;
+        this.prefManager = prefManager;
     }
 
     @Override
@@ -34,8 +37,12 @@ public class UpdateCheckerAppUpdaterImpl implements UpdateChecker {
         ApkFileDeleter apkFileDeleter = ApkFileDeleterInit.apkFileDeleter();
         apkFileDeleter.tryToDeleteApkFile();
 
+        String URI = "http://" + prefManager.load(PreferencesManagerType.HOST_UPDATER_MANAGER) + ":"
+                + prefManager.load(PreferencesManagerType.PORT_UPDATER_MANAGER)
+                + "/update/info/update.json";
+
         new AppUpdater(activity)
-                .setUpdateJSON(activity.getString(R.string.update_url))
+                .setUpdateJSON(URI)
                 .start();
     }
 }

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
+    android:id="@+id/dialog_rec"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/dialog_bg"
-    android:clipToPadding="false">
+    android:clipToPadding="false"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textViewTitleDialogAbout"
+        android:id="@+id/tvTitleDialogAuth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="19dp"
@@ -26,16 +28,18 @@
         android:layout_marginTop="10dp"
         android:textSize="14sp"
         android:textColor="@color/colorDelete"
+        android:layout_gravity="center"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitleDialogAbout" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitleDialogAuth" />
 
     <TextView
         android:id="@+id/twNeedAuth"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
+        android:layout_gravity="center"
         android:text="@string/need_auth"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,7 +109,7 @@
         app:layout_constraintTop_toBottomOf="@+id/etPassword"
         android:importantForAutofill="no" />
 
-    <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
         android:id="@+id/buttonDialogReconnect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -113,6 +117,7 @@
         android:layout_marginBottom="15dp"
         android:background="@drawable/buttonshape_small"
         android:text="@string/buttonConnect_label"
+        android:layout_gravity="center"
         android:textColor="@color/buttonTextColor"
         android:textSize="14sp"
         app:spinning_bar_color="@android:color/white"
@@ -125,4 +130,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etUserIdent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

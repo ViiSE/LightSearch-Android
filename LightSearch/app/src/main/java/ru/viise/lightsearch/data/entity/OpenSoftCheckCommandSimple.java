@@ -31,4 +31,9 @@ public class OpenSoftCheckCommandSimple implements Command<OpenSoftCheckPojo> {
     public String name() {
         return ClientCommands.OPEN_SOFT_CHECK;
     }
+
+    @Override
+    public void updateToken(String token) {
+        // nothing
+    }
 }

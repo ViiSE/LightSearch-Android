@@ -21,7 +21,7 @@ import ru.viise.lightsearch.data.pojo.SearchSoftCheckPojo;
 public class SearchSoftCheckCommandWithToken implements Command<SearchSoftCheckPojo> {
 
     private final Command<SearchSoftCheckPojo> command;
-    private final String token;
+    private String token;
 
     public SearchSoftCheckCommandWithToken(Command<SearchSoftCheckPojo> command, String token) {
         this.command = command;
@@ -39,5 +39,10 @@ public class SearchSoftCheckCommandWithToken implements Command<SearchSoftCheckP
     @Override
     public String name() {
         return command.name();
+    }
+
+    @Override
+    public void updateToken(String token) {
+        this.token = token;
     }
 }

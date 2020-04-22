@@ -29,7 +29,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 
 import ru.viise.lightsearch.util.appupdater.objects.Update;
 
@@ -90,8 +91,11 @@ class ParserJSON {
     }
 
     private JSONObject readJsonFromUrl() throws IOException, JSONException {
-        try (InputStream is = this.jsonUrl.openStream()) {
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+        URLConnection uConn = jsonUrl.openConnection();
+        uConn.setConnectTimeout(2000);
+        uConn.setReadTimeout(2000);
+        try (InputStream is = uConn.getInputStream()) {
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             String jsonText = readAll(rd);
             return new JSONObject(jsonText);
         }

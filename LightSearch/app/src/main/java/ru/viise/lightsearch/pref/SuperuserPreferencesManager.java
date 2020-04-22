@@ -14,22 +14,9 @@
  * limitations under the License.
  */
 
-package ru.viise.lightsearch.data;
+package ru.viise.lightsearch.pref;
 
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import ru.viise.lightsearch.security.HashAlgorithm;
-
-public interface InputPasswordAlertDialogCreatorDTO {
-    AlertDialogCreatorDTO alertDialogCreatorDTO();
-    HashAlgorithm hashAlgorithms();
-    TextView twHost();
-    TextView twPort();
-    EditText etHost();
-    EditText etPort();
-    Button bChangePassword();
-    CheckBox cbSettings();
+public interface SuperuserPreferencesManager {
+    String loadPassHash();
+    void savePassHash(String passHash);
 }

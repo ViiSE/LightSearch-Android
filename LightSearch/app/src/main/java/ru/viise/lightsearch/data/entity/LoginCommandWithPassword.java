@@ -40,4 +40,9 @@ public class LoginCommandWithPassword implements Command<LoginPojo> {
     public String name() {
         return command.name();
     }
+
+    @Override
+    public void updateToken(String token) {
+        command.updateToken(token);
+    }
 }

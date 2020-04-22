@@ -30,4 +30,9 @@ public class SearchSoftCheckCommandSimple implements Command<SearchSoftCheckPojo
     public String name() {
         return ClientCommands.SEARCH_SOFT_CHECK;
     }
+
+    @Override
+    public void updateToken(String token) {
+        // nothing
+    }
 }

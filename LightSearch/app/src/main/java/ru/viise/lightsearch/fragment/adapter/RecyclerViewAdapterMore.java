@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.viise.lightsearch.R;
+import ru.viise.lightsearch.activity.ManagerActivity;
 import ru.viise.lightsearch.dialog.alert.AboutAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.alert.ExitToAuthorizationAlertDialogCreatorImpl;
 
@@ -43,8 +44,9 @@ public class RecyclerViewAdapterMore extends RecyclerView.Adapter<RecyclerViewAd
         this.context = context;
         this.activity = activity;
         this.data = new ArrayList<>();
-        data.add("О приложении");
-        data.add("Выйти");
+        data.add(activity.getString(R.string.fm_doc));
+        data.add(activity.getString(R.string.fm_about_app));
+        data.add(activity.getString(R.string.fm_exit));
     }
 
     class DefaultViewHolder extends RecyclerView.ViewHolder {
@@ -65,15 +67,20 @@ public class RecyclerViewAdapterMore extends RecyclerView.Adapter<RecyclerViewAd
 
     @Override
     public void onBindViewHolder(@NonNull DefaultViewHolder holder, int position) {
-        holder.tvMore.setText(data.get(position));
         if(position == 0) {
+            holder.itemView.setOnClickListener(view -> {
+                ManagerActivity managerActivity = (ManagerActivity) activity;
+                managerActivity.doDocsFragmentTransaction();
+            });
+        } else if(position == 1) {
             holder.itemView.setOnClickListener(view ->
                     new AboutAlertDialogCreatorImpl(activity).create().show());
-        } else if(position == 1) {
+        } else if(position == 2) {
             holder.tvMore.setTextColor(context.getColor(R.color.colorDelete));
             holder.itemView.setOnClickListener(view ->
                     new ExitToAuthorizationAlertDialogCreatorImpl(activity).create().show());
         }
+        holder.tvMore.setText(data.get(position));
     }
 
     @Override

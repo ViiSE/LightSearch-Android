@@ -30,4 +30,9 @@ public class SkladListCommandSimple implements Command<SkladListPojo> {
     public String name() {
         return ClientCommands.SKLAD_LIST;
     }
+
+    @Override
+    public void updateToken(String token) {
+
+    }
 }

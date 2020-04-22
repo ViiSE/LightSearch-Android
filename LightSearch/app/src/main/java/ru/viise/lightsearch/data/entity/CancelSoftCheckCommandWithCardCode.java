@@ -40,4 +40,9 @@ public class CancelSoftCheckCommandWithCardCode implements Command<CancelSoftChe
     public String name() {
         return command.name();
     }
+
+    @Override
+    public void updateToken(String token) {
+        command.updateToken(token);
+    }
 }

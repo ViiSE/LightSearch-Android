@@ -17,29 +17,31 @@
 package ru.viise.lightsearch.dialog.alert;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.data.AuthorizationPreferenceEnum;
-import ru.viise.lightsearch.data.InputPasswordAlertDialogCreatorDTO;
-
-import static android.view.View.VISIBLE;
+import ru.viise.lightsearch.pref.PreferencesManager;
+import ru.viise.lightsearch.pref.PreferencesManagerType;
+import ru.viise.lightsearch.security.HashAlgorithm;
 
 public class InputPasswordAlertDialogCreatorImpl implements InputPasswordAlertDialogCreator {
 
     private final String SUPERUSER  = AuthorizationPreferenceEnum.SUPERUSER.stringValue();
 
-    private final InputPasswordAlertDialogCreatorDTO creatorDTO;
     private final Activity activity;
-    private final SharedPreferences sPref;
+    private final PreferencesManager prefManager;
+    private final HashAlgorithm hashAlgorithm;
 
-    public InputPasswordAlertDialogCreatorImpl(InputPasswordAlertDialogCreatorDTO creatorDTO) {
-        this.creatorDTO = creatorDTO;
-        activity = this.creatorDTO.alertDialogCreatorDTO().rootActivity();
-        sPref = this.creatorDTO.alertDialogCreatorDTO().sharedPreferences();
+    public InputPasswordAlertDialogCreatorImpl(
+            Activity activity,
+            PreferencesManager prefManager,
+            HashAlgorithm hashAlgorithm) {
+        this.activity = activity;
+        this.prefManager = prefManager;
+        this.hashAlgorithm = hashAlgorithm;
     }
 
     @Override
@@ -55,18 +57,18 @@ public class InputPasswordAlertDialogCreatorImpl implements InputPasswordAlertDi
                 .create();
 
         dialogSettingsContainer.buttonOK().setOnClickListener(viewOK -> {
-            String password = sPref.getString(SUPERUSER, "");
-            if (creatorDTO.hashAlgorithms().digest(dialogSettingsContainer.editText().getText().toString()).equals(password)) {
-                creatorDTO.twHost().setVisibility(VISIBLE);
-                creatorDTO.twPort().setVisibility(VISIBLE);
-                creatorDTO.etHost().setVisibility(VISIBLE);
-                creatorDTO.etPort().setVisibility(VISIBLE);
-                creatorDTO.bChangePassword().setVisibility(VISIBLE);
+            String password = prefManager.load(PreferencesManagerType.SUPERUSER);
+            if (hashAlgorithm.digest(dialogSettingsContainer.editText().getText().toString()).equals(password)) {
                 dialogSettingsContainer.editText().setText("");
                 dialog.dismiss();
+
+                new AlertDialogSettingsCreatorImpl(activity, hashAlgorithm, prefManager)
+                        .create()
+                        .show();
+
             } else {
                 ErrorAlertDialogCreator errADCr =
-                        new ErrorPassAlertDialogCreatorImpl(activity, creatorDTO);
+                        new ErrorPassAlertDialogCreatorImpl(activity);
                 errADCr.create().show();
                 dialogSettingsContainer.editText().setText("");
                 dialog.dismiss();
@@ -74,7 +76,7 @@ public class InputPasswordAlertDialogCreatorImpl implements InputPasswordAlertDi
         });
 
         dialogSettingsContainer.buttonCancel().setOnClickListener(viewCancel -> {
-            creatorDTO.cbSettings().setChecked(false);
+            dialogSettingsContainer.editText().setText("");
             dialog.dismiss();
         });
 

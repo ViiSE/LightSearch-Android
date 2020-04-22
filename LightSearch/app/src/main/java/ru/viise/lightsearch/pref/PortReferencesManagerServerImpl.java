@@ -20,26 +20,26 @@ import android.content.SharedPreferences;
 
 import ru.viise.lightsearch.data.AuthorizationPreferenceEnum;
 
-public class HostPreferencesManagerDefaultImpl implements HostPreferencesManager {
+public class PortReferencesManagerServerImpl implements PortPreferencesManager {
 
-    private final String HOST = AuthorizationPreferenceEnum.HOST.stringValue();
-    private final String IP   = "127.0.0.1";
+    private final String PORT       = AuthorizationPreferenceEnum.PORT.stringValue();
+    private final String PORT_VALUE = "50000";
 
     private final SharedPreferences sPref;
 
-    public HostPreferencesManagerDefaultImpl(SharedPreferences sPref) {
+    public PortReferencesManagerServerImpl(SharedPreferences sPref) {
         this.sPref = sPref;
     }
 
     @Override
-    public String loadHost() {
-        return sPref.getString(HOST, IP);
+    public String loadPort() {
+        return sPref.getString(PORT, PORT_VALUE);
     }
 
     @Override
-    public void saveHost(String host) {
+    public void savePort(String port) {
         SharedPreferences.Editor ed = sPref.edit();
-        ed.putString(HOST, host);
+        ed.putString(PORT, port);
         ed.apply();
     }
 }

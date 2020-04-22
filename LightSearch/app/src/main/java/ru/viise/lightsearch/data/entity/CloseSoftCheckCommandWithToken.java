@@ -21,7 +21,7 @@ import ru.viise.lightsearch.data.pojo.CloseSoftCheckPojo;
 public class CloseSoftCheckCommandWithToken implements Command<CloseSoftCheckPojo> {
 
     private final Command<CloseSoftCheckPojo> command;
-    private final String token;
+    private String token;
 
     public CloseSoftCheckCommandWithToken(Command<CloseSoftCheckPojo> command, String token) {
         this.command = command;
@@ -39,5 +39,10 @@ public class CloseSoftCheckCommandWithToken implements Command<CloseSoftCheckPoj
     @Override
     public String name() {
         return command.name();
+    }
+
+    @Override
+    public void updateToken(String token) {
+        this.token = token;
     }
 }

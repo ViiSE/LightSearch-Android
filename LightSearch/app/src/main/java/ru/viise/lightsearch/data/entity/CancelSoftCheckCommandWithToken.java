@@ -21,7 +21,7 @@ import ru.viise.lightsearch.data.pojo.CancelSoftCheckPojo;
 public class CancelSoftCheckCommandWithToken implements Command<CancelSoftCheckPojo> {
 
     private final Command<CancelSoftCheckPojo> command;
-    private final String token;
+    private String token;
 
     public CancelSoftCheckCommandWithToken(
             Command<CancelSoftCheckPojo> command,
@@ -41,5 +41,10 @@ public class CancelSoftCheckCommandWithToken implements Command<CancelSoftCheckP
     @Override
     public String name() {
         return command.name();
+    }
+
+    @Override
+    public void updateToken(String token) {
+        this.token = token;
     }
 }

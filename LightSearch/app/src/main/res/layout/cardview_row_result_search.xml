@@ -3,7 +3,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardViewRS"
     android:layout_width="match_parent"
-    android:layout_height="90dp"
+    android:layout_height="92dp"
     android:layout_margin="10dp"
     android:layout_marginBottom="5dp"
     card_view:cardCornerRadius="8dp"
@@ -21,7 +21,7 @@
         <TextView
             android:id="@+id/textViewCardNameRS"
             android:layout_width="374dp"
-            android:layout_height="40dp"
+            android:layout_height="43dp"
             android:layout_marginStart="1dp"
             android:layout_marginTop="25dp"
             android:gravity="center"
@@ -61,7 +61,7 @@
             android:layout_width="250dp"
             android:layout_height="20dp"
             android:layout_marginStart="1dp"
-            android:layout_marginTop="65dp"
+            android:layout_marginTop="67dp"
             android:textSize="15sp" />
 
         <TextView
@@ -69,7 +69,7 @@
             android:layout_width="115dp"
             android:layout_height="20dp"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="65dp"
+            android:layout_marginTop="67dp"
             android:layout_toEndOf="@+id/textViewCardSubdivRS"
             android:gravity="end"
             android:textSize="15sp" />

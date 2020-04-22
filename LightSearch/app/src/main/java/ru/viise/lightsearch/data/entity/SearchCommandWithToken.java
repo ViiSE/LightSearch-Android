@@ -21,7 +21,7 @@ import ru.viise.lightsearch.data.pojo.SearchPojo;
 public class SearchCommandWithToken implements Command<SearchPojo> {
 
     private final Command<SearchPojo> command;
-    private final String token;
+    private String token;
 
     public SearchCommandWithToken(Command<SearchPojo> command, String token) {
         this.command = command;
@@ -39,5 +39,10 @@ public class SearchCommandWithToken implements Command<SearchPojo> {
     @Override
     public String name() {
         return command.name();
+    }
+
+    @Override
+    public void updateToken(String token) {
+        this.token = token;
     }
 }

@@ -21,7 +21,7 @@ import ru.viise.lightsearch.data.pojo.UnbindCheckPojo;
 public class UnbindCheckCommandWithToken implements Command<UnbindCheckPojo> {
 
     private final Command<UnbindCheckPojo> command;
-    private final String token;
+    private String token;
 
     public UnbindCheckCommandWithToken(Command<UnbindCheckPojo> command, String token) {
         this.command = command;
@@ -39,5 +39,10 @@ public class UnbindCheckCommandWithToken implements Command<UnbindCheckPojo> {
     @Override
     public String name() {
         return command.name();
+    }
+
+    @Override
+    public void updateToken(String token) {
+        this.token = token;
     }
 }

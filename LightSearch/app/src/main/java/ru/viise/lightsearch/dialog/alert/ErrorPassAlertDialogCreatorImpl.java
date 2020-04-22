@@ -21,17 +21,14 @@ import android.app.Activity;
 import androidx.appcompat.app.AlertDialog;
 
 import ru.viise.lightsearch.R;
-import ru.viise.lightsearch.data.InputPasswordAlertDialogCreatorDTO;
 
 public class ErrorPassAlertDialogCreatorImpl implements ErrorAlertDialogCreator {
 
     private final Activity activity;
-    private final InputPasswordAlertDialogCreatorDTO creatorDTO;
 
 
-    public ErrorPassAlertDialogCreatorImpl(Activity activity, InputPasswordAlertDialogCreatorDTO creatorDTO) {
+    public ErrorPassAlertDialogCreatorImpl(Activity activity) {
         this.activity = activity;
-        this.creatorDTO = creatorDTO;
     }
 
     @Override
@@ -43,7 +40,6 @@ public class ErrorPassAlertDialogCreatorImpl implements ErrorAlertDialogCreator 
 
         AlertDialog dialog = new AlertDialog.Builder(activity).setView(dialogOKContainer.dialogOKView()).create();
         dialogOKContainer.buttonOK().setOnClickListener(viewOK -> {
-            creatorDTO.cbSettings().setChecked(false);
             dialog.dismiss();
         });
 

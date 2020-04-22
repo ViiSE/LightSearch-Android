@@ -21,7 +21,7 @@ import ru.viise.lightsearch.data.pojo.UnbindPojo;
 public class UnbindCommandWithToken implements Command<UnbindPojo> {
 
     private final Command<UnbindPojo> command;
-    private final String token;
+    private String token;
 
     public UnbindCommandWithToken(Command<UnbindPojo> command, String token) {
         this.command = command;
@@ -39,5 +39,10 @@ public class UnbindCommandWithToken implements Command<UnbindPojo> {
     @Override
     public String name() {
         return command.name();
+    }
+
+    @Override
+    public void updateToken(String token) {
+        this.token = token;
     }
 }

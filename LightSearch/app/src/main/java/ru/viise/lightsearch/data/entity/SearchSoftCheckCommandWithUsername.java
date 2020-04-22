@@ -40,4 +40,9 @@ public class SearchSoftCheckCommandWithUsername implements Command<SearchSoftChe
     public String name() {
         return command.name();
     }
+
+    @Override
+    public void updateToken(String token) {
+        command.updateToken(token);
+    }
 }

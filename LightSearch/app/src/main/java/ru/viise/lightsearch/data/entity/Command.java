@@ -21,4 +21,5 @@ import ru.viise.lightsearch.data.pojo.SendForm;
 public interface Command<T extends SendForm> {
     T formForSend();
     String name();
+    void updateToken(String token);
 }

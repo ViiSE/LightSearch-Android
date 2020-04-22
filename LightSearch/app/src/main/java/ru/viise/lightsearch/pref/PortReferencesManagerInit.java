@@ -21,6 +21,6 @@ import android.content.SharedPreferences;
 public class PortReferencesManagerInit {
 
     public static PortPreferencesManager portPreferencesManager(SharedPreferences sPref) {
-        return new PortReferencesManagerDefaultImpl(sPref);
+        return new PortReferencesManagerServerImpl(sPref);
     }
 }

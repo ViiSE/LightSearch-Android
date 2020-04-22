@@ -447,7 +447,6 @@ public class BindingFragment extends Fragment implements IBindingFragment, Netwo
 
     @Override
     public void handleResult(CommandResult<BindCheckPojo, BindCheckPojoResult> result) {
-        System.out.println("sdjfhdsajkfhksdjds");
         if(result.isDone()) {
             BindCheckPojoResult resPojo = result.data();
             if(resPojo.getSelected() == 0) { // check binding

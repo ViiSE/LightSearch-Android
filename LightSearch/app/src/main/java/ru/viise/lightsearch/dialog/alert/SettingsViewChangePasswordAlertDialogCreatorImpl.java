@@ -17,28 +17,28 @@
 package ru.viise.lightsearch.dialog.alert;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
 import ru.viise.lightsearch.R;
-import ru.viise.lightsearch.data.AuthorizationPreferenceEnum;
-import ru.viise.lightsearch.data.SettingsViewChangePasswordAlertDialogCreatorDTO;
+import ru.viise.lightsearch.pref.PreferencesManager;
+import ru.viise.lightsearch.pref.PreferencesManagerType;
+import ru.viise.lightsearch.security.HashAlgorithm;
 
 public class SettingsViewChangePasswordAlertDialogCreatorImpl implements SettingsViewChangePasswordAlertDialogCreator {
 
-    private final String SUPERUSER = AuthorizationPreferenceEnum.SUPERUSER.stringValue();
-
-    private final SettingsViewChangePasswordAlertDialogCreatorDTO creatorDTO;
     private final Activity rootActivity;
-    private final SharedPreferences sPref;
+    private final HashAlgorithm hashAlgorithm;
+    private final PreferencesManager prefManager;
 
     public SettingsViewChangePasswordAlertDialogCreatorImpl(
-            SettingsViewChangePasswordAlertDialogCreatorDTO creatorDTO) {
-        this.creatorDTO = creatorDTO;
-        rootActivity = this.creatorDTO.alertDialogCreatorDTO().rootActivity();
-        sPref = this.creatorDTO.alertDialogCreatorDTO().sharedPreferences();
+            Activity rootActivity,
+            HashAlgorithm hashAlgorithm,
+            PreferencesManager prefManager) {
+        this.rootActivity = rootActivity;
+        this.hashAlgorithm = hashAlgorithm;
+        this.prefManager = prefManager;
     }
 
     @Override
@@ -53,9 +53,9 @@ public class SettingsViewChangePasswordAlertDialogCreatorImpl implements Setting
                 .setView(dialogSettingsContainer.dialogSettingsView()).setCancelable(true).create();
 
         dialogSettingsContainer.buttonOK().setOnClickListener(viewOK -> {
-            SharedPreferences.Editor ed = sPref.edit();
-            ed.putString(SUPERUSER, creatorDTO.hashAlgorithms().digest(dialogSettingsContainer.editText().getText().toString()));
-            ed.apply();
+            prefManager.save(
+                    PreferencesManagerType.SUPERUSER,
+                    hashAlgorithm.digest(dialogSettingsContainer.editText().getText().toString()));
             dialogSettingsContainer.editText().setText("");
             Toast t =
                     Toast.makeText(rootActivity.getApplicationContext(), R.string.password_changed, Toast.LENGTH_SHORT);

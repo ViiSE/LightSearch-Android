@@ -31,4 +31,9 @@ public class ConfirmSoftCheckProductsCommandSimple implements Command<ConfirmSof
     public String name() {
         return ClientCommands.CONFIRM_SOFT_CHECK_PRODUCTS;
     }
+
+    @Override
+    public void updateToken(String token) {
+        // nothing
+    }
 }

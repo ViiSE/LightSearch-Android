@@ -21,6 +21,6 @@ import android.content.SharedPreferences;
 public class HostPreferencesManagerInit {
 
     public static HostPreferencesManager hostPreferencesManager(SharedPreferences sPref) {
-        return new HostPreferencesManagerDefaultImpl(sPref);
+        return new HostPreferencesManagerServerImpl(sPref);
     }
 }

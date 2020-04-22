@@ -17,6 +17,7 @@
 package ru.viise.lightsearch.cmd.process;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 
 import java.io.IOException;
 
@@ -54,17 +55,17 @@ public class AuthorizationProcess implements Process<LoginPojo, LoginPojoResult>
                             "\"code\":\"502\"" +
                         "}"
                         : response.errorBody().string();
-                ErrorPojo ePojo = new Gson().fromJson(json, ErrorPojo.class);
-                if(ePojo == null) {
-                    ePojo = new Gson().fromJson(
-                            "{" +
-                                    "\"message\":\"Неизвестная ошибка. Попробуйте выполнить запрос позже.\"," +
-                                    "\"code\":\"502\"" +
-                                  "}",
-                            ErrorPojo.class);
-                }
+                ErrorPojo ePojo;
+                try {
+                    ePojo = new Gson().fromJson(json, ErrorPojo.class);
 
-                return errorResult(ePojo.getMessage());
+                    if(ePojo == null)
+                        throw new JsonParseException("Null object");
+
+                    return errorResult(ePojo.getMessage());
+                } catch (JsonParseException ex) {
+                    return errorResult("Неизвестная ошибка. Попробуйте выполнить запрос позже.");
+                }
             }
         } catch (IOException ex) {
             String message = ex.getMessage() == null ? "" : ex.getMessage();

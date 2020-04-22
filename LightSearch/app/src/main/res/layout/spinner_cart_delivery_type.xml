@@ -5,6 +5,6 @@
     android:id="@+id/textView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:gravity="left"
+    android:gravity="start"
     android:textColor="@android:color/black"
     android:textSize="14sp" />

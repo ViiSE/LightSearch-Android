@@ -30,4 +30,9 @@ public class LoginCommandSimple implements Command<LoginPojo> {
     public String name() {
         return ClientCommands.LOGIN;
     }
+
+    @Override
+    public void updateToken(String token) {
+        // nothing
+    }
 }

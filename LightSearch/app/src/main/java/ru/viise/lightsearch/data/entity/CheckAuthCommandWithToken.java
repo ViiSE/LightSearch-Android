@@ -21,7 +21,7 @@ import ru.viise.lightsearch.data.pojo.CheckAuthPojo;
 public class CheckAuthCommandWithToken implements Command<CheckAuthPojo> {
 
     private final Command<CheckAuthPojo> command;
-    private final String token;
+    private String token;
 
     public CheckAuthCommandWithToken(
             Command<CheckAuthPojo> command,
@@ -41,5 +41,10 @@ public class CheckAuthCommandWithToken implements Command<CheckAuthPojo> {
     @Override
     public String name() {
         return command.name();
+    }
+
+    @Override
+    public void updateToken(String token) {
+        this.token = token;
     }
 }

@@ -17,8 +17,10 @@
 package ru.viise.lightsearch.cmd.process;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -59,24 +61,24 @@ public class SearchProcess implements Process<SearchPojo, SearchPojoResult> {
                             "\"code\":\"502\"" +
                         "}"
                         : response.errorBody().string();
-                ErrorPojo ePojo = new Gson().fromJson(json, ErrorPojo.class);
-                if(ePojo == null) {
-                    ePojo = new Gson().fromJson(
-                            "{" +
-                                    "\"message\":\"Неизвестная ошибка. Попробуйте выполнить запрос позже.\"," +
-                                    "\"code\":\"502\"" +
-                                    "}",
-                            ErrorPojo.class);
+                ErrorPojo ePojo;
+                try {
+                    ePojo = new Gson().fromJson(json, ErrorPojo.class);
+
+                    if(ePojo == null)
+                        throw new JsonParseException("Null object");
+
+                    if(ePojo.getCode().equals(String.valueOf(HttpsURLConnection.HTTP_UNAUTHORIZED)))
+                        return errorResult(command, ePojo.getMessage());
+                    else
+                        return errorResult(ePojo.getMessage());
+                } catch (JsonParseException ex) {
+                    if(response.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                        return errorResult(command, "");
+                    } else {
+                        return errorResult("Неизвестная ошибка. Попробуйте выполнить запрос позже.");
+                    }
                 }
-
-                System.out.println(response.code());
-
-                if(response.code() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                    return errorResult(command, "");
-                } else if(ePojo.getCode().equals(String.valueOf(HttpsURLConnection.HTTP_UNAUTHORIZED)))
-                    return errorResult(command, ePojo.getMessage());
-                else
-                    return errorResult(ePojo.getMessage());
             }
         } catch (IOException ex) {
             String message = ex.getMessage() == null ? "" : ex.getMessage();
@@ -105,6 +107,7 @@ public class SearchProcess implements Process<SearchPojo, SearchPojoResult> {
         SearchPojoRawResult srp = new SearchPojoRawResult();
         srp.setIsDone(false);
         srp.setMessage(message);
+        srp.setData(new ArrayList<>());
         return srp;
     }
 }

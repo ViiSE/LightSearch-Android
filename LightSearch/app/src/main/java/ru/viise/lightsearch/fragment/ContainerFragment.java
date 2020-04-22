@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -131,6 +132,12 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
         if(onBackPressedListenerType == OnBackPressedListenerType.CONTAINER_FRAGMENT) {
             getActivity().finish();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
 
     @Override

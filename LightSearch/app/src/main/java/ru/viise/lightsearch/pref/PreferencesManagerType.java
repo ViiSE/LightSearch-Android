@@ -18,10 +18,13 @@ package ru.viise.lightsearch.pref;
 
 public enum PreferencesManagerType {
     USERNAME_MANAGER,
-    HOST_MANAGER,
-    PORT_MANAGER,
+    HOST_SERVER_MANAGER,
+    PORT_SERVER_MANAGER,
+    HOST_UPDATER_MANAGER,
+    PORT_UPDATER_MANAGER,
     USER_IDENT_MANAGER,
     PASS_MANAGER,
     CARD_CODE_MANAGER,
-    TOKEN_MANAGER
+    TOKEN_MANAGER,
+    SUPERUSER
 }

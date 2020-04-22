@@ -21,7 +21,7 @@ import ru.viise.lightsearch.data.pojo.ConfirmSoftCheckProductsPojo;
 public class ConfirmSoftCheckProductsCommandWithToken implements Command<ConfirmSoftCheckProductsPojo> {
 
     private final Command<ConfirmSoftCheckProductsPojo> command;
-    private final String token;
+    private String token;
 
     public ConfirmSoftCheckProductsCommandWithToken(
             Command<ConfirmSoftCheckProductsPojo> command,
@@ -40,5 +40,10 @@ public class ConfirmSoftCheckProductsCommandWithToken implements Command<Confirm
     @Override
     public String name() {
         return command.name();
+    }
+
+    @Override
+    public void updateToken(String token) {
+        this.token = token;
     }
 }

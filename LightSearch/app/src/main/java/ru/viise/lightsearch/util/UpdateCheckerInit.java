@@ -18,9 +18,11 @@ package ru.viise.lightsearch.util;
 
 import android.app.Activity;
 
+import ru.viise.lightsearch.pref.PreferencesManager;
+
 public class UpdateCheckerInit {
 
-    public static UpdateChecker updateChecker(Activity activity) {
-        return new UpdateCheckerAppUpdaterImpl(activity);
+    public static UpdateChecker updateChecker(Activity activity, PreferencesManager prefManager) {
+        return new UpdateCheckerAppUpdaterImpl(activity, prefManager);
     }
 }

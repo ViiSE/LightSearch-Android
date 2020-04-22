@@ -31,4 +31,9 @@ public class CancelSoftCheckCommandSimple implements Command<CancelSoftCheckPojo
     public String name() {
         return ClientCommands.CANCEL_SOFT_CHECK;
     }
+
+    @Override
+    public void updateToken(String token) {
+        //nothing
+    }
 }

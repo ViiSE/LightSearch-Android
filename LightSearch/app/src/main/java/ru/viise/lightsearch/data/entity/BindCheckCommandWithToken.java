@@ -21,7 +21,7 @@ import ru.viise.lightsearch.data.pojo.BindCheckPojo;
 public class BindCheckCommandWithToken implements Command<BindCheckPojo> {
 
     private final Command<BindCheckPojo> command;
-    private final String token;
+    private String token;
 
     public BindCheckCommandWithToken(Command<BindCheckPojo> command, String token) {
         this.command = command;
@@ -39,5 +39,10 @@ public class BindCheckCommandWithToken implements Command<BindCheckPojo> {
     @Override
     public String name() {
         return command.name();
+    }
+
+    @Override
+    public void updateToken(String token) {
+        this.token = token;
     }
 }

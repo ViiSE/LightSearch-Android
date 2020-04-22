@@ -15,9 +15,170 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d971fcd-3628-4833-9afe-96f8e9859b51" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_barteksc_android_pdf_viewer_2_8_2_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_barteksc_pdfium_android_1_7_1_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_guava_guava_29_0_android_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_code_findbugs_jsr305_2_0_1_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_errorprone_error_prone_annotations_2_3_3_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_errorprone_error_prone_annotations_2_3_4_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_guava_guava_28_1_android_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_codehaus_mojo_animal_sniffer_annotations_1_18_jar.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/release/output.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/release/output.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/activity/ManagerActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/activity/ManagerActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/network/NetworkService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/network/NetworkService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/AuthorizationProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/AuthorizationProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/BindCheckProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/BindCheckProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/BindProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/BindProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/CancelSoftCheckProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/CancelSoftCheckProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/CloseSoftCheckProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/CloseSoftCheckProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/ConfirmSoftCheckProductsCommandProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/ConfirmSoftCheckProductsCommandProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/OpenSoftCheckProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/OpenSoftCheckProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/ProcessesImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/ProcessesImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/SearchProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/SearchProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/SearchSoftCheckProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/SearchSoftCheckProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/SkladListProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/SkladListProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/TKListProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/TKListProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/UnbindCheckProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/UnbindCheckProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/UnbindProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/UnbindProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/AuthorizationPreferenceEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/AuthorizationPreferenceEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/InputPasswordAlertDialogCreatorDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/InputPasswordAlertDialogCreatorDTOImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCheckCommandSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCheckCommandSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCheckCommandWithBarcode.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCheckCommandWithBarcode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCheckCommandWithCheckEAN13.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCheckCommandWithCheckEAN13.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCheckCommandWithFactoryBarcode.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCheckCommandWithFactoryBarcode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCheckCommandWithSelected.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCheckCommandWithSelected.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCheckCommandWithToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCheckCommandWithToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCommandSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCommandSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCommandWithBarcode.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCommandWithBarcode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCommandWithFactoryBarcode.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCommandWithFactoryBarcode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCommandWithSelected.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCommandWithSelected.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCommandWithToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCommandWithToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCommandWithUserIdentifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/BindCommandWithUserIdentifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CancelSoftCheckCommandSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CancelSoftCheckCommandSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CancelSoftCheckCommandWithCardCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CancelSoftCheckCommandWithCardCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CancelSoftCheckCommandWithCartSign.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CancelSoftCheckCommandWithCartSign.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CancelSoftCheckCommandWithToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CancelSoftCheckCommandWithToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CancelSoftCheckCommandWithUserIdentifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CancelSoftCheckCommandWithUserIdentifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CheckAuthCommandSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CheckAuthCommandSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CheckAuthCommandWithToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CheckAuthCommandWithToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CloseSoftCheckCommandSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CloseSoftCheckCommandSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CloseSoftCheckCommandWithCardCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CloseSoftCheckCommandWithCardCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CloseSoftCheckCommandWithDelivery.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CloseSoftCheckCommandWithDelivery.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CloseSoftCheckCommandWithToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CloseSoftCheckCommandWithToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CloseSoftCheckCommandWithUserIdentifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/CloseSoftCheckCommandWithUserIdentifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/Command.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/ConfirmSoftCheckProductsCommandSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/ConfirmSoftCheckProductsCommandSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/ConfirmSoftCheckProductsCommandWithCardCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/ConfirmSoftCheckProductsCommandWithCardCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/ConfirmSoftCheckProductsCommandWithData.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/ConfirmSoftCheckProductsCommandWithData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/ConfirmSoftCheckProductsCommandWithSoftCheckRecords.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/ConfirmSoftCheckProductsCommandWithSoftCheckRecords.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/ConfirmSoftCheckProductsCommandWithToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/ConfirmSoftCheckProductsCommandWithToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/ConfirmSoftCheckProductsCommandWithType.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/ConfirmSoftCheckProductsCommandWithType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/ConfirmSoftCheckProductsCommandWithUserIdentifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/ConfirmSoftCheckProductsCommandWithUserIdentifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandWithIMEI.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandWithIMEI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandWithIP.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandWithIP.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandWithModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandWithModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandWithOs.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandWithOs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandWithPassword.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandWithPassword.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandWithUserIdentifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandWithUserIdentifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandWithUsername.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/LoginCommandWithUsername.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/OpenSoftCheckCommandSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/OpenSoftCheckCommandSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/OpenSoftCheckCommandWithCardCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/OpenSoftCheckCommandWithCardCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/OpenSoftCheckCommandWithToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/OpenSoftCheckCommandWithToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/OpenSoftCheckCommandWithUserIdentifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/OpenSoftCheckCommandWithUserIdentifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchCommandSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchCommandSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchCommandWithBarcode.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchCommandWithBarcode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchCommandWithSklad.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchCommandWithSklad.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchCommandWithSubdivision.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchCommandWithSubdivision.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchCommandWithTK.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchCommandWithTK.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchCommandWithToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchCommandWithToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchCommandWithType.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchCommandWithType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchSoftCheckCommandSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchSoftCheckCommandSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchSoftCheckCommandWithBarcode.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchSoftCheckCommandWithBarcode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchSoftCheckCommandWithToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchSoftCheckCommandWithToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchSoftCheckCommandWithUsername.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SearchSoftCheckCommandWithUsername.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SkladListCommandSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SkladListCommandSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SkladListCommandWithToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/SkladListCommandWithToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/TKListCommandSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/TKListCommandSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/TKListCommandWithToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/TKListCommandWithToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCheckCommandSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCheckCommandSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCheckCommandWithBarcode.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCheckCommandWithBarcode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCheckCommandWithFactoryBarcode.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCheckCommandWithFactoryBarcode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCheckCommandWithToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCheckCommandWithToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCommandSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCommandSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCommandWithFactoryBarcode.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCommandWithFactoryBarcode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCommandWithToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCommandWithToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCommandWithUserIdentifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/data/entity/UnbindCommandWithUserIdentifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/dialog/alert/ErrorPassAlertDialogCreatorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/dialog/alert/ErrorPassAlertDialogCreatorImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/dialog/alert/InputPasswordAlertDialogCreatorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/dialog/alert/InputPasswordAlertDialogCreatorImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/dialog/alert/ReconnectAlertDialogCreatorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/dialog/alert/ReconnectAlertDialogCreatorImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/dialog/alert/SettingsViewChangePasswordAlertDialogCreatorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/dialog/alert/SettingsViewChangePasswordAlertDialogCreatorImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/AuthorizationFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/AuthorizationFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/BindingContainerFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/BindingContainerFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/BindingFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/BindingFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/ContainerFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/ContainerFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/SearchFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/SearchFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/SoftCheckContainerFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/SoftCheckContainerFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/adapter/RecyclerViewAdapterMore.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/adapter/RecyclerViewAdapterMore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/util/CardViewRowResultFillerSubdivisionImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/util/CardViewRowResultFillerSubdivisionImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/pref/HostPreferencesManagerDefaultImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/pref/HostPreferencesManagerServerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/pref/HostPreferencesManagerInit.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/pref/HostPreferencesManagerInit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/pref/PortReferencesManagerDefaultImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/pref/PortReferencesManagerServerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/pref/PortReferencesManagerInit.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/pref/PortReferencesManagerInit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/pref/PreferencesManagerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/pref/PreferencesManagerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/pref/PreferencesManagerType.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/pref/PreferencesManagerType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/util/UpdateCheckerAppUpdaterImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/util/UpdateCheckerAppUpdaterImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/util/UpdateCheckerInit.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/util/UpdateCheckerInit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/util/appupdater/AppUpdater.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/util/appupdater/AppUpdater.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/util/appupdater/ParserJSON.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/util/appupdater/ParserJSON.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/cardview_row_more.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/cardview_row_more.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/cardview_row_result_search.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/cardview_row_result_search.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/dialog_reconnect.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/dialog_reconnect.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/dialog_soft_check_result_search.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/dialog_soft_check_result_search.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_authorization.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_authorization.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_container.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_container.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_more.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_more.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/spinner_cart_delivery_type.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/spinner_cart_delivery_type.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/cmd/result/AuthorizationCommandResultJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/cmd/result/AuthorizationCommandResultJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/cmd/result/CancelSoftCheckCommandResultJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/cmd/result/CancelSoftCheckCommandResultJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/cmd/result/CloseSoftCheckCommandResultJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/cmd/result/CloseSoftCheckCommandResultJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/cmd/result/ConfirmSoftCheckProductsResultJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/cmd/result/ConfirmSoftCheckProductsResultJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/cmd/result/OpenSoftCheckCommandResultJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/cmd/result/OpenSoftCheckCommandResultJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/cmd/result/SearchCommandResultJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/cmd/result/SearchCommandResultJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/AuthorizationDTOJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/AuthorizationDTOJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/CartRecordJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/CartRecordJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/SearchRecordJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/SearchRecordJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/SoftCheckRecordJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/SoftCheckRecordJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/SubdivisionJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/SubdivisionJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/SubdivisionListJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/SubdivisionListJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/UnconfirmedRecordJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/UnconfirmedRecordJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/creator/CartRecordsCreatorJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/creator/CartRecordsCreatorJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/creator/SearchRecordsCreatorJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/creator/SearchRecordsCreatorJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/creator/SoftCheckRecordCreatorJUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/ru/viise/lightsearch/data/creator/SoftCheckRecordCreatorJUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateAuthorizationCommandResultRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateAuthorizationCommandResultRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateAuthorizationDTORule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateAuthorizationDTORule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateCancelSoftCheckCommandResultRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateCancelSoftCheckCommandResultRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateCartRecordRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateCartRecordRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateCartRecordsCreatorRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateCartRecordsCreatorRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateCloseSoftCheckCommandResultRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateCloseSoftCheckCommandResultRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateConfirmSoftCheckProductsResultRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateConfirmSoftCheckProductsResultRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateOpenSoftCheckCommandResultRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateOpenSoftCheckCommandResultRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSearchCommandResultRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSearchCommandResultRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSearchRecordListRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSearchRecordListRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSearchRecordRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSearchRecordRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSearchRecordsCreatorRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSearchRecordsCreatorRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSoftCheckRecordCreatorRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSoftCheckRecordCreatorRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSoftCheckRecordRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSoftCheckRecordRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSoftCheckRecordsListRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSoftCheckRecordsListRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSubdivisionRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSubdivisionRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSubdivisionsListRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateSubdivisionsListRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateUnconfirmedRecordRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/test/rule/CreateUnconfirmedRecordRule.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -42,10 +203,10 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="layoutResourceFile" />
         <option value="valueResourceFile" />
-        <option value="resourceFile" />
         <option value="Interface" />
+        <option value="resourceFile" />
+        <option value="layoutResourceFile" />
         <option value="Class" />
       </list>
     </option>
@@ -72,7 +233,7 @@
     <property name="ExportApk.SignV2" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/Android/Sdk" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/res/drawable" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Загрузки" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/src/main/res/drawable" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -82,28 +243,31 @@
     <option name="LAST_EDITED_BUILD_TYPE" value="release" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="ru.viise.lightsearch.cmd.result" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/holder/v2/future" />
-      <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
-      <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
-      <recent name="$PROJECT_DIR$/app/src/main/res/drawable/v24" />
-      <recent name="$PROJECT_DIR$/app/src/main/res/drawable-v24" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="ru.viise.lightsearch.data.pojo" />
-      <recent name="ru.viise.lightsearch.data.v2" />
-      <recent name="ru.viise.lightsearch.cmd.process.v2.future" />
-      <recent name="ru.viise.lightsearch.cmd.manager.task.v2.future" />
-      <recent name="ru.viise.lightsearch.dialog.alert" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable/" />
       <recent name="$PROJECT_DIR$/app/src/main/res/" />
       <recent name="$PROJECT_DIR$/app/src/main/res/menu" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="ru.viise.lightsearch.cmd.result" />
+    </key>
+    <key name="android.template.packageName">
+      <recent name="ru.viise.lightsearch" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="ru.viise.lightsearch.pref" />
+      <recent name="ru.viise.lightsearch.data.pojo" />
+      <recent name="ru.viise.lightsearch.data.v2" />
+      <recent name="ru.viise.lightsearch.cmd.process.v2.future" />
+      <recent name="ru.viise.lightsearch.cmd.manager.task.v2.future" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
+      <recent name="$PROJECT_DIR$/app/src/main/assets" />
+      <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
+      <recent name="$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/holder/v2/future" />
+      <recent name="$PROJECT_DIR$/app/src/main/res/drawable/v24" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -123,7 +287,73 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Android App.app">
+    <configuration name="TestGsonParse (1)" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="app" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="test" />
+      <option name="MAIN_CLASS_NAME" value="test.TestGsonParse" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestGsonParse" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="app" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="test" />
+      <option name="MAIN_CLASS_NAME" value="test.TestGsonParse" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestGsonParse.tryParse" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="app" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="test" />
+      <option name="MAIN_CLASS_NAME" value="test.TestGsonParse" />
+      <option name="METHOD_NAME" value="tryParse" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestGsonParse.try_uauth" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="app" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="test" />
+      <option name="MAIN_CLASS_NAME" value="test.TestGsonParse" />
+      <option name="METHOD_NAME" value="try_uauth" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
       <option name="TEST_OBJECT" value="class" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -182,6 +412,14 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Android JUnit.TestGsonParse" />
+        <item itemvalue="Android JUnit.TestGsonParse.try_uauth" />
+        <item itemvalue="Android JUnit.TestGsonParse (1)" />
+        <item itemvalue="Android JUnit.TestGsonParse.tryParse" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -214,38 +452,53 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/BindingFragment.java</url>
-          <line>450</line>
+          <line>449</line>
           <option name="timeStamp" value="78" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/BindingFragment.java</url>
-          <line>449</line>
-          <option name="timeStamp" value="79" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/BindingFragment.java</url>
-          <line>477</line>
+          <line>476</line>
           <option name="timeStamp" value="81" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/BindingFragment.java</url>
-          <line>478</line>
+          <line>477</line>
           <option name="timeStamp" value="82" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/BindingFragment.java</url>
-          <line>479</line>
+          <line>478</line>
           <option name="timeStamp" value="83" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/OpenSoftCheckProcess.java</url>
-          <line>43</line>
+          <line>44</line>
           <option name="timeStamp" value="84" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/network/NetworkService.java</url>
+          <line>43</line>
+          <option name="timeStamp" value="86" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/process/SearchProcess.java</url>
-          <line>71</line>
-          <option name="timeStamp" value="85" />
+          <line>46</line>
+          <option name="timeStamp" value="88" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/fragment/SearchFragment.java</url>
+          <line>300</line>
+          <option name="timeStamp" value="94" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/dialog/alert/ReconnectAlertDialogCreatorImpl.java</url>
+          <line>172</line>
+          <option name="timeStamp" value="95" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/ru/viise/lightsearch/cmd/network/task/NetworkAsyncTask.java</url>
+          <line>61</line>
+          <option name="timeStamp" value="96" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

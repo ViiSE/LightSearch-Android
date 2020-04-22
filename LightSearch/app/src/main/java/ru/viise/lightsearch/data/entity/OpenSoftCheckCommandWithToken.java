@@ -21,7 +21,7 @@ import ru.viise.lightsearch.data.pojo.OpenSoftCheckPojo;
 public class OpenSoftCheckCommandWithToken implements Command<OpenSoftCheckPojo> {
 
     private final Command<OpenSoftCheckPojo> command;
-    private final String token;
+    private String token;
 
     public OpenSoftCheckCommandWithToken(
             Command<OpenSoftCheckPojo> command,
@@ -41,5 +41,10 @@ public class OpenSoftCheckCommandWithToken implements Command<OpenSoftCheckPojo>
     @Override
     public String name() {
         return command.name();
+    }
+
+    @Override
+    public void updateToken(String token) {
+        this.token = token;
     }
 }

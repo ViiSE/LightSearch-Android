@@ -41,4 +41,9 @@ public class ConfirmSoftCheckProductsCommandWithUserIdentifier implements Comman
     public String name() {
         return command.name();
     }
+
+    @Override
+    public void updateToken(String token) {
+        command.updateToken(token);
+    }
 }

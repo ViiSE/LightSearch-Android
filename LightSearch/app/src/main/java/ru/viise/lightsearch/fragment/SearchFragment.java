@@ -176,7 +176,6 @@ public class SearchFragment extends Fragment implements ISearchFragment, Network
 
         skladRadioButton.setOnClickListener(view1 -> {
             skladSpinner.setEnabled(true);
-            System.out.println("I am here");
             TKSpinner.setEnabled(false);
             selected = 0;
         });
@@ -325,10 +324,11 @@ public class SearchFragment extends Fragment implements ISearchFragment, Network
                     this,
                     result.lastCommand()
             ).create().show();
-        } else
+        } else {
             new ErrorAlertDialogCreatorImpl(
                     this.getActivity(),
                     result.data().getMessage()
             ).create().show();
+        }
     }
 }

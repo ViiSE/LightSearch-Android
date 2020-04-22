@@ -6,8 +6,12 @@
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
     tools:activity="ru.viise.lightsearch.fragment.AuthorizationFragment"
-    tools:layout_editor_absoluteY="25dp"
     android:background="@color/background">
+
+    <include
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/toolbar_authorization" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -78,73 +82,9 @@
             android:inputType="number"
             android:textSize="20sp" />
 
-        <CheckBox
-            android:id="@+id/checkBoxSettings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/checkBox_settings"
-            android:layout_marginTop="20dp"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/textViewHost"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/host_label"
-            android:textSize="20sp" />
-
-        <EditText
-            android:id="@+id/editTextHost"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edittextshape"
-            android:digits="0123456789."
-            android:ems="10"
-            android:inputType="number"
-            android:text="@string/default_ip"
-            android:textSize="20sp" />
-        <!--android:importantForAutofill="no"-->
-
-        <TextView
-            android:id="@+id/textViewPort"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/port_label"
-            android:textSize="20sp" />
-
-        <EditText
-            android:id="@+id/editTextPort"
-            android:background="@drawable/edittextshape"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number"
-            android:text="@string/default_port"
-            android:textSize="20sp"/>
-        <!--android:importantForAutofill="no"-->
-
-        <Button
-            android:id="@+id/buttonChangePass"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/buttonshape"
-            android:shadowColor="@color/buttonShadowColor"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="2"
-            android:layout_marginTop="10dp"
-            android:text="@string/buttonChPass_label"
-            android:textColor="@color/buttonTextColor" />
-
-        <!--        <Space-->
-        <!--            android:id="@+id/spaceAuto"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="5dp" />-->
-
         <Button
             android:id="@+id/buttonConnect"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="50dp"
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="50dp"

@@ -21,7 +21,7 @@ import ru.viise.lightsearch.data.pojo.TKListPojo;
 public class TKListCommandWithToken implements Command<TKListPojo> {
 
     private final Command<TKListPojo> command;
-    private final String token;
+    private String token;
 
     public TKListCommandWithToken(Command<TKListPojo> command, String token) {
         this.command = command;
@@ -38,5 +38,10 @@ public class TKListCommandWithToken implements Command<TKListPojo> {
     @Override
     public String name() {
         return command.name();
+    }
+
+    @Override
+    public void updateToken(String token) {
+        this.token = token;
     }
 }
