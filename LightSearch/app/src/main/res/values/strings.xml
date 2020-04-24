@@ -178,8 +178,8 @@
 
     <string name="about_app">О приложении</string>
     <string name="about_LightSearch">LightSearch</string>
-    <string name="about_version">Версия 1.15</string>
-    <string name="about_code_version">Код версии 16</string>
+    <string name="about_version">Версия 1.16</string>
+    <string name="about_code_version">Код версии 17</string>
     <string name="about_license">Данный программный продукт распространяется под лицензией Apache v2.0.</string>
     <string name="search_result">Поиск:</string>
 
