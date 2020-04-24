@@ -11,6 +11,7 @@
         <item name="android:navigationBarColor">@color/navBarColor</item>
 <!--        <item name="android:navigationBarColor">@color/colorPrimary</item>-->
         <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:windowFullscreen">false</item>
     </style>
 
     <style name="FragmentBindingContainerTabText" parent="TextAppearance.Design.Tab">
