@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import ru.viise.lightsearch.R;
@@ -62,6 +63,7 @@ public class DocsFragment extends Fragment implements OnBackPressedListener {
                 + "/man";
         pdfView.getSettings().setJavaScriptEnabled(true);
         pdfView.getSettings().setBuiltInZoomControls(true);
+        pdfView.getSettings().setSupportZoom(true);
         pdfView.getSettings().setDisplayZoomControls(false);
         pdfView.setWebViewClient(new WebViewClient() {
             @Override
@@ -108,6 +110,12 @@ public class DocsFragment extends Fragment implements OnBackPressedListener {
             childAt.requestLayout();
             usableHeightPrevious = usableHeightNow;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
     }
 
     private int computeUsableHeight() {
