@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -81,7 +82,9 @@ public class SearchFragment extends Fragment implements ISearchFragment, Network
     private final static String MENU_SELECTED = "selected";
     private final static String SKLAD_ARRAY = "sklad_array";
     private final static String TK_ARRAY = "tk_array";
+    private final static String POSITION = "pos";
     private int selected = 0; //0-sklad, 1-TK, 2 - ALL
+    private int pos = 0;
 
     private AlertDialog queryDialog;
     private SpinnerWithCallback skladSpinner;
@@ -104,6 +107,7 @@ public class SearchFragment extends Fragment implements ISearchFragment, Network
             selected = savedInstanceState.getInt(MENU_SELECTED);
             TKArray = savedInstanceState.getStringArray(TK_ARRAY);
             skladArray = savedInstanceState.getStringArray(SKLAD_ARRAY);
+            pos = savedInstanceState.getInt(POSITION);
         }
     }
 
@@ -120,8 +124,16 @@ public class SearchFragment extends Fragment implements ISearchFragment, Network
         TKRadioButton = view.findViewById(R.id.radioButtonTK);
         AllRadioButton = view.findViewById(R.id.radioButtonAll);
 
-        TKSpinner.afterSetAdapterCallback(dataTK -> TKArray = dataTK);
-        skladSpinner.afterSetAdapterCallback(dataSklad -> skladArray = dataSklad);
+        TKSpinner.afterSetAdapterCallback(dataTK -> {
+            TKArray = dataTK;
+            if(selected == 1)
+                TKSpinner.setSelection(pos);
+        });
+        skladSpinner.afterSetAdapterCallback(dataSklad -> {
+            skladArray = dataSklad;
+            if(selected == 0)
+                skladSpinner.setSelection(pos);
+        });
 
         searchEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -191,6 +203,26 @@ public class SearchFragment extends Fragment implements ISearchFragment, Network
             selected = 2;
         });
 
+        skladSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                pos = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
+
+        TKSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                pos = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
         queryDialog = SpotsDialogCreatorInit.spotsDialogCreator(this.getActivity(), R.string.spots_dialog_query_exec)
                 .create();
         return view;
@@ -201,6 +233,7 @@ public class SearchFragment extends Fragment implements ISearchFragment, Network
         outState.putInt(MENU_SELECTED, selected);
         outState.putStringArray(SKLAD_ARRAY, skladArray);
         outState.putStringArray(TK_ARRAY, TKArray);
+        outState.putInt(POSITION, pos);
         super.onSaveInstanceState(outState);
     }
 
