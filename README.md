@@ -16,11 +16,15 @@ LightSearch Android - Мобильное клиентское приложени
 1) Авторизация
 2) Поиск
 3) Результат поиска
-4) Привязка
-5) Результат привязки
-6) Отвязка
-7) Мягкий чек
-8) Корзина
+4) Задачи
+5) Привязка
+6) Результат привязки
+7) Отвязка
+8) Открытие мягкого чека
+9) Мягкий чек
+10) Корзина
+11) Еще
+12) Документация
 
 Функции
 -------
@@ -32,6 +36,11 @@ LightSearch Android - Мобильное клиентское приложени
 2) Привязка товара
 3) Отвязка товара
 4) Открытие, закрытие, отмена мягкого чека
+5) Документация
+
+Зашифрованная авторизация
+-------------------------
+LightSearch Android поддерживает зашифрованную авторизацию через точку POST /clients/login/encrypted. 
 
 Ссылки
 ------
@@ -46,3 +55,7 @@ LightSearch Android - Мобильное клиентское приложени
 - [JUnit 5](https://junit.org/junit5/)
 - [Mockito](https://github.com/mockito/mockito)
 - [CounterFab](https://github.com/andremion/CounterFab)
+- [Retrofit2](https://github.com/square/retrofit)
+- [JWTDecode.Android](https://github.com/auth0/JWTDecode.Android)
+- [Progress Button Android](https://github.com/leandroBorgesFerreira/LoadingButtonAndroid)
+- [Google Truth](https://github.com/google/truth)
