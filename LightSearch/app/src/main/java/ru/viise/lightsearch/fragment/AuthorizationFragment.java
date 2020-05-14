@@ -36,11 +36,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.google.gson.Gson;
+
+import java.security.PublicKey;
+
 import ru.viise.lightsearch.R;
 import ru.viise.lightsearch.activity.ManagerActivityUI;
 import ru.viise.lightsearch.check.FirstRunAppChecker;
 import ru.viise.lightsearch.check.FirstRunAppCheckerImpl;
-import ru.viise.lightsearch.cmd.network.NetworkService;
 import ru.viise.lightsearch.cmd.network.task.NetworkAsyncTask;
 import ru.viise.lightsearch.cmd.network.task.NetworkCallback;
 import ru.viise.lightsearch.data.AlertDialogCreatorDTO;
@@ -49,6 +52,7 @@ import ru.viise.lightsearch.data.CreatePasswordInFirstTimeAlertDialogCreatorDTO;
 import ru.viise.lightsearch.data.CreatePasswordInFirstTimeAlertDialogCreatorDTOImpl;
 import ru.viise.lightsearch.data.entity.Command;
 import ru.viise.lightsearch.data.entity.CommandResult;
+import ru.viise.lightsearch.data.entity.KeyCommandSimple;
 import ru.viise.lightsearch.data.entity.LoginCommandSimple;
 import ru.viise.lightsearch.data.entity.LoginCommandWithIMEI;
 import ru.viise.lightsearch.data.entity.LoginCommandWithIP;
@@ -57,6 +61,11 @@ import ru.viise.lightsearch.data.entity.LoginCommandWithOs;
 import ru.viise.lightsearch.data.entity.LoginCommandWithPassword;
 import ru.viise.lightsearch.data.entity.LoginCommandWithUserIdentifier;
 import ru.viise.lightsearch.data.entity.LoginCommandWithUsername;
+import ru.viise.lightsearch.data.entity.LoginEncryptedCommandSimple;
+import ru.viise.lightsearch.data.entity.LoginEncryptedCommandWithData;
+import ru.viise.lightsearch.data.pojo.KeyPojo;
+import ru.viise.lightsearch.data.pojo.KeyPojoResult;
+import ru.viise.lightsearch.data.pojo.LoginEncryptedPojo;
 import ru.viise.lightsearch.data.pojo.LoginPojo;
 import ru.viise.lightsearch.data.pojo.LoginPojoResult;
 import ru.viise.lightsearch.dialog.alert.CreatePasswordInFirstTimeAlertDialogCreator;
@@ -67,20 +76,26 @@ import ru.viise.lightsearch.dialog.alert.InputPasswordAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreator;
 import ru.viise.lightsearch.dialog.alert.SuccessAlertDialogCreatorImpl;
 import ru.viise.lightsearch.dialog.spots.SpotsDialogCreatorInit;
+import ru.viise.lightsearch.exception.InformationException;
 import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManager;
 import ru.viise.lightsearch.fragment.transaction.FragmentTransactionManagerImpl;
 import ru.viise.lightsearch.pref.PreferencesManager;
 import ru.viise.lightsearch.pref.PreferencesManagerInit;
 import ru.viise.lightsearch.pref.PreferencesManagerType;
+import ru.viise.lightsearch.security.DecryptedInformation;
+import ru.viise.lightsearch.security.EncryptedInformation;
 import ru.viise.lightsearch.security.HashAlgorithm;
 import ru.viise.lightsearch.security.HashAlgorithmInit;
+import ru.viise.lightsearch.security.Information;
+import ru.viise.lightsearch.security.Key;
+import ru.viise.lightsearch.security.KeyAsPublicKeyImpl;
 import ru.viise.lightsearch.util.IPAddressProvider;
 import ru.viise.lightsearch.util.IPAddressProviderInit;
 
 import static android.view.View.OnClickListener;
 
 
-public class AuthorizationFragment extends Fragment implements OnClickListener, NetworkCallback<LoginPojo, LoginPojoResult> {
+public class AuthorizationFragment extends Fragment implements OnClickListener, NetworkCallback<LoginEncryptedPojo, LoginPojoResult> {
 
     public static final String TAG = "AuthorizationFragment";
 
@@ -153,46 +168,70 @@ public class AuthorizationFragment extends Fragment implements OnClickListener, 
     @SuppressWarnings("unchecked")
     @Override
     public void onClick(View v) {
-        switch(v.getId()) {
-            case R.id.buttonConnect:
-                v.startAnimation(animAlpha);
-                if(editTextUsername.getText().toString().isEmpty()  ||
+        if (v.getId() == R.id.buttonConnect) {
+            v.startAnimation(animAlpha);
+            if (editTextUsername.getText().toString().isEmpty() ||
                     editTextPassword.getText().toString().isEmpty()) {
-                    Toast t = Toast.makeText(this.getActivity().getApplicationContext(),
-                            R.string.toast_not_enough_auth_data, Toast.LENGTH_LONG);
-                    t.show();
-                } else {
-                    prefManager.save(PreferencesManagerType.USERNAME_MANAGER, editTextUsername.getText().toString());
-                    if(editTextUserIdent.getText().toString().isEmpty())
-                        prefManager.save(PreferencesManagerType.USER_IDENT_MANAGER, "0");
-                    else
-                        prefManager.save(PreferencesManagerType.USER_IDENT_MANAGER, editTextUserIdent.getText().toString());
-                    IPAddressProvider ipAddrProvider = IPAddressProviderInit.ipAddressProvider();
-                    String ip = ipAddrProvider.ipAddress(true);
-                    String os = Build.VERSION.RELEASE;
-                    String model = Build.MODEL;
-                    Command<LoginPojo> command = new LoginCommandWithIMEI(
-                            new LoginCommandWithUsername(
-                                    new LoginCommandWithPassword(
-                                            new LoginCommandWithUserIdentifier(
-                                                    new LoginCommandWithIP(
-                                                            new LoginCommandWithOs(
-                                                                    new LoginCommandWithModel(
-                                                                            new LoginCommandSimple(),
-                                                                            model
-                                                                    ), os
-                                                            ), ip
-                                                    ), prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER)
-                                            ), editTextPassword.getText().toString()
-                                    ), editTextUsername.getText().toString()
-                            ), mIManagerActivity.getIMEI());
+                Toast t = Toast.makeText(this.getActivity().getApplicationContext(),
+                        R.string.toast_not_enough_auth_data, Toast.LENGTH_LONG);
+                t.show();
+            } else {
+                prefManager.save(PreferencesManagerType.USERNAME_MANAGER, editTextUsername.getText().toString());
+                if (editTextUserIdent.getText().toString().isEmpty())
+                    prefManager.save(PreferencesManagerType.USER_IDENT_MANAGER, "0");
+                else
+                    prefManager.save(PreferencesManagerType.USER_IDENT_MANAGER, editTextUserIdent.getText().toString());
 
-                    NetworkAsyncTask<LoginPojo, LoginPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
-                            this,
-                            queryDialog);
-                    networkAsyncTask.execute(command);
-                }
-                break;
+                NetworkCallback<KeyPojo, KeyPojoResult> keyCallback = result -> {
+                    try {
+                        Key<PublicKey> key = new KeyAsPublicKeyImpl(
+                                result.data().getKey(),
+                                result.data().getType());
+
+                        IPAddressProvider ipAddrProvider = IPAddressProviderInit.ipAddressProvider();
+                        String ip = ipAddrProvider.ipAddress(true);
+                        String os = Build.VERSION.RELEASE;
+                        String model = Build.MODEL;
+                        Command<LoginPojo> command = new LoginCommandWithIMEI(
+                                new LoginCommandWithUsername(
+                                        new LoginCommandWithPassword(
+                                                new LoginCommandWithUserIdentifier(
+                                                        new LoginCommandWithIP(
+                                                                new LoginCommandWithOs(
+                                                                        new LoginCommandWithModel(
+                                                                                new LoginCommandSimple(),
+                                                                                model
+                                                                        ), os
+                                                                ), ip
+                                                        ), prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER)
+                                                ), editTextPassword.getText().toString()
+                                        ), editTextUsername.getText().toString()
+                                ), mIManagerActivity.getIMEI());
+
+                        Information<String> encInfo = new EncryptedInformation(
+                                new DecryptedInformation(new Gson().toJson(command.formForSend())),
+                                result.data().getAlg(),
+                                key);
+
+                        Command<LoginEncryptedPojo> loginCmd = new LoginEncryptedCommandWithData(
+                                new LoginEncryptedCommandSimple(),
+                                encInfo.data());
+
+                        NetworkAsyncTask<LoginEncryptedPojo, LoginPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
+                                AuthorizationFragment.this,
+                                queryDialog);
+                        networkAsyncTask.execute(loginCmd);
+                    } catch (InformationException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                };
+
+                Command<KeyPojo> cmdKey = new KeyCommandSimple();
+                NetworkAsyncTask<KeyPojo, KeyPojoResult> networkAsyncTaskKey = new NetworkAsyncTask<>(
+                        keyCallback,
+                        queryDialog);
+                networkAsyncTaskKey.execute(cmdKey);
+            }
         }
     }
 
@@ -216,7 +255,7 @@ public class AuthorizationFragment extends Fragment implements OnClickListener, 
     }
 
     @Override
-    public void handleResult(CommandResult<LoginPojo, LoginPojoResult> result) {
+    public void handleResult(CommandResult<LoginEncryptedPojo, LoginPojoResult> result) {
         if(result.isDone()) {
             prefManager.save(PreferencesManagerType.TOKEN_MANAGER, result.data().getToken());
             if(result.data().getUserIdentifier().equals("0")) {

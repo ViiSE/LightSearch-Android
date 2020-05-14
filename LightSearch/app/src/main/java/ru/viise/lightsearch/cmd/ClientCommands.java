@@ -35,4 +35,6 @@ public class ClientCommands {
     public final static String TK_LIST = "tk_list";
     public final static String SKLAD_LIST = "sklad_list";
     public final static String CHECK_AUTH = "check_auth";
+    public final static String KEY = "key";
+    public final static String LOGIN_ENCRYPTED = "login_encrypted";
 }

@@ -33,6 +33,8 @@ import ru.viise.lightsearch.data.pojo.CloseSoftCheckPojo;
 import ru.viise.lightsearch.data.pojo.CloseSoftCheckPojoResult;
 import ru.viise.lightsearch.data.pojo.ConfirmSoftCheckProductsPojo;
 import ru.viise.lightsearch.data.pojo.ConfirmSoftCheckProductsPojoRawResult;
+import ru.viise.lightsearch.data.pojo.KeyPojoResult;
+import ru.viise.lightsearch.data.pojo.LoginEncryptedPojo;
 import ru.viise.lightsearch.data.pojo.LoginPojo;
 import ru.viise.lightsearch.data.pojo.LoginPojoResult;
 import ru.viise.lightsearch.data.pojo.OpenSoftCheckPojo;
@@ -110,4 +112,10 @@ public interface LightSearchAPI {
 
     @GET("/clients/tkList")
     Call<TKListPojoRawResult> TKList(@Header("authorization") String token);
+
+    @GET("/clients/login/key")
+    Call<KeyPojoResult> key();
+
+    @POST("/clients/login/encrypted")
+    Call<LoginPojoResult> loginEncrypted(@Body LoginEncryptedPojo data);
 }

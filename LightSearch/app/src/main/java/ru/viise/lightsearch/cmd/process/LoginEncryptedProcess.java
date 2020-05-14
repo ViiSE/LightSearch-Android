@@ -1,17 +1,17 @@
 /*
- *  Copyright 2020 ViiSE.
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Copyright 2020 ViiSE
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package ru.viise.lightsearch.cmd.process;
@@ -25,29 +25,29 @@ import retrofit2.Response;
 import ru.viise.lightsearch.cmd.network.NetworkService;
 import ru.viise.lightsearch.data.entity.Command;
 import ru.viise.lightsearch.data.entity.CommandResult;
-import ru.viise.lightsearch.data.entity.LoginCommandResult;
+import ru.viise.lightsearch.data.entity.LoginEncryptedCommandResult;
 import ru.viise.lightsearch.data.pojo.ErrorPojo;
-import ru.viise.lightsearch.data.pojo.LoginPojo;
+import ru.viise.lightsearch.data.pojo.LoginEncryptedPojo;
 import ru.viise.lightsearch.data.pojo.LoginPojoResult;
 
-public class AuthorizationProcess implements Process<LoginPojo, LoginPojoResult> {
+public class LoginEncryptedProcess implements Process<LoginEncryptedPojo, LoginPojoResult> {
 
     private final NetworkService networkService;
 
-    public AuthorizationProcess(NetworkService networkService) {
+    public LoginEncryptedProcess(NetworkService networkService) {
         this.networkService = networkService;
     }
 
     @Override
-    public CommandResult<LoginPojo, LoginPojoResult> apply(Command<LoginPojo> command) {
+    public CommandResult<LoginEncryptedPojo, LoginPojoResult> apply(Command<LoginEncryptedPojo> command) {
         try {
             Response<LoginPojoResult> response = networkService
                     .getLightSearchAPI()
-                    .login(command.formForSend())
+                    .loginEncrypted(command.formForSend())
                     .execute();
             if(response.isSuccessful()) {
                 LoginPojoResult lrp = response.body();
-                return new LoginCommandResult(lrp);
+                return new LoginEncryptedCommandResult(lrp);
             } else {
                 String json = response.errorBody() == null ?
                         "{" +
@@ -81,10 +81,10 @@ public class AuthorizationProcess implements Process<LoginPojo, LoginPojoResult>
 
     }
 
-    private CommandResult<LoginPojo, LoginPojoResult> errorResult(String message) {
+    private CommandResult<LoginEncryptedPojo, LoginPojoResult> errorResult(String message) {
         LoginPojoResult lrp = new LoginPojoResult();
         lrp.setIsDone(false);
         lrp.setMessage(message);
-        return new LoginCommandResult(lrp);
+        return new LoginEncryptedCommandResult(lrp);
     }
 }

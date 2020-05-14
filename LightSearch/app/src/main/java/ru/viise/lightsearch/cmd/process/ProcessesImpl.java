@@ -42,7 +42,7 @@ public class ProcessesImpl implements Processes {
     }
 
     private void fillProcess(NetworkService networkService) {
-        processes.put(ClientCommands.LOGIN, new AuthorizationProcess(networkService));
+        processes.put(ClientCommands.LOGIN, new LoginProcess(networkService));
         processes.put(ClientCommands.SEARCH, new SearchProcess(networkService));
         processes.put(ClientCommands.OPEN_SOFT_CHECK, new OpenSoftCheckProcess(networkService));
         processes.put(ClientCommands.CANCEL_SOFT_CHECK, new CancelSoftCheckProcess(networkService));
@@ -56,5 +56,7 @@ public class ProcessesImpl implements Processes {
         processes.put(ClientCommands.SKLAD_LIST, new SkladListProcess(networkService));
         processes.put(ClientCommands.TK_LIST, new TKListProcess(networkService));
         processes.put(ClientCommands.CHECK_AUTH, new CheckAuthProcess(networkService));
+        processes.put(ClientCommands.KEY, new KeyProcess(networkService));
+        processes.put(ClientCommands.LOGIN_ENCRYPTED, new LoginEncryptedProcess(networkService));
     }
 }
