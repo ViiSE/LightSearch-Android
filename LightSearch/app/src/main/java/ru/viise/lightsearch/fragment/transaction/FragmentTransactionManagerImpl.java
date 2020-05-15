@@ -71,6 +71,7 @@ public class FragmentTransactionManagerImpl implements FragmentTransactionManage
     @Override
     public void doResultSearchFragmentTransaction(String title, List<SearchRecord> searchRecords) {
         ResultSearchFragment resultSearchFragment = new ResultSearchFragment();
+        resultSearchFragment.setTitle(title);
         resultSearchFragment.init(searchRecords);
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_down, R.anim.exit_to_up, R.anim.enter_from_up, R.anim.exit_to_down);
@@ -84,6 +85,7 @@ public class FragmentTransactionManagerImpl implements FragmentTransactionManage
     @Override
     public void doResultBindFragmentTransaction(String title, CommandResult<BindCheckPojo, BindCheckPojoResult> result) {
         ResultBindFragment resultBindFragment = new ResultBindFragment();
+        resultBindFragment.setTitle(title);
         resultBindFragment.init(result.data().getRecords(), result.data().getFactoryBarcode(), result.data().getSelected());
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_down, R.anim.exit_to_up, R.anim.enter_from_up, R.anim.exit_to_down);

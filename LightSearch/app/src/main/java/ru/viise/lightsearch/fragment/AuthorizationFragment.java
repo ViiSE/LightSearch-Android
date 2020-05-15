@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -113,6 +114,14 @@ public class AuthorizationFragment extends Fragment implements OnClickListener, 
 
     private android.app.AlertDialog queryDialog;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setCustomView(R.layout.toolbar_authorization);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -139,7 +148,10 @@ public class AuthorizationFragment extends Fragment implements OnClickListener, 
         createPassFirstDialog(aDCreatorDTO, hashAlgorithm);
         createInputPassDialog(prefManager, hashAlgorithm);
 
-        ImageButton buttonSettings = view.findViewById(R.id.ibSettings);
+        ImageButton buttonSettings = ((AppCompatActivity)getActivity())
+                .getSupportActionBar()
+                .getCustomView()
+                .findViewById(R.id.ibSettings);
         buttonSettings.setOnClickListener(v -> inputPassword.show());
 
         FirstRunAppChecker firstRunAppChecker = new FirstRunAppCheckerImpl(sPref);
@@ -157,12 +169,6 @@ public class AuthorizationFragment extends Fragment implements OnClickListener, 
     public void onAttach(Context context) {
         super.onAttach(context);
         mIManagerActivity = (ManagerActivityUI) this.getActivity();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
     }
 
     @SuppressWarnings("unchecked")
@@ -183,47 +189,53 @@ public class AuthorizationFragment extends Fragment implements OnClickListener, 
                     prefManager.save(PreferencesManagerType.USER_IDENT_MANAGER, editTextUserIdent.getText().toString());
 
                 NetworkCallback<KeyPojo, KeyPojoResult> keyCallback = result -> {
-                    try {
-                        Key<PublicKey> key = new KeyAsPublicKeyImpl(
-                                result.data().getKey(),
-                                result.data().getType());
+                    if(result.isDone()) {
+                        try {
+                            Key<PublicKey> key = new KeyAsPublicKeyImpl(
+                                    result.data().getKey(),
+                                    result.data().getType());
 
-                        IPAddressProvider ipAddrProvider = IPAddressProviderInit.ipAddressProvider();
-                        String ip = ipAddrProvider.ipAddress(true);
-                        String os = Build.VERSION.RELEASE;
-                        String model = Build.MODEL;
-                        Command<LoginPojo> command = new LoginCommandWithIMEI(
-                                new LoginCommandWithUsername(
-                                        new LoginCommandWithPassword(
-                                                new LoginCommandWithUserIdentifier(
-                                                        new LoginCommandWithIP(
-                                                                new LoginCommandWithOs(
-                                                                        new LoginCommandWithModel(
-                                                                                new LoginCommandSimple(),
-                                                                                model
-                                                                        ), os
-                                                                ), ip
-                                                        ), prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER)
-                                                ), editTextPassword.getText().toString()
-                                        ), editTextUsername.getText().toString()
-                                ), mIManagerActivity.getIMEI());
+                            IPAddressProvider ipAddrProvider = IPAddressProviderInit.ipAddressProvider();
+                            String ip = ipAddrProvider.ipAddress(true);
+                            String os = Build.VERSION.RELEASE;
+                            String model = Build.MODEL;
+                            Command<LoginPojo> command = new LoginCommandWithIMEI(
+                                    new LoginCommandWithUsername(
+                                            new LoginCommandWithPassword(
+                                                    new LoginCommandWithUserIdentifier(
+                                                            new LoginCommandWithIP(
+                                                                    new LoginCommandWithOs(
+                                                                            new LoginCommandWithModel(
+                                                                                    new LoginCommandSimple(),
+                                                                                    model
+                                                                            ), os
+                                                                    ), ip
+                                                            ), prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER)
+                                                    ), editTextPassword.getText().toString()
+                                            ), editTextUsername.getText().toString()
+                                    ), mIManagerActivity.getIMEI());
 
-                        Information<String> encInfo = new EncryptedInformation(
-                                new DecryptedInformation(new Gson().toJson(command.formForSend())),
-                                result.data().getAlg(),
-                                key);
+                            Information<String> encInfo = new EncryptedInformation(
+                                    new DecryptedInformation(new Gson().toJson(command.formForSend())),
+                                    result.data().getAlg(),
+                                    key);
 
-                        Command<LoginEncryptedPojo> loginCmd = new LoginEncryptedCommandWithData(
-                                new LoginEncryptedCommandSimple(),
-                                encInfo.data());
+                            Command<LoginEncryptedPojo> loginCmd = new LoginEncryptedCommandWithData(
+                                    new LoginEncryptedCommandSimple(),
+                                    encInfo.data());
 
-                        NetworkAsyncTask<LoginEncryptedPojo, LoginPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
-                                AuthorizationFragment.this,
-                                queryDialog);
-                        networkAsyncTask.execute(loginCmd);
-                    } catch (InformationException ex) {
-                        throw new RuntimeException(ex);
-                    }
+                            NetworkAsyncTask<LoginEncryptedPojo, LoginPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
+                                    AuthorizationFragment.this,
+                                    queryDialog);
+                            networkAsyncTask.execute(loginCmd);
+                        } catch (InformationException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    } else
+                        new ErrorAlertDialogCreatorImpl(
+                                this.getActivity(),
+                                result.data().getMessage()
+                        ).create().show();
                 };
 
                 Command<KeyPojo> cmdKey = new KeyCommandSimple();
@@ -233,6 +245,12 @@ public class AuthorizationFragment extends Fragment implements OnClickListener, 
                 networkAsyncTaskKey.execute(cmdKey);
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setCustomView(R.layout.toolbar_authorization);
     }
 
     private void createPassFirstDialog(AlertDialogCreatorDTO aDCreatorDTO, HashAlgorithm hashAlgorithm) {

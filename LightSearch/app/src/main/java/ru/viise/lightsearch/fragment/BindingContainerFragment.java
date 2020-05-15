@@ -25,6 +25,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -55,6 +57,9 @@ public class BindingContainerFragment extends Fragment implements IBindingContai
 
         if (savedInstanceState != null)
             selected = savedInstanceState.getInt(ON_BACK_TYPE_BIND_CONT);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setCustomView(R.layout.toolbar_bind);
     }
 
     @Nullable
@@ -85,6 +90,12 @@ public class BindingContainerFragment extends Fragment implements IBindingContai
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(ON_BACK_TYPE_BIND_CONT, selected);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setCustomView(R.layout.toolbar_bind);
     }
 
     private void setupViewPager(ViewPager viewPager) {

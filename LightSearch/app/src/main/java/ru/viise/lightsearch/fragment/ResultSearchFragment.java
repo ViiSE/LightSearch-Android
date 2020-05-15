@@ -23,9 +23,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.ListFragment;
 
 import java.util.List;
@@ -38,7 +41,16 @@ import ru.viise.lightsearch.fragment.adapter.ResultSearchArrayAdapter;
 
 public class ResultSearchFragment extends ListFragment {
 
+    private String title;
     private List<SearchRecord> searchRecords;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setCustomView(R.layout.toolbar_res_search);
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -51,7 +63,14 @@ public class ResultSearchFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_result_search, container, false);
         initAdapter();
 
+        TextView tvTitle = ((AppCompatActivity)getActivity()).getSupportActionBar().getCustomView().findViewById(R.id.tvResSearchToolbar);
+        tvTitle.setText(title);
+
         return view;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     private void initAdapter() {

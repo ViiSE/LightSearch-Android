@@ -27,6 +27,8 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -73,6 +75,8 @@ public class SoftCheckContainerFragment extends Fragment implements ISoftCheckCo
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
         if (savedInstanceState != null){
             selected = savedInstanceState.getInt(SCC_FRAGMENT);
             if(selected == 1)
@@ -90,18 +94,21 @@ public class SoftCheckContainerFragment extends Fragment implements ISoftCheckCo
             onBackPressedListenerType = OnBackPressedListenerType.OPEN_SOFT_CHECK;
             transaction.replace(R.id.fragment_sc_container, new OpenSoftCheckFragment());
             transaction.addToBackStack(null);
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setCustomView(R.layout.toolbar_soft_check);
         } else if(selected == 1) {
             onBackPressedListenerType = OnBackPressedListenerType.SOFT_CHECK_FRAGMENT;
             SoftCheckFragment scFragment = new SoftCheckFragment();
             scFragment.init(softCheckRecords);
             transaction.replace(R.id.fragment_sc_container, scFragment);
             transaction.addToBackStack(null);
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setCustomView(R.layout.toolbar_soft_check);
         } else if(selected == 2) {
             onBackPressedListenerType = OnBackPressedListenerType.CART_FRAGMENT;
             CartFragment cartFragment = new CartFragment();
             cartFragment.init(softCheckRecords);
             transaction.replace(R.id.fragment_sc_container, cartFragment);
             transaction.addToBackStack(null);
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setCustomView(R.layout.toolbar_cart);
         }
         transaction.commit();
     }

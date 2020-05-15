@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -37,7 +38,6 @@ import ru.viise.lightsearch.exception.FindableException;
 import ru.viise.lightsearch.find.ImplFinder;
 import ru.viise.lightsearch.find.ImplFinderFragmentFromFragmentDefaultImpl;
 import ru.viise.lightsearch.fragment.pager.ZoomOutPageTransformer;
-
 
 public class ContainerFragment extends Fragment implements OnBackPressedListener, IContainerFragment {
 
@@ -57,6 +57,9 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
 
         if (savedInstanceState != null)
             selected = savedInstanceState.getInt(ON_BACK_TYPE);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setCustomView(R.layout.toolbar_light_search);
     }
 
     @Nullable
@@ -107,6 +110,13 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setCustomView(R.layout.toolbar_light_search);
+    }
+
     private void setupViewPager(ViewPager viewPager) {
         FragmentPageAdapter fragmentPageAdapter = new FragmentPageAdapter(getChildFragmentManager());
 
@@ -132,12 +142,6 @@ public class ContainerFragment extends Fragment implements OnBackPressedListener
         if(onBackPressedListenerType == OnBackPressedListenerType.CONTAINER_FRAGMENT) {
             getActivity().finish();
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
 
     @Override

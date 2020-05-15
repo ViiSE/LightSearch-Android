@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -93,6 +95,14 @@ public class SoftCheckFragment extends Fragment implements ISoftCheckFragment {
 
     private AlertDialog queryDialog;
     private EditText editTextSearch;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setCustomView(R.layout.toolbar_soft_check);
+    }
 
     @SuppressWarnings("unchecked")
     @Nullable
@@ -218,6 +228,12 @@ public class SoftCheckFragment extends Fragment implements ISoftCheckFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         managerActivityUI = (ManagerActivityUI) this.getActivity();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setCustomView(R.layout.toolbar_soft_check);
     }
 
     public void init(List<SoftCheckRecord> softCheckRecords) {

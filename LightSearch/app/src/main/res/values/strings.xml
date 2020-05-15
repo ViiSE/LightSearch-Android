@@ -185,6 +185,11 @@
 
     <!-- Toolbar -->
     <string name="toolbar_auth">Авторизация</string>
+    <string name="toolbar_ls">LightSearch</string>
+    <string name="toolbar_sc">Мягкий чек</string>
+    <string name="toolbar_bind">Операции</string>
+    <string name="toolbar_cart">Корзина</string>
+    <string name="toolbar_doc">Документация</string>
     <!-- =================== -->
 
     <!-- Fragment More -->

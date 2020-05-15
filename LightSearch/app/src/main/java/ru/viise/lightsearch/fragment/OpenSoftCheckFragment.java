@@ -34,6 +34,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
@@ -74,6 +76,14 @@ public class OpenSoftCheckFragment extends Fragment implements IOpenSoftCheckFra
     private ManagerActivityUI managerActivityUI;
 
     private AlertDialog queryDialog;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setCustomView(R.layout.toolbar_open_soft_check);
+    }
 
     @Nullable
     @Override
@@ -125,6 +135,12 @@ public class OpenSoftCheckFragment extends Fragment implements IOpenSoftCheckFra
         });
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setCustomView(R.layout.toolbar_open_soft_check);
     }
 
     @Override

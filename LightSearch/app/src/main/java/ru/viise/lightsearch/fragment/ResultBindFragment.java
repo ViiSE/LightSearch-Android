@@ -23,9 +23,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.ListFragment;
 
 import java.util.List;
@@ -56,6 +59,7 @@ public class ResultBindFragment extends ListFragment {
 
     private String factoryBarcode;
     private List<BindRecord> bindRecords;
+    private String title;
 
     private int selected; // 0 - bindCheck, 1 - bind
 
@@ -64,13 +68,28 @@ public class ResultBindFragment extends ListFragment {
         super.onAttach(context);
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setCustomView(R.layout.toolbar_res_bind);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_result_search, container, false);
         initAdapter();
 
+        TextView tvTitle = ((AppCompatActivity)getActivity()).getSupportActionBar().getCustomView().findViewById(R.id.tvResBindToolbar);
+        tvTitle.setText(title);
+
         return view;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     private void initAdapter() {
