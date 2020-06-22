@@ -229,7 +229,63 @@ public class AuthorizationFragment extends Fragment implements OnClickListener, 
                                     queryDialog);
                             networkAsyncTask.execute(loginCmd);
                         } catch (InformationException ex) {
-                            throw new RuntimeException(ex);
+                            // Try login without encryption
+                            IPAddressProvider ipAddrProvider = IPAddressProviderInit.ipAddressProvider();
+                            String ip = ipAddrProvider.ipAddress(true);
+                            String os = Build.VERSION.RELEASE;
+                            String model = Build.MODEL;
+
+                            Command<LoginPojo> command = new LoginCommandWithIMEI(
+                                    new LoginCommandWithUsername(
+                                            new LoginCommandWithPassword(
+                                                    new LoginCommandWithUserIdentifier(
+                                                            new LoginCommandWithIP(
+                                                                    new LoginCommandWithOs(
+                                                                            new LoginCommandWithModel(
+                                                                                    new LoginCommandSimple(),
+                                                                                    model
+                                                                            ), os
+                                                                    ), ip
+                                                            ), prefManager.load(PreferencesManagerType.USER_IDENT_MANAGER)
+                                                    ), editTextPassword.getText().toString()
+                                            ), editTextUsername.getText().toString()
+                                    ), mIManagerActivity.getIMEI());
+
+                            NetworkCallback<LoginPojo, LoginPojoResult> loginCallback = res -> {
+                                if(res.isDone()) {
+                                    prefManager.save(PreferencesManagerType.TOKEN_MANAGER, res.data().getToken());
+                                    if(res.data().getUserIdentifier().equals("0")) {
+                                        prefManager.save(
+                                                PreferencesManagerType.USER_IDENT_MANAGER,
+                                                prefManager.load(PreferencesManagerType.USERNAME_MANAGER));
+                                    } else {
+                                        prefManager.save(
+                                                PreferencesManagerType.USER_IDENT_MANAGER,
+                                                res.data().getUserIdentifier());
+                                    }
+
+                                    SuccessAlertDialogCreator successADCr = new SuccessAlertDialogCreatorImpl(
+                                            this.getActivity(),
+                                            res.data().getMessage());
+                                    successADCr.create().show();
+
+                                    FragmentTransactionManager fragmentTransactionManager =
+                                            new FragmentTransactionManagerImpl(this.getActivity());
+                                    fragmentTransactionManager.doContainerFragmentTransaction(
+                                            res.data().getSkladList().toArray(new String[0]),
+                                            res.data().getTKList().toArray(new String[0]),
+                                            true);
+                                } else
+                                    new ErrorAlertDialogCreatorImpl(
+                                            this.getActivity(),
+                                            res.data().getMessage()
+                                    ).create().show();
+                            };
+
+                            NetworkAsyncTask<LoginPojo, LoginPojoResult> networkAsyncTask = new NetworkAsyncTask<>(
+                                    loginCallback,
+                                    queryDialog);
+                            networkAsyncTask.execute(command);
                         }
                     } else
                         new ErrorAlertDialogCreatorImpl(
